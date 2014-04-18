@@ -1,7 +1,6 @@
 package com.zsrm.preemption;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import com.zsrm.datastructure.OSQueues;
 import com.zsrm.datastructure.Task;
@@ -21,27 +20,15 @@ public class TaskWorker {
 				runningQTask.setCyclesAssisgned(runningQTask.getCyclesAssisgned() + 1);
 				timer++;
 				Thread.sleep(1000);
-
 				GeneralUtils.updateZSI();
-				/*
-				 * System.out.println("** PRINTING LIST START *** ");
-				 * GeneralUtils.printTasksList();
-				 * System.out.println("** PRINTING LIST END *** ");
-				 */
-
 				if (runningQTask.getCyclesAssisgned() == runningQTask.getOverloadedExecTime()) {
 					OSQueues.readyQueue.add(runningQTask);
-					/*
-					 * if (timer == (runningQTask.getRound() *
-					 * runningQTask.getPeriod())) {
-					 * runningQTask.setRound(runningQTask.getRound() + 1); }
-					 */
-
 					ArrayList<Task> tasksList = TasksList.getTasksList();
 					Task toBeExecTask = null;
 					for (int i = 0; i < tasksList.size(); i++) {
 						Task task = tasksList.get(i);
-						if ((task.getZeroSlackInstant() == timer) && (task.getZeroSlackInstant() != task.getPeriod())) {
+						if ((task.getZeroSlackInstant() <= timer) && (task.getZeroSlackInstant() != (task.getRound() * task.getPeriod()))
+								&& (task.getCyclesAssisgned() != task.getOverloadedExecTime())) {
 							if (toBeExecTask == null) {
 								toBeExecTask = task;
 							} else {
@@ -49,9 +36,7 @@ public class TaskWorker {
 									toBeExecTask = task;
 								}
 							}
-						}
-
-						if (((task.getRound() * task.getPeriod()) == timer) && (task.getCyclesAssisgned() != task.getOverloadedExecTime())) {
+						} else if (((task.getRound() * task.getPeriod()) == timer) && (task.getCyclesAssisgned() != task.getOverloadedExecTime())) {
 							if ((task.getZeroSlackInstant()) == timer) {
 								if (toBeExecTask == null) {
 									toBeExecTask = task;
@@ -61,17 +46,12 @@ public class TaskWorker {
 									}
 								}
 							} else {
-								// toBeExecTask =
-								// GeneralUtils.getHighestPriorityTask();
-
 								Task newTask = OSQueues.readyQueue.poll();
 								if ((newTask.getPriority() < runningQTask.getPriority())) {
 									toBeExecTask = newTask;
 								} else {
 									toBeExecTask = task;
 								}
-								// OSQueues.readyQueue.add(newTask);
-
 							}
 							break;
 						}
@@ -83,12 +63,19 @@ public class TaskWorker {
 					} else {
 						OSQueues.runningQueue.add(toBeExecTask);
 					}
-
 					runningQTask.setCyclesAssisgned(0);
-
+					ArrayList<Task> tList = TasksList.getTasksList();
+					for (int i = 0; i < tList.size(); i++) {
+						Task t1 = tList.get(i);
+						if (timer == (t1.getRound() * t1.getPeriod())) {
+							t1.setRound(t1.getRound() + 1);
+							t1.setCyclesAssisgned(0);
+						}
+					}
 				} else {
 					ArrayList<Task> tasksList = TasksList.getTasksList();
 					Task toBeExecTask = null;
+					boolean zsiCheck = false;
 					for (int i = 0; i < tasksList.size(); i++) {
 						Task task = tasksList.get(i);
 						if (((task.getRound() * task.getPeriod()) == timer)) {
@@ -102,21 +89,38 @@ public class TaskWorker {
 									}
 								}
 							} else {
-								// toBeExecTask =
-								// GeneralUtils.getHighestPriorityTask();
 
-								Task newTask = OSQueues.readyQueue.poll();
-								if ((newTask.getPriority() < runningQTask.getPriority())) {
-									toBeExecTask = newTask;
-								} else {
-									toBeExecTask = task;
+								ArrayList<Task> otherZsiTasks = TasksList.getTasksList();
+								for (Task zsiTask : otherZsiTasks) {
+									if (zsiTask != task) {
+										if (((zsiTask.getRound()) * zsiTask.getPeriod())
+												- (zsiTask.getOverloadedExecTime() - zsiTask.getCyclesAssisgned()) == timer) {
+											zsiCheck = true;
+											if (toBeExecTask != null) {
+												if (zsiTask.getCriticality() < toBeExecTask.getCriticality()) {
+													toBeExecTask = zsiTask;
+												}
+											} else {
+												toBeExecTask = zsiTask;
+											}
+										}
+									}
 								}
-								OSQueues.readyQueue.add(newTask);
-
+								if (zsiCheck == false) {
+									if (i < OSQueues.readyQueue.size()) {
+										Task newTask = OSQueues.readyQueue.poll();
+										if ((newTask.getPriority() < runningQTask.getPriority())) {
+											toBeExecTask = newTask;
+										} else {
+											toBeExecTask = task;
+										}
+										OSQueues.readyQueue.add(newTask);
+									}
+								}
 							}
 							break;
 						} else {
-							if ((task.getZeroSlackInstant()) == timer) {
+							if ((task.getZeroSlackInstant()) == timer && (task.getCyclesAssisgned() != 0)) {
 								if (toBeExecTask == null) {
 									toBeExecTask = task;
 								} else {
@@ -125,16 +129,39 @@ public class TaskWorker {
 									}
 								}
 							} else {
-								Task newTask = OSQueues.readyQueue.peek();
-								if ((newTask.getPriority() < runningQTask.getPriority()) && (newTask.getCyclesAssisgned() != 0)) {
-									toBeExecTask = newTask;
-								} else {
-									toBeExecTask = runningQTask;
+
+								ArrayList<Task> otherZsiTasks = TasksList.getTasksList();
+								for (Task zsiTask : otherZsiTasks) {
+									if (zsiTask != task) {
+
+										if (((zsiTask.getRound() * zsiTask.getPeriod()) - (zsiTask.getOverloadedExecTime() - zsiTask
+												.getCyclesAssisgned())) == timer) {
+											zsiCheck = true;
+											if (toBeExecTask != null) {
+												if (zsiTask.getCriticality() < toBeExecTask.getCriticality()) {
+													toBeExecTask = zsiTask;
+												}
+											} else {
+												toBeExecTask = zsiTask;
+											}
+										}
+									}
+								}
+
+								if (zsiCheck == false) {
+									if (i < OSQueues.readyQueue.size()) {
+										Task newTask = OSQueues.readyQueue.poll();
+										if ((newTask.getPriority() < runningQTask.getPriority()) && (newTask.getCyclesAssisgned() != 0)) {
+											toBeExecTask = newTask;
+										} else {
+											toBeExecTask = runningQTask;
+										}
+										OSQueues.readyQueue.add(newTask);
+									}
 								}
 							}
 							continue;
 						}
-
 					}
 					if (toBeExecTask == null) {
 
@@ -144,22 +171,14 @@ public class TaskWorker {
 						OSQueues.readyQueue.add(runningQTask);
 						OSQueues.runningQueue.add(toBeExecTask);
 
-						/*
-						 * if ((timer % toBeExecTask.getPeriod()) == 0) {
-						 * OSQueues.runningQueue.add(toBeExecTask);
-						 * OSQueues.readyQueue.remove(toBeExecTask); // Sub the
-						 * remaining time here before adding to // ready q
-						 * toBeExecTask.setCyclesAssisgned(0);
-						 * OSQueues.readyQueue.add(runningQTask); } else {
-						 * OSQueues.runningQueue.add(toBeExecTask); }
-						 */
 					}
 
 					ArrayList<Task> tList = TasksList.getTasksList();
 					for (int i = 0; i < tList.size(); i++) {
 						Task t1 = tList.get(i);
-						if (timer == (t1.getRound() * t1.getPeriod()) && (t1.getCyclesAssisgned() == 0)) {
+						if (timer == (t1.getRound() * t1.getPeriod())) {
 							t1.setRound(t1.getRound() + 1);
+							t1.setCyclesAssisgned(0);
 						}
 					}
 
@@ -170,5 +189,4 @@ public class TaskWorker {
 			periodLCM--;
 		}
 	}
-
 }
