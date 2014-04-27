@@ -16,10 +16,9 @@ public class TaskWorker {
 		while (periodLCM != 0) {
 			try {
 				Task runningQTask = OSQueues.runningQueue.poll();
-				OutputSystem.print(runningQTask);
+				OutputSystem.addToPrintList(runningQTask, timer);
 				runningQTask.setCyclesAssisgned(runningQTask.getCyclesAssisgned() + 1);
 				timer++;
-				Thread.sleep(1000);
 				GeneralUtils.updateZSI();
 				if (runningQTask.getCyclesAssisgned() == runningQTask.getOverloadedExecTime()) {
 					OSQueues.readyQueue.add(runningQTask);
@@ -188,5 +187,6 @@ public class TaskWorker {
 			}
 			periodLCM--;
 		}
+		OutputSystem.printGanttChart();
 	}
 }
