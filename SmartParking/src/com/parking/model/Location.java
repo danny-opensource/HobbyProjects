@@ -1,11 +1,11 @@
 package com.parking.model;
 
-public class UserLocation {
+public class Location {
 
 	private double mLatitude;
 	private double mLongitude;
 
-	public UserLocation(final double latitude, final double longitude) {
+	public Location(final double latitude, final double longitude) {
 		mLatitude = latitude;
 		mLongitude = longitude;
 	}
