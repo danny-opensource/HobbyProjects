@@ -10,7 +10,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Hashtable;
-import java.util.List;
 
 import com.parking.algorithms.GravitationalComputation;
 import com.parking.model.Location;
@@ -29,21 +28,38 @@ public class ResourceSearch {
 		 * driverTimeStamp
 		 */
 
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
 		try {
 			Class.forName("org.postgresql.Driver");
 		} catch (ClassNotFoundException cnfe) {
 			cnfe.printStackTrace();
+			return false;
 		}
 		try {
-			String query = "select max(timestamp),block_id from parking.\"projection\" where block_id=" + block;
+			conn = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/postgres", "postgres", "cs440");
+			String query = "select p.block_id, max(p.timestamp) from parking.\"projection\" p where p.block_id=" + block + "and p.timestamp <'"
+					+ driverTimeStamp + "' group by p.block_id";
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(query);
+			if (rs.next()) {
+				// System.out.println("User's timestamp: " + driverTimeStamp);
+				// System.out.println("Chosen Timestamp: " + rs.getString(2));
+
+				int parkingLotCount = Integer.parseInt(rs.getString(1));
+				if (parkingLotCount > 0) {
+					return true;
+				}
+			}
+			return false;
 		} catch (Exception ex) {
 			ex.printStackTrace();
+			return false;
 		}
-		return true;
 	}
 
 	private void computeGravityRoadNetwork(final Location userLoc) {
-
 		try {
 			Class.forName("org.postgresql.Driver");
 		} catch (ClassNotFoundException cnfe) {
@@ -81,11 +97,11 @@ public class ResourceSearch {
 				userToNode2Distance = DistanceUtils.distance(userLoc.getLatitude(), userLoc.getLongitude(), node2Loc.getLatitude(),
 						node2Loc.getLongitude(), 'M');
 
-				node1ToBlockDistance = DistanceUtils.distance(node1Loc.getLatitude(), node1Loc.getLongitude(), Double.parseDouble(rs.getString(4)),
-						Double.parseDouble(rs.getString(3)), 'M');
+				node1ToBlockDistance = DistanceUtils.distance(node1Loc.getLatitude(), node1Loc.getLongitude(), Double.parseDouble(rs.getString(3)),
+						Double.parseDouble(rs.getString(4)), 'M');
 
-				node2ToBlockDistance = DistanceUtils.distance(node2Loc.getLatitude(), node2Loc.getLongitude(), Double.parseDouble(rs.getString(4)),
-						Double.parseDouble(rs.getString(3)), 'M');
+				node2ToBlockDistance = DistanceUtils.distance(node2Loc.getLatitude(), node2Loc.getLongitude(), Double.parseDouble(rs.getString(3)),
+						Double.parseDouble(rs.getString(4)), 'M');
 
 				totalDistanceViaNode1 = userToNode1Distance + node1ToBlockDistance;
 				totalDistanceViaNode2 = userToNode2Distance + node2ToBlockDistance;
@@ -95,8 +111,6 @@ public class ResourceSearch {
 				if (temp > closestDistance) {
 					temp = closestDistance;
 				}
-
-				System.out.println("Closest Distance: " + closestDistance);
 
 				double gForce = gComp.getGForce(66, closestDistance); // TODO
 																		// Remove
@@ -123,12 +137,14 @@ public class ResourceSearch {
 				// Increase 1 second from the timestamp
 				driverTimeStamp.setSeconds(driverTimeStamp.getSeconds() + 1);
 
-				System.out.println("driverTimeStamp is: " + driverTimeStamp);
+				// System.out.println("driverTimeStamp is: " + driverTimeStamp);
 
 				// TODO Check for max time-stamp that is less than
 				// driverTimeStamp
 
 				if (isParkingSpaceAvailable(parkingBlock)) {
+					System.out.println("Block searched for driver at " + driverTimeStamp + " is " + parkingBlock + " with a distance: " + temp
+							+ " miles");
 					continue;
 				} else {
 					// TODO Allocate a different block
@@ -170,7 +186,7 @@ public class ResourceSearch {
 					temp = closestDistance;
 				}
 
-				System.out.println("Closest Distance: " + closestDistance);
+				// System.out.println("Closest Distance: " + closestDistance);
 
 				double gForce = gComp.getGForce(66, closestDistance); // TODO
 																		// Remove
@@ -197,7 +213,7 @@ public class ResourceSearch {
 				// Increase 1 second from the timestamp
 				driverTimeStamp.setSeconds(driverTimeStamp.getSeconds() + 1);
 
-				System.out.println("driverTimeStamp is: " + driverTimeStamp);
+				// System.out.println("driverTimeStamp is: " + driverTimeStamp);
 
 				// TODO Check for max time-stamp that is less than
 				// driverTimeStamp
@@ -219,10 +235,11 @@ public class ResourceSearch {
 		try {
 			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 			Date date = dateFormat.parse("06/04/2012");
+			date.setMinutes(10);
 			long time = date.getTime();
 			driverTimeStamp = new Timestamp(time);
 
-			System.out.println(driverTimeStamp);
+			// System.out.println(driverTimeStamp);
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -232,11 +249,13 @@ public class ResourceSearch {
 	public static void main(String[] args) {
 		ResourceSearch rSearch = new ResourceSearch();
 
-		// Test: 37.806180, -122.423803
-		Location currentUserLoc = new Location(-122.423803, 37.806180);
+		// Test: 37.806205, -122.424262
+		Location currentUserLoc = new Location(37.806205, -122.424262);
 
 		// Initialize the driver timestamp to 2012-04-06:00:00:00:00
 		rSearch.initializeDriverTime();
+
+		System.out.println("Computing your parking lot. Please wait ...");
 
 		// rSearch.computeGravityFreeSpace(currentUserLoc);
 		rSearch.computeGravityRoadNetwork(currentUserLoc);

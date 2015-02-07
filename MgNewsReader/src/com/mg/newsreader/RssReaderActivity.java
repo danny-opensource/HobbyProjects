@@ -27,7 +27,6 @@ public class RssReaderActivity extends Activity {
 	}
 
 	private List<RssItem> getRssItems() {
-
 		List<RssItem> returnList = new ArrayList<RssItem>();
 		RssItem item1 = new RssItem("Title1", "http://www.google.com", "Description 1",
 				"http://zapt1.staticworld.net/images/article/2013/11/pcworld-idgns-primaryimage-100154539-medium.png");
