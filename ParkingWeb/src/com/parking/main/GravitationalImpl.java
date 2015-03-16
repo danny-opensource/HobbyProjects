@@ -24,6 +24,7 @@ import com.parking.algorithms.GravitationalComputation;
 import com.parking.constants.AppConstants;
 import com.parking.constants.AppConstants.ALGORITHM_TYPE;
 import com.parking.model.Location;
+import com.parking.model.RoadNetworkEdge;
 import com.parking.utils.DistanceUtils;
 import com.parking.utils.GeneralUtils;
 
@@ -71,137 +72,126 @@ public class GravitationalImpl extends HttpServlet {
 	}
 
 	public int computeGravityRoadNetwork(final Location userLoc) {
-		try {
-			Class.forName("org.postgresql.Driver");
-		} catch (ClassNotFoundException cnfe) {
-			cnfe.printStackTrace();
-			return -1;
-		}
-		try {
-			AppConstants.dynamicProgress = 10;
-			Connection conn = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/postgres", "postgres", "cs440");
+		
+		System.out.println("*** Inside ComputeGravityRoadNetwork");
 
-			Statement stmt = conn.createStatement();
-			String query = "select * from parking.\"edges\"";
-			ResultSet rs = stmt.executeQuery(query);
-			mGForceDistance = new Hashtable<Integer, Double>();
-			GravitationalComputation gComp = new GravitationalComputation();
-			double temp = Integer.MAX_VALUE;
-			while (rs.next()) {
-				// TODO need to optimize the query
+		Iterator<Integer> it = AppConstants.sInMemoryEdges.getKeySet().iterator();
 
-				int node1 = Integer.parseInt(rs.getString(7));
-				int node2 = Integer.parseInt(rs.getString(8));
+		mGForceDistance = new Hashtable<Integer, Double>();
+		GravitationalComputation gComp = new GravitationalComputation();
+		double temp = Integer.MAX_VALUE;
 
-				Location node1Loc = GeneralUtils.getNodeLocation(node1);
-				Location node2Loc = GeneralUtils.getNodeLocation(node2);
+		while (it.hasNext()) {
+			// TODO need to optimize the query
 
-				// TODO Need to calculate based on latitude_2 and longitude_2
-				double userToNode1Distance = 0;
-				double userToNode2Distance = 0;
-				double node1ToBlockDistance = 0;
-				double node2ToBlockDistance = 0;
+			RoadNetworkEdge edge = AppConstants.sInMemoryEdges.getEdge(it.next());
 
-				double totalDistanceViaNode1 = 0;
-				double totalDistanceViaNode2 = 0;
+			int node1 = edge.nodeId1;
+			int node2 = edge.nodeId2;
 
-				System.out.println("-------START EXAMINATION-------------");
-				System.out.println("Examination for block: " + rs.getString(1));
+			Location node1Loc = GeneralUtils.getNodeLocation(node1);
+			Location node2Loc = GeneralUtils.getNodeLocation(node2);
 
-				userToNode1Distance = DistanceUtils.distance(userLoc.getLatitude(), userLoc.getLongitude(), node1Loc.getLatitude(),
-						node1Loc.getLongitude(), 'M');
+			// TODO Need to calculate based on latitude_2 and longitude_2
+			double userToNode1Distance = 0;
+			double userToNode2Distance = 0;
+			double node1ToBlockDistance = 0;
+			double node2ToBlockDistance = 0;
 
-				System.out.println("userToNode1Distance: " + userToNode1Distance);
+			double totalDistanceViaNode1 = 0;
+			double totalDistanceViaNode2 = 0;
 
-				userToNode2Distance = DistanceUtils.distance(userLoc.getLatitude(), userLoc.getLongitude(), node2Loc.getLatitude(),
-						node2Loc.getLongitude(), 'M');
+			System.out.println("-------START EXAMINATION-------------");
+			System.out.println("Examination for block: " + edge.blockId);
 
-				System.out.println("userToNode2Distance: " + userToNode2Distance);
+			userToNode1Distance = DistanceUtils.distance(userLoc.getLatitude(), userLoc.getLongitude(), node1Loc.getLatitude(),
+					node1Loc.getLongitude(), 'M');
 
-				node1ToBlockDistance = DistanceUtils.distance(node1Loc.getLatitude(), node1Loc.getLongitude(), Double.parseDouble(rs.getString(3)),
-						Double.parseDouble(rs.getString(4)), 'M');
+			System.out.println("userToNode1Distance: " + userToNode1Distance);
 
-				System.out.println("node1ToBlockDistance: " + node1ToBlockDistance);
+			userToNode2Distance = DistanceUtils.distance(userLoc.getLatitude(), userLoc.getLongitude(), node2Loc.getLatitude(),
+					node2Loc.getLongitude(), 'M');
 
-				node2ToBlockDistance = DistanceUtils.distance(node2Loc.getLatitude(), node2Loc.getLongitude(), Double.parseDouble(rs.getString(3)),
-						Double.parseDouble(rs.getString(4)), 'M');
+			System.out.println("userToNode2Distance: " + userToNode2Distance);
 
-				System.out.println("node2ToBlockDistance: " + node2ToBlockDistance);
+			node1ToBlockDistance = DistanceUtils.distance(node1Loc.getLatitude(), node1Loc.getLongitude(), edge.latitude1, edge.longitude1, 'M');
 
-				totalDistanceViaNode1 = userToNode1Distance + node1ToBlockDistance;
-				totalDistanceViaNode2 = userToNode2Distance + node2ToBlockDistance;
+			System.out.println("node1ToBlockDistance: " + node1ToBlockDistance);
 
-				System.out.println("totalDistanceViaNode1: " + totalDistanceViaNode1);
-				System.out.println("totalDistanceViaNode2: " + totalDistanceViaNode2);
+			node2ToBlockDistance = DistanceUtils.distance(node2Loc.getLatitude(), node2Loc.getLongitude(), edge.latitude1, edge.longitude1, 'M');
 
-				double closestDistance = Math.min(totalDistanceViaNode1, totalDistanceViaNode2);
+			System.out.println("node2ToBlockDistance: " + node2ToBlockDistance);
 
-				if (temp > closestDistance) {
-					temp = closestDistance;
-				}
+			totalDistanceViaNode1 = userToNode1Distance + node1ToBlockDistance;
+			totalDistanceViaNode2 = userToNode2Distance + node2ToBlockDistance;
 
-				int blockId = Integer.parseInt(rs.getString(1));
-				int totalAvailableParkingLots = GeneralUtils.getAvailableParkingLots(blockId, driverTimeStamp);
-				System.out.println("TotalAvailableParkingLots: " + totalAvailableParkingLots);
+			System.out.println("totalDistanceViaNode1: " + totalDistanceViaNode1);
+			System.out.println("totalDistanceViaNode2: " + totalDistanceViaNode2);
 
-				double gForce = gComp.getGForce(totalAvailableParkingLots, closestDistance);
-				if (Integer.parseInt(rs.getString(10)) > 0) {
-					mGForceDistance.put(Integer.parseInt(rs.getString(1)), gForce);
-				}
+			double closestDistance = Math.min(totalDistanceViaNode1, totalDistanceViaNode2);
 
-				System.out.println("GForce: " + gForce);
+			if (temp > closestDistance) {
+				temp = closestDistance;
 			}
-			AppConstants.dynamicProgress = 30;
 
-			int parkingBlock = GeneralUtils.getBlockWithMaxForce(mGForceDistance);
-			HashMap<String, Location> blockLoc = GeneralUtils.getBlockLocation(parkingBlock);
-			Location blockStartLoc = blockLoc.get("start");
-			Location blockEndLoc = blockLoc.get("end");
-			System.out.println("Block searched for driver at + " + driverTimeStamp + " instant of time: " + parkingBlock + " with a distance: "
-					+ temp + " miles. This block is located between: " + blockStartLoc.getLatitude() + ", " + blockStartLoc.getLongitude() + " and "
-					+ blockEndLoc.getLatitude() + ", " + blockEndLoc.getLongitude());
+			int blockId = edge.blockId;
+			int totalAvailableParkingLots = GeneralUtils.getAvailableParkingLots(blockId, driverTimeStamp);
+			System.out.println("TotalAvailableParkingLots: " + totalAvailableParkingLots);
 
-			System.out.println("&&&&&&&&&&&&&&&& END OF EXAMINATION &&&&&&&&&&&&&&&&&&\n\n");
-			AppConstants.dynamicProgress = 50;
-			// return parkingBlock;
-
-			// Scale: Driver travels 1 meter in 1 minute
-
-			int totalMinutes = 1;
-			while (temp > 0) {
-				AppConstants.dynamicProgress += 2;
-				try {
-					Thread.sleep(1000);
-				} catch (Exception ex) {
-					ex.printStackTrace();
-					return -1;
-				}
-				temp = temp - 0.0310686; //
-				// Subracting 50 meters from mile
-
-				// Increase 1 second from the timestamp
-				driverTimeStamp.setMinutes(driverTimeStamp.getMinutes() + 1);
-				totalMinutes += 1;
-
-				// System.out.println("driverTimeStamp is: " + driverTimeStamp);
-
-				// TODO Check for max time-stamp that is less than
-				// driverTimeStamp
-
-				if (isParkingSpaceAvailable(parkingBlock)) {
-					System.out.println("Block searched for driver at " + driverTimeStamp + " is " + parkingBlock + " with a distance: " + temp
-							+ " miles");
-					continue;
-				} else {
-					System.out.println("Parking Lot not available at : " + driverTimeStamp);
-					// TODO Allocate a different block
-				}
+			double gForce = gComp.getGForce(totalAvailableParkingLots, closestDistance);
+			if (edge.numOperational > 0) {
+				mGForceDistance.put(edge.blockId, gForce);
 			}
-			return totalMinutes;
-		} catch (SQLException se) {
-			se.printStackTrace();
-			return -1;
+
+			System.out.println("GForce: " + gForce);
 		}
+		AppConstants.dynamicProgress = 30;
+
+		int parkingBlock = GeneralUtils.getBlockWithMaxForce(mGForceDistance);
+		HashMap<String, Location> blockLoc = GeneralUtils.getBlockLocation(parkingBlock);
+		Location blockStartLoc = blockLoc.get("start");
+		Location blockEndLoc = blockLoc.get("end");
+		System.out.println("Block searched for driver at + " + driverTimeStamp + " instant of time: " + parkingBlock + " with a distance: " + temp
+				+ " miles. This block is located between: " + blockStartLoc.getLatitude() + ", " + blockStartLoc.getLongitude() + " and "
+				+ blockEndLoc.getLatitude() + ", " + blockEndLoc.getLongitude());
+
+		System.out.println("&&&&&&&&&&&&&&&& END OF EXAMINATION &&&&&&&&&&&&&&&&&&\n\n");
+		AppConstants.dynamicProgress = 50;
+		// return parkingBlock;
+
+		// Scale: Driver travels 1 meter in 1 minute
+
+		int totalMinutes = 1;
+		while (temp > 0) {
+			AppConstants.dynamicProgress += 2;
+			try {
+				Thread.sleep(1000);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				return -1;
+			}
+			temp = temp - 0.0310686; //
+			// Subracting 50 meters from mile
+
+			// Increase 1 second from the timestamp
+			driverTimeStamp.setMinutes(driverTimeStamp.getMinutes() + 1);
+			totalMinutes += 1;
+
+			// System.out.println("driverTimeStamp is: " + driverTimeStamp);
+
+			// TODO Check for max time-stamp that is less than
+			// driverTimeStamp
+
+			if (isParkingSpaceAvailable(parkingBlock)) {
+				System.out
+						.println("Block searched for driver at " + driverTimeStamp + " is " + parkingBlock + " with a distance: " + temp + " miles");
+				continue;
+			} else {
+				System.out.println("Parking Lot not available at : " + driverTimeStamp);
+				// TODO Allocate a different block
+			}
+		}
+		return totalMinutes;
 	}
 
 	private void computeGravityFreeSpace(final Location userLoc) {

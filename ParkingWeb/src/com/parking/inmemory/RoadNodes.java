@@ -17,7 +17,7 @@ public class RoadNodes {
 		mInMemoryNodes.put(nodeId, node);
 	}
 
-	public RoadNetworkNode getEdge(int nodeId) {
+	public RoadNetworkNode getNode(int nodeId) {
 		return mInMemoryNodes.get(nodeId);
 	}
 

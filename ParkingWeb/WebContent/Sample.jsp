@@ -14,7 +14,7 @@ $(document).ready(function()
 	$.ajax(
 		{
 			crossDomain: true,
-			url: 'http://localhost:8080/ParkingWeb/rest/hello/gravitationaldeterministic/3',
+			url: 'http://localhost:8080/ParkingWeb/rest/gravitationaldeterministic/3',
 			complete: function(jsXHR, textStatus) {
 				var xmlResponse = $.parseXML(jsXHR.responseText),
 				$xml = $(xmlResponse),

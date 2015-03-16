@@ -13,6 +13,7 @@ import java.util.Map;
 import com.parking.constants.AppConstants;
 import com.parking.constants.AppConstants.ALGORITHM_TYPE;
 import com.parking.model.Location;
+import com.parking.model.RoadNetworkNode;
 
 public class GeneralUtils {
 
@@ -92,46 +93,10 @@ public class GeneralUtils {
 	}
 
 	public static Location getNodeLocation(final int nodeId) {
-		try {
-			Class.forName("org.postgresql.Driver");
-		} catch (ClassNotFoundException cnfe) {
-			cnfe.printStackTrace();
-		}
 
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-
-		try {
-			conn = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/postgres", "postgres", "cs440");
-			stmt = conn.createStatement();
-			String query = "select * from parking.\"node\" where node_id=" + nodeId;
-
-			rs = stmt.executeQuery(query);
-
-			double latitude = 0;
-			double longitude = 0;
-
-			while (rs.next()) {
-				latitude = Double.parseDouble(rs.getString(2));
-				longitude = Double.parseDouble(rs.getString(3));
-			}
-
-			Location location = new Location(latitude, longitude);
-			return location;
-
-		} catch (SQLException sqlEx) {
-			sqlEx.printStackTrace();
-			return null;
-		} finally {
-			try {
-				rs.close();
-				stmt.close();
-				conn.close();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
+		RoadNetworkNode node = AppConstants.sInMemoryNodes.getNode(nodeId);
+		Location location = new Location(node.latitude, node.longitude);
+		return location;
 	}
 
 	public static int getAvailableParkingLots(final int block, final Timestamp driverTimeStamp) {
