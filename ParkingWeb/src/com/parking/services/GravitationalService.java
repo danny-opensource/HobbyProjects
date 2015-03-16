@@ -10,14 +10,13 @@ import com.parking.constants.AppConstants;
 import com.parking.main.GravitationalImpl;
 import com.parking.model.Location;
 
-@Path("/hello")
+@Path("/parking")
 public class GravitationalService {
 	@GET
 	@Path("/gravitationaldeterministic/{param}")
 	@Produces("application/xml")
 	public Response applyGravitational(@PathParam("param") String trialCount) {
 		StringBuilder output = new StringBuilder("<trials>");
-
 		int trials = Integer.parseInt(trialCount);
 		GravitationalImpl gravityComp = new GravitationalImpl();
 		for (int i = 0; i < trials; i++) {
@@ -25,12 +24,21 @@ public class GravitationalService {
 			gravityComp.initializeDriverTime();
 			int totalMins = gravityComp.computeGravityRoadNetwork(sampleUserLoc);
 			output.append("<trial>");
-			output.append("<number>" +  + i + 1 + "</number>");
+			output.append("<number>" + +i + 1 + "</number>");
 			output.append("<averageTime>" + totalMins + "</averageTime>");
 			output.append("</trial>");
 		}
 		output.append("</trials>");
 		return Response.status(200).entity(output.toString()).build();
+	}
+
+	@GET
+	@Path("/gravitationaldeterministic/{user_latitude}/{user_longitude}/{parking_block}/{congestion_level}")
+	@Produces("application/xml")
+	public Response applyGravitational(@PathParam("user_latitiude") Double userLatitude, @PathParam("user_longitude") Double userLongitude,
+			@PathParam("parking_block") Integer parkingBlock, @PathParam("congestion_level") Integer congestionLevel) {
+		
+		return null;
 	}
 
 }
