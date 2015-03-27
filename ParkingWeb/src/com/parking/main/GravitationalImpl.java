@@ -72,7 +72,7 @@ public class GravitationalImpl extends HttpServlet {
 	}
 
 	public int computeGravityRoadNetwork(final Location userLoc) {
-		
+
 		System.out.println("*** Inside ComputeGravityRoadNetwork");
 
 		Iterator<Integer> it = AppConstants.sInMemoryEdges.getKeySet().iterator();
@@ -101,32 +101,38 @@ public class GravitationalImpl extends HttpServlet {
 			double totalDistanceViaNode1 = 0;
 			double totalDistanceViaNode2 = 0;
 
-			System.out.println("-------START EXAMINATION-------------");
-			System.out.println("Examination for block: " + edge.blockId);
+			// System.out.println("-------START EXAMINATION-------------");
+			// System.out.println("Examination for block: " + edge.blockId);
 
 			userToNode1Distance = DistanceUtils.distance(userLoc.getLatitude(), userLoc.getLongitude(), node1Loc.getLatitude(),
 					node1Loc.getLongitude(), 'M');
 
-			System.out.println("userToNode1Distance: " + userToNode1Distance);
+			// System.out.println("userToNode1Distance: " +
+			// userToNode1Distance);
 
 			userToNode2Distance = DistanceUtils.distance(userLoc.getLatitude(), userLoc.getLongitude(), node2Loc.getLatitude(),
 					node2Loc.getLongitude(), 'M');
 
-			System.out.println("userToNode2Distance: " + userToNode2Distance);
+			// System.out.println("userToNode2Distance: " +
+			// userToNode2Distance);
 
 			node1ToBlockDistance = DistanceUtils.distance(node1Loc.getLatitude(), node1Loc.getLongitude(), edge.latitude1, edge.longitude1, 'M');
 
-			System.out.println("node1ToBlockDistance: " + node1ToBlockDistance);
+			// System.out.println("node1ToBlockDistance: " +
+			// node1ToBlockDistance);
 
 			node2ToBlockDistance = DistanceUtils.distance(node2Loc.getLatitude(), node2Loc.getLongitude(), edge.latitude1, edge.longitude1, 'M');
 
-			System.out.println("node2ToBlockDistance: " + node2ToBlockDistance);
+			// System.out.println("node2ToBlockDistance: " +
+			// node2ToBlockDistance);
 
 			totalDistanceViaNode1 = userToNode1Distance + node1ToBlockDistance;
 			totalDistanceViaNode2 = userToNode2Distance + node2ToBlockDistance;
 
-			System.out.println("totalDistanceViaNode1: " + totalDistanceViaNode1);
-			System.out.println("totalDistanceViaNode2: " + totalDistanceViaNode2);
+			// System.out.println("totalDistanceViaNode1: " +
+			// totalDistanceViaNode1);
+			// System.out.println("totalDistanceViaNode2: " +
+			// totalDistanceViaNode2);
 
 			double closestDistance = Math.min(totalDistanceViaNode1, totalDistanceViaNode2);
 
@@ -136,16 +142,16 @@ public class GravitationalImpl extends HttpServlet {
 
 			int blockId = edge.blockId;
 			int totalAvailableParkingLots = GeneralUtils.getAvailableParkingLots(blockId, driverTimeStamp);
-			System.out.println("TotalAvailableParkingLots: " + totalAvailableParkingLots);
+			// System.out.println("TotalAvailableParkingLots: " +
+			// totalAvailableParkingLots);
 
 			double gForce = gComp.getGForce(totalAvailableParkingLots, closestDistance);
 			if (edge.numOperational > 0) {
 				mGForceDistance.put(edge.blockId, gForce);
 			}
 
-			System.out.println("GForce: " + gForce);
+			// System.out.println("GForce: " + gForce);
 		}
-		AppConstants.dynamicProgress = 30;
 
 		int parkingBlock = GeneralUtils.getBlockWithMaxForce(mGForceDistance);
 		HashMap<String, Location> blockLoc = GeneralUtils.getBlockLocation(parkingBlock);
@@ -155,29 +161,19 @@ public class GravitationalImpl extends HttpServlet {
 				+ " miles. This block is located between: " + blockStartLoc.getLatitude() + ", " + blockStartLoc.getLongitude() + " and "
 				+ blockEndLoc.getLatitude() + ", " + blockEndLoc.getLongitude());
 
-		System.out.println("&&&&&&&&&&&&&&&& END OF EXAMINATION &&&&&&&&&&&&&&&&&&\n\n");
-		AppConstants.dynamicProgress = 50;
-		// return parkingBlock;
+		// System.out.println("&&&&&&&&&&&&&&&& END OF EXAMINATION &&&&&&&&&&&&&&&&&&\n\n");
 
 		// Scale: Driver travels 1 meter in 1 minute
 
 		int totalMinutes = 1;
 		while (temp > 0) {
-			AppConstants.dynamicProgress += 2;
-			try {
-				Thread.sleep(1000);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-				return -1;
-			}
-			temp = temp - 0.0310686; //
+			temp = temp -
+					0.0310686; //
 			// Subracting 50 meters from mile
 
-			// Increase 1 second from the timestamp
+			// Increase 1 minute from the timestamp
 			driverTimeStamp.setMinutes(driverTimeStamp.getMinutes() + 1);
 			totalMinutes += 1;
-
-			// System.out.println("driverTimeStamp is: " + driverTimeStamp);
 
 			// TODO Check for max time-stamp that is less than
 			// driverTimeStamp
@@ -191,6 +187,7 @@ public class GravitationalImpl extends HttpServlet {
 				// TODO Allocate a different block
 			}
 		}
+		System.out.println("Total Minutes to the parking lot: " + totalMinutes);
 		return totalMinutes;
 	}
 

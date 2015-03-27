@@ -18,4 +18,9 @@ public class Location {
 		return mLongitude;
 	}
 
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return new String(mLatitude + "," + mLongitude);
+	}
 }

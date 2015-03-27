@@ -36,16 +36,6 @@ prcnt.innerHTML = percent + " %";
 		<input type="radio" name="algorithmType" value="1">Greedy Deterministic</>
 		 <br /> <input type="submit" value="Compute" />
 	</form>
-	
-<%
-		while(AppConstants.dynamicProgress != 100 && AppConstants.dynamicProgress != 0)
-			{
-			System.out.println("*** In While");
-		out.println("<script>updatePercent(" + AppConstants.dynamicProgress + ")</script>\n"); 
-		out.flush(); 
-			}
-		out.flush();
-	%>
 
 </body>
 </html>

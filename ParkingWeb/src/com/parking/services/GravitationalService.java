@@ -19,9 +19,11 @@ public class GravitationalService {
 		StringBuilder output = new StringBuilder("<trials>");
 		int trials = Integer.parseInt(trialCount);
 		GravitationalImpl gravityComp = new GravitationalImpl();
+		long startTime = System.currentTimeMillis();
 		for (int i = 0; i < trials; i++) {
 			System.out.println("** Trials are being executed: " + i);
 			Location sampleUserLoc = AppConstants.randomUserLocations.get(i);
+			System.out.println("Location is: " + sampleUserLoc.toString());
 			gravityComp.initializeDriverTime();
 			int totalMins = gravityComp.computeGravityRoadNetwork(sampleUserLoc);
 			output.append("<trial>");
@@ -30,6 +32,9 @@ public class GravitationalService {
 			output.append("</trial>");
 		}
 		output.append("</trials>");
+		long endTime = System.currentTimeMillis();
+		long totalTime = endTime - startTime;
+		System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&   Total Time taken: " + totalTime);
 		return Response.status(200).entity(output.toString()).build();
 	}
 

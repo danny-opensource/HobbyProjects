@@ -13,6 +13,7 @@ import java.util.Map;
 import com.parking.constants.AppConstants;
 import com.parking.constants.AppConstants.ALGORITHM_TYPE;
 import com.parking.model.Location;
+import com.parking.model.RoadNetworkEdge;
 import com.parking.model.RoadNetworkNode;
 
 public class GeneralUtils {
@@ -39,57 +40,24 @@ public class GeneralUtils {
 	public static HashMap<String, Location> getBlockLocation(final int blockId) {
 
 		HashMap<String, Location> blockLocation = new HashMap<String, Location>();
+		RoadNetworkEdge edge = AppConstants.sInMemoryEdges.getEdge(blockId);
 
-		try {
-			Class.forName("org.postgresql.Driver");
-		} catch (ClassNotFoundException cnfe) {
-			cnfe.printStackTrace();
-		}
+		double startLatitude = 0;
+		double startLongitude = 0;
+		double endLatitude = 0;
+		double endLongitude = 0;
 
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
+		startLatitude = edge.latitude1;
+		startLongitude = edge.longitude1;
+		endLatitude = edge.latitude2;
+		endLongitude = edge.longitude2;
 
-		try {
-			conn = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/postgres", "postgres", "cs440");
-			stmt = conn.createStatement();
-			String query = "select * from parking.\"edges\" where block_id=" + blockId;
+		Location startLocation = new Location(startLatitude, startLongitude);
+		blockLocation.put("start", startLocation);
+		Location endLocation = new Location(endLatitude, endLongitude);
+		blockLocation.put("end", endLocation);
 
-			rs = stmt.executeQuery(query);
-
-			double startLatitude = 0;
-			double startLongitude = 0;
-			double endLatitude = 0;
-			double endLongitude = 0;
-
-			while (rs.next()) {
-				startLatitude = Double.parseDouble(rs.getString(3));
-				startLongitude = Double.parseDouble(rs.getString(4));
-				endLatitude = Double.parseDouble(rs.getString(5));
-				endLongitude = Double.parseDouble(rs.getString(6));
-			}
-
-			Location startLocation = new Location(startLatitude, startLongitude);
-			blockLocation.put("start", startLocation);
-
-			Location endLocation = new Location(endLatitude, endLongitude);
-			blockLocation.put("end", endLocation);
-
-			return blockLocation;
-
-		} catch (SQLException sqlEx) {
-			sqlEx.printStackTrace();
-			return null;
-		} finally {
-			try {
-				rs.close();
-				stmt.close();
-				conn.close();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-
+		return blockLocation;
 	}
 
 	public static Location getNodeLocation(final int nodeId) {

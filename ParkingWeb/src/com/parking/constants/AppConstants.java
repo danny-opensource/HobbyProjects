@@ -14,7 +14,6 @@ public class AppConstants {
 		GRAVITATIONAL_DETERMINISTIC, GREEDY_DETERMINISTIC;
 	}
 
-	public static volatile int dynamicProgress = 0;
 	public static HashMap<Integer, Location> randomUserLocations;
 	public static RoadNodes sInMemoryNodes = new RoadNodes();
 	public static RoadEdges sInMemoryEdges = new RoadEdges();

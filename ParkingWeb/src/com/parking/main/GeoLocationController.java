@@ -77,7 +77,6 @@ public class GeoLocationController extends HttpServlet implements Runnable {
 			cnfe.printStackTrace();
 		}
 		try {
-			AppConstants.dynamicProgress = 20;
 			Connection conn = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/postgres", "postgres", "cs440");
 
 			Statement stmt = conn.createStatement();
@@ -160,13 +159,11 @@ public class GeoLocationController extends HttpServlet implements Runnable {
 					+ blockEndLoc.getLatitude() + ", " + blockEndLoc.getLongitude());
 
 			System.out.println("&&&&&&&&&&&&&&&& END OF EXAMINATION &&&&&&&&&&&&&&&&&&\n\n");
-			AppConstants.dynamicProgress = 50;
 			// return parkingBlock;
 
 			// Scale: Driver travels 1 meter in 1 minute
 
 			while (temp > 0) {
-				AppConstants.dynamicProgress = AppConstants.dynamicProgress + 5;
 				try {
 					Thread.sleep(1000);
 				} catch (Exception ex) {
@@ -302,13 +299,6 @@ public class GeoLocationController extends HttpServlet implements Runnable {
 			Thread gravityThread = new Thread(this);
 			gravityThread.start();
 			int previous = -1;
-			while (AppConstants.dynamicProgress != 100) {
-				if (previous != AppConstants.dynamicProgress) {
-					System.out.println("*** Inside If");
-					out.append("<html><body>Please wait while computing ... " + AppConstants.dynamicProgress + "<br/>");
-				}
-				previous = AppConstants.dynamicProgress;
-			}
 			//
 
 			break;
