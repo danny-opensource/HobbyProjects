@@ -7,27 +7,46 @@
 <title>Insert title here</title>
 <script src="js/jquery-1.11.2.min.js"></script>
 <script src="charts/Chart.js"></script>
-<script>
-	$(document)
-			.ready(
-					function() {
-						$
-								.ajax({
-									crossDomain : true,
-									url : 'http://localhost:8080/ParkingWeb/rest/parking/gravitationaldeterministic/2',
-									complete : function(jsXHR, textStatus) {
-										var xmlResponse = $
-												.parseXML(jsXHR.responseText), $xml = $(xmlResponse), $trials = $xml
-												.find('trials');
-										$averageTime = $xml.find('averageTime');
-										var jsAvgTime = $averageTime;
-										alert('Hi' + jsAvgTime.text());
-										$('h3#id').html(
-												"Total Trials conducted: "
-														+ $averageTime.text());
-									}
-								});
-					});
+<script type="text/javascript">
+	function runTrials() {
+		var averageTimes = [];
+		var counter = 0;
+		var averageTime = 0;
+		var plotTimes = [];
+		$("#imgProgress").show();
+		$
+				.ajax({
+					crossDomain : true,
+					url : 'http://localhost:8080/ParkingWeb/rest/parking/gravitationaldeterministic/2/0',
+					complete : function(jsXHR, textStatus) {
+						$("#imgProgress").hide();
+						var xmlResponse = $.parseXML(jsXHR.responseText), 
+						$xml = $(xmlResponse);
+						$($xml).find('trial').each(function()
+						{
+							averageTimes[counter] = $(this).find('averageTime').text();
+							alert('AverageTimes[counter]' + averageTimes[counter]);
+							counter++;
+						});
+						
+						for(var i=0;i<averageTimes.length;i++)
+						{
+							averageTime  = averageTime + parseInt(averageTimes[i]);
+							alert('iteration is: ' + i);
+							alert('averageTime is: ' + averageTime);
+						}
+						var jsAvgTime = averageTime/counter;
+						alert('Total AvgTime: ' + jsAvgTime);
+						//alert('Hi' + jsAvgTime.text());
+						plotTimes[0] = jsAvgTime;
+						plotTimes[1] = jsAvgTime;
+						plotTimes[2] = jsAvgTime;
+						plotTimes[3] = jsAvgTime;
+						plotTimes[4] = jsAvgTime;
+						populateGraph(plotTimes);
+					}
+				});
+	}
 </script>
 
 <style>
@@ -87,41 +106,28 @@
 			fontStyle : tooltip.fontStyle,
 		});
 	};
-	var randomScalingFactor = function() {
-		return Math.round(Math.random() * 100);
-	};
-	var lineChartData = {
-		labels : [ "0%", "10%", "20%", "30%", "40%" ],
-		datasets : [
-				{
-					label : "My First dataset",
-					fillColor : "rgba(220,220,220,0.2)",
-					strokeColor : "rgba(220,220,220,1)",
-					pointColor : "rgba(220,220,220,1)",
-					pointStrokeColor : "#fff",
-					pointHighlightFill : "#fff",
-					pointHighlightStroke : "rgba(220,220,220,1)",
-					data : [ randomScalingFactor(), randomScalingFactor(),
-							randomScalingFactor(), randomScalingFactor(),
-							randomScalingFactor(), randomScalingFactor(),
-							randomScalingFactor() ]
-				},
-				{
-					label : "My Second dataset",
-					fillColor : "rgba(151,187,205,0.2)",
-					strokeColor : "rgba(151,187,205,1)",
-					pointColor : "rgba(151,187,205,1)",
-					pointStrokeColor : "#fff",
-					pointHighlightFill : "#fff",
-					pointHighlightStroke : "rgba(151,187,205,1)",
-					data : [ randomScalingFactor(), randomScalingFactor(),
-							randomScalingFactor(), randomScalingFactor(),
-							randomScalingFactor(), randomScalingFactor(),
-							randomScalingFactor() ]
-				} ]
-	};
 
-	function populateGraph() {
+	
+	function populateGraph(plotTimes) {
+		var data = plotTimes;
+		//alert("Avg Time: " + jsAvgTime.text());
+		var randomScalingFactor = function() {
+			return Math.round(Math.random() * 100);
+		};
+		var lineChartData = {
+			labels : [ "0", "10", "20", "30", "40" ],
+			datasets : [
+					{
+						label : "My First dataset",
+						fillColor : "rgba(151,187,205,0.2)",
+						strokeColor : "rgba(151,187,205,1)",
+						pointColor : "rgba(151,187,205,1)",
+						pointStrokeColor : "#fff",
+						pointHighlightFill : "#fff",
+						pointHighlightStroke : "rgba(151,187,205,1)",
+						data : [data[0],data[1],data[2],data[3],data[4]]
+					}]
+		};
 		var ctx2 = document.getElementById("chart2").getContext("2d");
 		window.myLine = new Chart(ctx2).Line(lineChartData, {
 			responsive : true
@@ -130,9 +136,12 @@
 </script>
 </head>
 <body>
+
+	<img src="images/ajax-loader.gif" style="display: none;"
+		id="imgProgress" />
 	<h3 id="id"></h3>
 
-	<input type="button" value="Populate Graph" onclick="populateGraph()" />
+	<input type="button" value="Populate Graph" onclick="runTrials()" />
 
 	<div id="canvas-holder2">
 		<canvas id="chart2" width="450" height="300" />
