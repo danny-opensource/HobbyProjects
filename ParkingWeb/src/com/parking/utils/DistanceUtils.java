@@ -1,20 +1,52 @@
 package com.parking.utils;
 
+import com.parking.maps.GoogleDistance;
+import com.parking.maps.OSMMaps;
 import com.parking.model.Location;
 
 public class DistanceUtils {
-	
-	public static Location latlong(final Location startPoint, final double bearing, final double distance)
-	{
-		
+
+	private static GoogleDistance sGoogleInstance;
+	private static OSMMaps sOSMMaps;
+
+	private DistanceUtils() {
+		System.out.println("Sorry. This class cannot be instantiated. It is a Singleton!");
+	}
+
+	public static GoogleDistance getGDistanceInstance() {
+		if (sGoogleInstance == null) {
+			sGoogleInstance = new GoogleDistance();
+			return sGoogleInstance;
+		}
+		return sGoogleInstance;
+	}
+
+	public static OSMMaps getOSMMapsInstance() {
+		if (sOSMMaps == null) {
+			sOSMMaps = new OSMMaps();
+			return sOSMMaps;
+		}
+		return sOSMMaps;
+	}
+
+	public static Location latlong(final Location startPoint, final double bearing, final double distance) {
+
 		return null;
 	}
 
-	public static double distance(double lat1, double lon1, double lat2,
-			double lon2, char unit) {
+	public static double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
+
+		double distance = 0;
+		OSMMaps osmMapsInstance = DistanceUtils.getOSMMapsInstance();
+
+		distance = Double.parseDouble(osmMapsInstance.getDistance(lat1, lon1, lat2, lon2));
+		System.out.println("*** Double Distance: " + distance);
+		return distance;
+	}
+
+	public static double anotherDistance(double lat1, double lon1, double lat2, double lon2, char unit) {
 		double theta = lon1 - lon2;
-		double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2))
-				+ Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2))
+		double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2))
 				* Math.cos(deg2rad(theta));
 		dist = Math.acos(dist);
 		dist = rad2deg(dist);
