@@ -2,6 +2,7 @@ package com.parking.constants;
 
 import java.util.HashMap;
 
+import com.parking.inmemory.BlockProjections;
 import com.parking.inmemory.RoadEdges;
 import com.parking.inmemory.RoadNodes;
 import com.parking.model.Location;
