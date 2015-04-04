@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 import com.parking.constants.AppConstants;
+import com.parking.inmemory.BlockProjections;
 import com.parking.model.Location;
 import com.parking.model.RoadNetworkEdge;
 import com.parking.model.RoadNetworkNode;
@@ -106,12 +107,14 @@ public class AppInitializer extends HttpServlet {
 		} catch (ClassNotFoundException cnfe) {
 			cnfe.printStackTrace();
 		}
-
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
 		try {
-			Connection conn = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/postgres", "postgres", "cs440");
+			conn = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/postgres", "postgres", "cs440");
 			String query = "select * from parking.\"node\"";
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(query);
 			RoadNetworkNode node;
 			while (rs.next()) {
 				node = new RoadNetworkNode();
@@ -140,12 +143,25 @@ public class AppInitializer extends HttpServlet {
 				edge.numBlocks = Integer.parseInt(rs.getString(9));
 				edge.numOperational = Integer.parseInt(rs.getString(10));
 				AppConstants.sInMemoryEdges.insert(edge.blockId, edge);
-
 			}
 
 		} catch (SQLException sqlEx) {
 			sqlEx.printStackTrace();
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (stmt != null) {
+					stmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (Exception ex) {
+				System.out.println("In AppInitializer. Exception in closing connections!");
+				ex.printStackTrace();
+			}
 		}
 	}
-
 }
