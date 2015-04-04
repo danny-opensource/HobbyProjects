@@ -20,5 +20,8 @@
 	<classpathentry kind="lib" path="libs/jersey-servlet-1.19.jar"/>
 	<classpathentry kind="lib" path="libs/jettison-1.1.jar"/>
 	<classpathentry kind="lib" path="libs/jsr311-api-1.1.1.jar"/>
+	<classpathentry kind="lib" path="libs/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="libs/org.json-20120521.jar"/>
+	<classpathentry kind="lib" path="libs/java-json.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
