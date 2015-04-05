@@ -139,17 +139,15 @@ public class GeoLocationController extends HttpServlet implements Runnable {
 				}
 
 				int blockId = Integer.parseInt(rs.getString(1));
-				int totalAvailableParkingLots = GeneralUtils.getAvailableParkingLots(blockId, driverTimeStamp);
+				int totalAvailableParkingLots = GeneralUtils.getAvailableParkingLots(blockId, driverTimeStamp, 0);
 				System.out.println("TotalAvailableParkingLots: " + totalAvailableParkingLots);
 
 				double gForce = gComp.getGForce(totalAvailableParkingLots, closestDistance);
 				if (Integer.parseInt(rs.getString(10)) > 0) {
 					mGForceDistance.put(Integer.parseInt(rs.getString(1)), gForce);
 				}
-
 				System.out.println("GForce: " + gForce);
 			}
-
 			int parkingBlock = GeneralUtils.getBlockWithMaxForce(mGForceDistance);
 			HashMap<String, Location> blockLoc = GeneralUtils.getBlockLocation(parkingBlock);
 			Location blockStartLoc = blockLoc.get("start");
@@ -225,7 +223,7 @@ public class GeoLocationController extends HttpServlet implements Runnable {
 				}
 
 				int blockId = Integer.parseInt(rs.getString(1));
-				int totalAvailableParkingLots = GeneralUtils.getAvailableParkingLots(blockId, driverTimeStamp);
+				int totalAvailableParkingLots = GeneralUtils.getAvailableParkingLots(blockId, driverTimeStamp, 0);
 
 				double gForce = gComp.getGForce(totalAvailableParkingLots, closestDistance);
 				if (Integer.parseInt(rs.getString(10)) > 0) {
@@ -345,6 +343,6 @@ public class GeoLocationController extends HttpServlet implements Runnable {
 		rSearch.initializeDriverTime();
 
 		System.out.println("Computing your parking lot. Please wait ...");
-		rSearch.computeGravityRoadNetwork(currentUserLoc);
+		rSearch.computeGravityRoadNetwork(currentUserLoc, 0);
 	}
 }
