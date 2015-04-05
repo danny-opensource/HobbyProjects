@@ -11,7 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 import com.parking.constants.AppConstants;
-import com.parking.inmemory.BlockProjections;
 import com.parking.model.Location;
 import com.parking.model.RoadNetworkEdge;
 import com.parking.model.RoadNetworkNode;
@@ -119,6 +118,7 @@ public class AppInitializer extends HttpServlet {
 			while (rs.next()) {
 				node = new RoadNetworkNode();
 				node.nodeId = Integer.parseInt(rs.getString(1));
+				System.out.println("NodeID in AppInitializer is : " + AppConstants.sInMemoryNodes);
 				node.latitude = Double.parseDouble(rs.getString(2));
 				node.longitude = Double.parseDouble(rs.getString(3));
 				node.nodeName = rs.getString(4);
