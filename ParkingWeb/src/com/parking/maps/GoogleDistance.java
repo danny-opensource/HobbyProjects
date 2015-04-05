@@ -29,7 +29,6 @@ public class GoogleDistance {
 			}
 		}
 		String location = locationBuilder.toString();
-		System.out.println("Location String: " + location);
 		// System.out.println(location);
 		URL url = new URL(location);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -75,7 +74,6 @@ public class GoogleDistance {
 				distance = distance.replace("mi", "");
 			}
 			actualDistance = distance.trim();
-			System.out.println("*** actualDistance: " + actualDistance);
 			return actualDistance;
 
 		} else
@@ -94,7 +92,6 @@ public class GoogleDistance {
 			ex.printStackTrace();
 			return null;
 		}
-		System.out.println("*** Returning Distance: " + returnDistance);
 		return returnDistance;
 	}
 
@@ -124,8 +121,6 @@ public class GoogleDistance {
 		// System.out.println(element.toString());
 		JSONObject distance = (JSONObject) element.get("distance");
 		String dist = distance.get("text").toString();
-		System.out.println("*** dist: " + distance);
-		System.out.println(dist);
 		return dist;
 	}
 }
