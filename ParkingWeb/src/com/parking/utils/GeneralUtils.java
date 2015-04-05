@@ -67,7 +67,7 @@ public class GeneralUtils {
 		return location;
 	}
 
-	public static int getAvailableParkingLots(final int block, final Timestamp driverTimeStamp) {
+	public static int getAvailableParkingLots(final int block, final Timestamp driverTimeStamp, final int congestionLevel) {
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -79,14 +79,39 @@ public class GeneralUtils {
 		}
 		try {
 			conn = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/postgres", "postgres", "cs440");
-			String query = "select p.available, max(p.timestamp) from parking.\"projection\" p where p.block_id=" + block + "and p.timestamp <'"
-					+ driverTimeStamp + "' group by p.available";
+			String query = "";
+			switch (congestionLevel) {
+			case 0:
+				query = "select p.available, max(p.timestamp) from parking.\"projection\" p where p.block_id=" + block + "and p.timestamp <'"
+						+ driverTimeStamp + "' group by p.available";
+				break;
+			case 30:
+				query = "select p.available, max(p.timestamp) from parking.\"projection_thirty\" p where p.block_id=" + block + "and p.timestamp <'"
+						+ driverTimeStamp + "' group by p.available";
+				break;
+			case 50:
+				query = "select p.available, max(p.timestamp) from parking.\"projection_fifty\" p where p.block_id=" + block + "and p.timestamp <'"
+						+ driverTimeStamp + "' group by p.available";
+				break;
+			case 70:
+				query = "select p.available, max(p.timestamp) from parking.\"projection_seventy\" p where p.block_id=" + block + "and p.timestamp <'"
+						+ driverTimeStamp + "' group by p.available";
+				break;
+			case 90:
+				query = "select p.available, max(p.timestamp) from parking.\"projection_ninety\" p where p.block_id=" + block + "and p.timestamp <'"
+						+ driverTimeStamp + "' group by p.available";
+				break;
+			default:
+				query = "select p.available, max(p.timestamp) from parking.\"projection\" p where p.block_id=" + block + "and p.timestamp <'"
+						+ driverTimeStamp + "' group by p.available";
+				break;
+			}
 
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(query);
 			int parkingLotCount = 0;
 			if (rs.next()) {
-				System.out.println("*** Chosen timestamp: " + rs.getString(2));
+			//	System.out.println("*** Chosen timestamp: " + rs.getString(2));
 				parkingLotCount = Integer.parseInt(rs.getString(1));
 			}
 			return parkingLotCount;
