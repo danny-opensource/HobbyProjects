@@ -80,21 +80,8 @@ public class OSMMaps {
 					builder.append((char) a);
 				}
 				// System.out.println(builder.toString());
-				String distance = fetchTotalTime(builder.toString());
-				StringBuilder distanceBuilder = new StringBuilder();
-
-				String actualDistance = "";
-				if (distance.contains("ft")) {
-					distance = distance.replace("ft", "");
-					distance = distance.trim();
-					double ft = Double.parseDouble(distance);
-					ft *= 0.000189394;
-					distance = ft + "";
-				} else {
-					distance = distance.replace("mi", "");
-				}
-				actualDistance = distance.trim();
-				return actualDistance;
+				String totalTime = fetchTotalTime(builder.toString());
+				return totalTime;
 
 			}
 
@@ -115,9 +102,9 @@ public class OSMMaps {
 			System.exit(1);
 		}
 		JSONObject routeSummary = (JSONObject) response.get("route_summary"); //
-		String totalDistance = routeSummary.get("total_time").toString();
+		String totalTime = routeSummary.get("total_time").toString();
 
-		return totalDistance;
+		return totalTime;
 	}
 
 	private String fetchDistance(final String builderString) {
