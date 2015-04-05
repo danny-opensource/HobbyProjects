@@ -71,7 +71,7 @@ public class GravitationalImpl extends HttpServlet {
 		}
 	}
 
-	public int computeGravityRoadNetwork(final Location userLoc) {
+	public int computeGravityRoadNetwork(final Location userLoc, final int congestionLevel) {
 		Iterator<Integer> it = AppConstants.sInMemoryEdges.getKeySet().iterator();
 		mGForceDistance = new Hashtable<Integer, Double>();
 		GravitationalComputation gComp = new GravitationalComputation();
@@ -80,7 +80,7 @@ public class GravitationalImpl extends HttpServlet {
 			double userToBlockDistance = 0;
 			userToBlockDistance = DistanceUtils.distance(userLoc.getLatitude(), userLoc.getLongitude(), edge.latitude1, edge.longitude1, 'M');
 			int blockId = edge.blockId;
-			int totalAvailableParkingLots = GeneralUtils.getAvailableParkingLots(blockId, driverTimeStamp);
+			int totalAvailableParkingLots = GeneralUtils.getAvailableParkingLots(blockId, driverTimeStamp, congestionLevel);
 			double gForce = gComp.getGForce(totalAvailableParkingLots, userToBlockDistance);
 			if (edge.numOperational > 0) {
 				mGForceDistance.put(edge.blockId, gForce);
@@ -91,36 +91,36 @@ public class GravitationalImpl extends HttpServlet {
 		HashMap<String, Location> blockLoc = GeneralUtils.getBlockLocation(parkingBlock);
 		Location blockStartLoc = blockLoc.get("start");
 		Location blockEndLoc = blockLoc.get("end");
-		System.out.println("Block searched for driver at + " + driverTimeStamp + " instant of time: " + parkingBlock);
+		// System.out.println("Block searched for driver at + " +
+		// driverTimeStamp + " instant of time: " + parkingBlock);
 
 		double userToBestParkingDistance = DistanceUtils.distance(userLoc.getLatitude(), userLoc.getLongitude(), blockStartLoc.getLatitude(),
 				blockStartLoc.getLongitude(), 'M');
 
-		System.out.println("The Parking Block allocated is located at a distance of: " + userToBestParkingDistance + " from the user location");
+		System.out.println("The Parking Block: " + parkingBlock + " allocated is located at a distance of: " + userToBestParkingDistance
+				+ " from the user location");
 
-		int totalMinutes = 1;
+		int totalTime = DistanceUtils.totalTime(userLoc.getLatitude(), userLoc.getLongitude(), blockStartLoc.getLatitude(),
+				blockStartLoc.getLongitude(), 'M');
 		while (userToBestParkingDistance > 0) {
 			userToBestParkingDistance = userToBestParkingDistance - 0.0310686; //
 			// Subracting 50 meters from mile
 
 			// Increase 1 minute from the timestamp
 			driverTimeStamp.setMinutes(driverTimeStamp.getMinutes() + 1);
-			totalMinutes += 1;
 
 			// TODO Check for max time-stamp that is less than
 			// driverTimeStamp
 
 			if (isParkingSpaceAvailable(parkingBlock)) {
-				System.out.println("Block searched for driver at " + driverTimeStamp + " is " + parkingBlock + " with a distance: "
-						+ userToBestParkingDistance + " miles");
 				continue;
 			} else {
 				System.out.println("Parking Lot not available at : " + driverTimeStamp);
 				// TODO Allocate a different block
 			}
 		}
-		System.out.println("Total Minutes to the parking lot: " + totalMinutes);
-		return totalMinutes;
+		System.out.println("Total Minutes to the parking lot in seconds: " + totalTime);
+		return totalTime;
 	}
 
 	private void computeGravityFreeSpace(final Location userLoc) {
@@ -152,7 +152,7 @@ public class GravitationalImpl extends HttpServlet {
 				}
 
 				int blockId = Integer.parseInt(rs.getString(1));
-				int totalAvailableParkingLots = GeneralUtils.getAvailableParkingLots(blockId, driverTimeStamp);
+				int totalAvailableParkingLots = GeneralUtils.getAvailableParkingLots(blockId, driverTimeStamp, 0);
 
 				double gForce = gComp.getGForce(totalAvailableParkingLots, closestDistance);
 				if (Integer.parseInt(rs.getString(10)) > 0) {
@@ -161,8 +161,9 @@ public class GravitationalImpl extends HttpServlet {
 			}
 
 			int parkingBlock = GeneralUtils.getBlockWithMaxForce(mGForceDistance);
-			System.out.println("Block searched for driver at 2012-04-06:00:19:00 instant of time: " + parkingBlock + " with a distance: " + temp
-					+ " miles");
+			// System.out.println("Block searched for driver at 2012-04-06:00:19:00 instant of time: "
+			// + parkingBlock + " with a distance: " + temp
+			// + " miles");
 
 			// Scale: Driver travels 1 meter in 1 sec
 
@@ -209,10 +210,6 @@ public class GravitationalImpl extends HttpServlet {
 		}
 	}
 
-	public void setCongestionLevel(final int percentageCongestionLevel) {
-
-	}
-
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -230,11 +227,11 @@ public class GravitationalImpl extends HttpServlet {
 			// Initialize the driver timestamp to 2012-04-06:00:00:10:00
 			rSearch.initializeDriverTime();
 
-			System.out.println("Computing your parking lot. Please wait ...");
+			// System.out.println("Computing your parking lot. Please wait ...");
 			/*
 			 * ---> Uncomment for Gravitational Algorithm using Road Network
 			 */
-			rSearch.computeGravityRoadNetwork(currentUserLoc);
+			rSearch.computeGravityRoadNetwork(currentUserLoc, 0);
 			break;
 		case GREEDY_DETERMINISTIC:
 			break;
@@ -253,14 +250,16 @@ public class GravitationalImpl extends HttpServlet {
 		// Initialize the driver timestamp to 2012-04-06:00:00:10:00
 		rSearch.initializeDriverTime();
 
-		System.out.println("Computing your parking lot. Please wait ...");
+		// System.out.println("Computing your parking lot. Please wait ...");
 
 		// rSearch.computeGravityFreeSpace(currentUserLoc); --> Uncomment for
 		// Gravitation Algorithm using Free Space
-		rSearch.computeGravityRoadNetwork(currentUserLoc); // ---> Uncomment for
-															// Gravitational
-															// Algorithm using
-															// Road Network
+		rSearch.computeGravityRoadNetwork(currentUserLoc, 0); // ---> Uncomment
+																// for
+																// Gravitational
+																// Algorithm
+																// using
+																// Road Network
 
 	}
 }
