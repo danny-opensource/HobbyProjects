@@ -25,8 +25,8 @@ public class GravitationalService {
 			Location sampleUserLoc = AppConstants.randomUserLocations.get(i);
 			System.out.println("Location is: " + sampleUserLoc.toString());
 			gravityComp.initializeDriverTime();
-			gravityComp.setCongestionLevel(Integer.parseInt(congestionLevel));
-			int totalMins = gravityComp.computeGravityRoadNetwork(sampleUserLoc);
+			int totalSecs = gravityComp.computeGravityRoadNetwork(sampleUserLoc, Integer.parseInt(congestionLevel));
+			double totalMins = (totalSecs / (double)60);
 			output.append("<trial>");
 			output.append("<number>" + (i + 1) + "</number>");
 			output.append("<averageTime>" + totalMins + "</averageTime>");
