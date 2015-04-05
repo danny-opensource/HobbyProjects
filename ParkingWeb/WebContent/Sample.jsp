@@ -31,7 +31,7 @@
 						
 						for(var i=0;i<averageTimes.length;i++)
 						{
-							averageTime  = averageTime + parseInt(averageTimes[i]);
+							averageTime  = averageTime + parseFloat(averageTimes[i]);
 							alert('iteration is: ' + i);
 							alert('averageTime is: ' + averageTime);
 						}
