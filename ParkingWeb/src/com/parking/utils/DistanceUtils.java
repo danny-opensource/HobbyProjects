@@ -40,8 +40,18 @@ public class DistanceUtils {
 		OSMMaps osmMapsInstance = DistanceUtils.getOSMMapsInstance();
 
 		distance = Double.parseDouble(osmMapsInstance.getDistance(lat1, lon1, lat2, lon2));
-		System.out.println("*** Double Distance: " + distance);
+		// System.out.println("*** Double Distance: " + distance);
 		return distance;
+	}
+
+	public static int totalTime(double lat1, double lon1, double lat2, double lon2, char unit) {
+
+		int totalTimeInSecs = 0;
+		OSMMaps osmMapsInstance = DistanceUtils.getOSMMapsInstance();
+
+		totalTimeInSecs = Integer.parseInt(osmMapsInstance.getTotalTimeToParkingBlock(lat1, lon1, lat2, lon2));
+		// System.out.println("*** Double Distance: " + distance);
+		return totalTimeInSecs;
 	}
 
 	public static double anotherDistance(double lat1, double lon1, double lat2, double lon2, char unit) {
