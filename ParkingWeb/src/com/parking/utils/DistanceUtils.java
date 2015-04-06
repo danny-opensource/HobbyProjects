@@ -4,6 +4,13 @@ import com.parking.maps.GoogleDistance;
 import com.parking.maps.OSMMaps;
 import com.parking.model.Location;
 
+/**
+ * General Distance Utility class that acts as a facade for handling distance
+ * and time related functionalities
+ * 
+ * @author Madan Gopal (Git: madan1988)
+ *
+ */
 public class DistanceUtils {
 
 	private static GoogleDistance sGoogleInstance;
