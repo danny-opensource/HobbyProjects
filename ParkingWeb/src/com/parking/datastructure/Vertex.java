@@ -1,5 +1,11 @@
 package com.parking.datastructure;
 
+/**
+ * Road Vertex Data Structure
+ * 
+ * @author Madan Gopal (Git: madan1988)
+ *
+ */
 public class Vertex implements Comparable<Vertex> {
 	public String name;
 	public Edge[] adjacencies;
