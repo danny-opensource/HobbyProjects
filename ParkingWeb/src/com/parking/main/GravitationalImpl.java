@@ -18,16 +18,20 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.ws.http.HTTPBinding;
 
 import com.parking.algorithms.GravitationalComputation;
 import com.parking.constants.AppConstants;
-import com.parking.constants.AppConstants.ALGORITHM_TYPE;
 import com.parking.model.Location;
 import com.parking.model.RoadNetworkEdge;
 import com.parking.utils.DistanceUtils;
 import com.parking.utils.GeneralUtils;
 
+/**
+ * Core Gravitational Algorithm Implementater.
+ * 
+ * @author Madan Gopal (Git: madan1988)
+ *
+ */
 public class GravitationalImpl extends HttpServlet {
 
 	private Timestamp driverTimeStamp;
@@ -82,6 +86,7 @@ public class GravitationalImpl extends HttpServlet {
 			int blockId = edge.blockId;
 			int totalAvailableParkingLots = GeneralUtils.getAvailableParkingLots(blockId, driverTimeStamp, congestionLevel);
 			double gForce = gComp.getGForce(totalAvailableParkingLots, userToBlockDistance);
+			System.out.println("Block: " + blockId + " : GForce:" + gForce + " : congestionLevel: " + congestionLevel);
 			if (edge.numOperational > 0) {
 				mGForceDistance.put(edge.blockId, gForce);
 			}
@@ -102,23 +107,20 @@ public class GravitationalImpl extends HttpServlet {
 
 		int totalTime = DistanceUtils.totalTime(userLoc.getLatitude(), userLoc.getLongitude(), blockStartLoc.getLatitude(),
 				blockStartLoc.getLongitude(), 'M');
-		while (userToBestParkingDistance > 0) {
-			userToBestParkingDistance = userToBestParkingDistance - 0.0310686; //
-			// Subracting 50 meters from mile
-
-			// Increase 1 minute from the timestamp
-			driverTimeStamp.setMinutes(driverTimeStamp.getMinutes() + 1);
-
-			// TODO Check for max time-stamp that is less than
-			// driverTimeStamp
-
-			if (isParkingSpaceAvailable(parkingBlock)) {
-				continue;
-			} else {
-				System.out.println("Parking Lot not available at : " + driverTimeStamp);
-				// TODO Allocate a different block
-			}
-		}
+		/*
+		 * while (userToBestParkingDistance > 0) { userToBestParkingDistance =
+		 * userToBestParkingDistance - 0.0310686; // // Subracting 50 meters
+		 * from mile
+		 * 
+		 * // Increase 1 minute from the timestamp
+		 * driverTimeStamp.setMinutes(driverTimeStamp.getMinutes() + 1);
+		 * 
+		 * // TODO Check for max time-stamp that is less than // driverTimeStamp
+		 * 
+		 * if (isParkingSpaceAvailable(parkingBlock)) { continue; } else {
+		 * System.out.println("Parking Lot not available at : " +
+		 * driverTimeStamp); // TODO Allocate a different block } }
+		 */
 		System.out.println("Total Minutes to the parking lot in seconds: " + totalTime);
 		return totalTime;
 	}
