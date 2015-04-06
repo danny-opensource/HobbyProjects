@@ -18,15 +18,19 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.ws.http.HTTPBinding;
 
 import com.parking.algorithms.GravitationalComputation;
 import com.parking.constants.AppConstants;
-import com.parking.constants.AppConstants.ALGORITHM_TYPE;
 import com.parking.model.Location;
 import com.parking.utils.DistanceUtils;
 import com.parking.utils.GeneralUtils;
 
+/**
+ * Location Controller. Not currently in use. This is deprecated.
+ * 
+ * @author Madan Gopal (Git: madan1988)
+ *
+ */
 public class GeoLocationController extends HttpServlet implements Runnable {
 
 	private Timestamp driverTimeStamp;
