@@ -1,5 +1,11 @@
 package com.parking.model;
 
+/**
+ * Location Data Structure
+ * 
+ * @author Madan Gopal (Git: madan1988)
+ *
+ */
 public class Location {
 
 	private double mLatitude;
