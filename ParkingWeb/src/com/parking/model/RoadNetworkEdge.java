@@ -1,5 +1,11 @@
 package com.parking.model;
 
+/**
+ * Road Network Edge Data Structure
+ * 
+ * @author Madan Gopal (Git: madan1988)
+ *
+ */
 public class RoadNetworkEdge {
 
 	public int blockId;
