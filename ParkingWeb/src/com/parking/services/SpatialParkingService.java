@@ -11,12 +11,20 @@ import com.parking.main.GravitationalImpl;
 import com.parking.main.GreedyImpl;
 import com.parking.model.Location;
 
+/**
+ * Core REST Service that services all the requests from the UI. Follows SOA
+ * Based Architecure
+ * 
+ * @author Madan Gopal (Git: madan1988)
+ *
+ */
 @Path("/parking")
 public class SpatialParkingService {
 	@GET
 	@Path("/gravitationaldeterministic/{trialCount}/{congestionLevel}")
 	@Produces("application/xml")
 	public Response applyGravitational(@PathParam("trialCount") String trialCount, @PathParam("congestionLevel") String congestionLevel) {
+		System.out.println("CongestionLevel Received: " + congestionLevel);
 		StringBuilder output = new StringBuilder("<trials>");
 		int trials = Integer.parseInt(trialCount);
 		GravitationalImpl gravityComp = new GravitationalImpl();
