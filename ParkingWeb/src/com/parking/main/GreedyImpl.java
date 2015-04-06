@@ -1,25 +1,125 @@
 package com.parking.main;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
 
-import com.parking.datastructure.Edge;
-import com.parking.datastructure.Vertex;
+import com.parking.constants.AppConstants;
 import com.parking.model.Location;
-import com.parking.utils.DatabaseUtils;
+import com.parking.model.RoadNetworkEdge;
+import com.parking.utils.DistanceUtils;
+import com.parking.utils.GeneralUtils;
 
+/**
+ * Core Greedy Algorithm Implementer
+ * 
+ * @author Madan Gopal (Git: madan1988)
+ *
+ */
 public class GreedyImpl {
 
 	private Timestamp driverTimeStamp;
 
-	private void initializeDriverTime() {
+	private TreeMap<Integer, Double> mBlockDistanceSortedMap;
+
+	private boolean isParkingSpaceAvailable(final int block) {
+		/*
+		 * TODO Check if parking space is available for the block at the
+		 * driverTimeStamp
+		 */
+
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			Class.forName("org.postgresql.Driver");
+		} catch (ClassNotFoundException cnfe) {
+			cnfe.printStackTrace();
+			return false;
+		}
+		try {
+			conn = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/postgres", "postgres", "cs440");
+			String query = "select p.block_id, max(p.timestamp) from parking.\"projection\" p where p.block_id=" + block + "and p.timestamp <'"
+					+ driverTimeStamp + "' group by p.block_id";
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(query);
+			if (rs.next()) {
+				// System.out.println("User's timestamp: " + driverTimeStamp);
+				// System.out.println("Chosen Timestamp: " + rs.getString(2));
+
+				int parkingLotCount = Integer.parseInt(rs.getString(1));
+				if (parkingLotCount > 0) {
+					return true;
+				}
+			}
+			return false;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+	}
+
+	public int computeGravityRoadNetwork(final Location userLoc, final int congestionLevel) {
+		Iterator<Integer> it = AppConstants.sInMemoryEdges.getKeySet().iterator();
+		mBlockDistanceSortedMap = new TreeMap<Integer, Double>();
+		while (it.hasNext()) {
+			RoadNetworkEdge edge = AppConstants.sInMemoryEdges.getEdge(it.next());
+			double userToBlockDistance = 0;
+			userToBlockDistance = DistanceUtils.distance(userLoc.getLatitude(), userLoc.getLongitude(), edge.latitude1, edge.longitude1, 'M');
+			int blockId = edge.blockId;
+			int totalAvailableParkingLots = GeneralUtils.getAvailableParkingLots(blockId, driverTimeStamp, congestionLevel);
+			if (edge.numOperational > 0 && totalAvailableParkingLots > 0) {
+				mBlockDistanceSortedMap.put(edge.blockId, userToBlockDistance);
+			}
+		}
+		Map<Integer, Double> sortedDistanceMap = GeneralUtils.sortByValues(mBlockDistanceSortedMap);
+
+		int parkingBlock = GeneralUtils.getNearestParkingBlock(sortedDistanceMap);
+		HashMap<String, Location> blockLoc = GeneralUtils.getBlockLocation(parkingBlock);
+		Location blockStartLoc = blockLoc.get("start");
+
+		double userToBestParkingDistance = DistanceUtils.distance(userLoc.getLatitude(), userLoc.getLongitude(), blockStartLoc.getLatitude(),
+				blockStartLoc.getLongitude(), 'M');
+
+		System.out.println("The Parking Block: " + parkingBlock + " allocated is located at a distance of: " + userToBestParkingDistance
+				+ " from the user location");
+
+		int totalTime = DistanceUtils.totalTime(userLoc.getLatitude(), userLoc.getLongitude(), blockStartLoc.getLatitude(),
+				blockStartLoc.getLongitude(), 'M');
+
+		// NAVIGATION PART WHILE - BAD CODE. RE-INVENT!
+		while (userToBestParkingDistance > 0) {
+			userToBestParkingDistance = userToBestParkingDistance - 0.0310686; //
+			// Subracting 50 meters from mile
+
+			// Increase 1 minute from the timestamp
+			driverTimeStamp.setMinutes(driverTimeStamp.getMinutes() + 1);
+
+			// TODO Check for max time-stamp that is less than
+			// driverTimeStamp
+
+			if (isParkingSpaceAvailable(parkingBlock)) {
+				continue;
+			} else {
+				System.out.println("Parking Lot not available at : " + driverTimeStamp);
+				// TODO Allocate a different block
+			}
+		}
+
+		System.out.println("Total Minutes to the parking lot in seconds: " + totalTime);
+		return totalTime;
+	}
+
+	public void initializeDriverTime() {
 		try {
 			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 			Date date = dateFormat.parse("23/04/2012");
@@ -28,99 +128,8 @@ public class GreedyImpl {
 			date.setSeconds(00);
 			long time = date.getTime();
 			driverTimeStamp = new Timestamp(time);
-
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
-
-	public void computeGravityRoadNetwork(final Location userLoc) {
-		Connection conn = DatabaseUtils.getDBConnection();
-
-		HashMap<Integer, Vertex> vertexMap = new HashMap<Integer, Vertex>();
-
-		Vertex vertex[] = new Vertex[1000];
-		Edge edge[] = new Edge[1000];
-		int index = 0;
-
-		String query = "select * from parking.\"node\"";
-		try {
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			int nodeId = 0;
-			double latitude = 0.0;
-			double longitude = 0.0;
-			String nodeName = "";
-			while (rs.next()) {
-				nodeId = Integer.parseInt(rs.getString(1));
-				latitude = Double.parseDouble(rs.getString(2));
-				longitude = Double.parseDouble(rs.getString(3));
-				nodeName = rs.getString(4);
-				vertex[index].nodeId = nodeId;
-				vertex[index].name = nodeName;
-				vertex[index].latitude = latitude;
-				vertex[index].longitude = longitude;
-				vertexMap.put(nodeId, vertex[index]);
-				index++;
-			}
-		} catch (SQLException sqlE) {
-			sqlE.printStackTrace();
-		}
-
-		index = 0;
-		query = "select * from parking.\"edges\"";
-		try {
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			int blockId = 0;
-			String blockName = "";
-			double latitude1 = 0.0;
-			double longitude1 = 0.0;
-			double latitude2 = 0.0;
-			double longitude2 = 0.0;
-			int node1 = 0;
-			int node2 = 0;
-			int numBlocks = 0;
-			int operationalBlocks = 0;
-
-			rs = stmt.executeQuery(query);
-			while (rs.next()) {
-				blockId = Integer.parseInt(rs.getString(1));
-				blockName = rs.getString(2);
-				latitude1 = Double.parseDouble(rs.getString(3));
-				longitude1 = Double.parseDouble(rs.getString(4));
-				latitude2 = Double.parseDouble(rs.getString(5));
-				longitude2 = Double.parseDouble(rs.getString(6));
-				node1 = Integer.parseInt(rs.getString(7));
-				node2 = Integer.parseInt(rs.getString(8));
-				numBlocks = Integer.parseInt(rs.getString(9));
-				operationalBlocks = Integer.parseInt(rs.getString(10));
-
-				edge[index].blockId = blockId;
-				edge[index].blockName = blockName;
-				edge[index].latitude1 = latitude1;
-				edge[index].longitude1 = longitude1;
-				edge[index].latitude2 = latitude2;
-				edge[index].node1 = node1;
-				edge[index].node2 = node2;
-				edge[index].numBlocks = numBlocks;
-				edge[index].operationalBlocks = operationalBlocks;
-
-			}
-
-		} catch (SQLException sqlE) {
-			sqlE.printStackTrace();
-		}
-
-	}
-
-	public static void main(String[] args) {
-		GreedyImpl greedyImpl = new GreedyImpl();
-
-		Location currentUserLoc = new Location(37.805559, -122.414299);
-
-		greedyImpl.computeGravityRoadNetwork(currentUserLoc);
-
-	}
-
 }
