@@ -5,6 +5,12 @@ import java.util.Set;
 
 import com.parking.model.RoadNetworkEdge;
 
+/**
+ * Road Edges Map Construction
+ * 
+ * @author Madan Gopal (Git: madan1988)
+ *
+ */
 public class RoadEdges {
 
 	private HashMap<Integer, RoadNetworkEdge> mInMemoryEdges;
