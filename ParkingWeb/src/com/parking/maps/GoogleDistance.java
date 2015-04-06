@@ -14,6 +14,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+/**
+ * Utility to fetch the distance and navigation details using Google APIs.
+ * 
+ * @author Madan Gopal (Git: madan1988)
+ *
+ */
 public class GoogleDistance {
 	private final String MAP_API = "https://maps.googleapis.com/maps/api";
 
