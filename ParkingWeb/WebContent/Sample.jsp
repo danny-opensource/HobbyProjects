@@ -8,42 +8,52 @@
 <script src="js/jquery-1.11.2.min.js"></script>
 <script src="charts/Chart.js"></script>
 <script type="text/javascript">
-	function runTrials() {
+	var plotTimes = [];
+	var congestionCounter = 0;
+	function runTrials(congestion) {
 		var averageTimes = [];
 		var counter = 0;
 		var averageTime = 0;
-		var plotTimes = [];
 		$("#imgProgress").show();
 		$
 				.ajax({
 					crossDomain : true,
-					url : 'http://localhost:8080/ParkingWeb/rest/parking/gravitationaldeterministic/2/0',
+					url : 'http://localhost:8080/ParkingWeb/rest/parking/gravitationaldeterministic/2/'
+							+ congestion,
 					complete : function(jsXHR, textStatus) {
 						$("#imgProgress").hide();
-						var xmlResponse = $.parseXML(jsXHR.responseText), 
-						$xml = $(xmlResponse);
-						$($xml).find('trial').each(function()
-						{
-							averageTimes[counter] = $(this).find('averageTime').text();
-							alert('AverageTimes[counter]' + averageTimes[counter]);
-							counter++;
-						});
-						
-						for(var i=0;i<averageTimes.length;i++)
-						{
-							averageTime  = averageTime + parseFloat(averageTimes[i]);
-							alert('iteration is: ' + i);
-							alert('averageTime is: ' + averageTime);
+						var xmlResponse = $.parseXML(jsXHR.responseText), $xml = $(xmlResponse);
+						$($xml).find('trial').each(
+								function() {
+									averageTimes[counter] = $(this).find(
+											'averageTime').text();
+									
+									counter++;
+								});
+
+						for (var i = 0; i < averageTimes.length; i++) {
+							averageTime = averageTime
+									+ parseFloat(averageTimes[i]);
+							
 						}
-						var jsAvgTime = averageTime/counter;
-						alert('Total AvgTime: ' + jsAvgTime);
+						var jsAvgTime = averageTime / counter;
 						//alert('Hi' + jsAvgTime.text());
-						plotTimes[0] = jsAvgTime;
-						plotTimes[1] = jsAvgTime;
-						plotTimes[2] = jsAvgTime;
-						plotTimes[3] = jsAvgTime;
-						plotTimes[4] = jsAvgTime;
-						populateGraph(plotTimes);
+						plotTimes[congestionCounter] = jsAvgTime;
+						if (congestion == 0) {
+							runTrials(30);
+							congestionCounter++;
+						} else if (congestion == 30) {
+							runTrials(50);
+							congestionCounter++;
+						} else if (congestion == 50) {
+							runTrials(70);
+							congestionCounter++;
+						} else if (congestion == 70) {
+							runTrials(90);
+							congestionCounter++;
+						} else if (congestion == 90) {
+							populateGraph(plotTimes);
+						}
 					}
 				});
 	}
@@ -107,7 +117,6 @@
 		});
 	};
 
-	
 	function populateGraph(plotTimes) {
 		var data = plotTimes;
 		//alert("Avg Time: " + jsAvgTime.text());
@@ -115,18 +124,17 @@
 			return Math.round(Math.random() * 100);
 		};
 		var lineChartData = {
-			labels : [ "0", "10", "20", "30", "40" ],
-			datasets : [
-					{
-						label : "My First dataset",
-						fillColor : "rgba(151,187,205,0.2)",
-						strokeColor : "rgba(151,187,205,1)",
-						pointColor : "rgba(151,187,205,1)",
-						pointStrokeColor : "#fff",
-						pointHighlightFill : "#fff",
-						pointHighlightStroke : "rgba(151,187,205,1)",
-						data : [data[0],data[1],data[2],data[3],data[4]]
-					}]
+			labels : [ "0", "30", "50", "70", "90" ],
+			datasets : [ {
+				label : "My First dataset",
+				fillColor : "rgba(151,187,205,0.2)",
+				strokeColor : "rgba(151,187,205,1)",
+				pointColor : "rgba(151,187,205,1)",
+				pointStrokeColor : "#fff",
+				pointHighlightFill : "#fff",
+				pointHighlightStroke : "rgba(151,187,205,1)",
+				data : [ data[0], data[1], data[2], data[3], data[4] ]
+			} ]
 		};
 		var ctx2 = document.getElementById("chart2").getContext("2d");
 		window.myLine = new Chart(ctx2).Line(lineChartData, {
@@ -136,12 +144,11 @@
 </script>
 </head>
 <body>
-
 	<img src="images/ajax-loader.gif" style="display: none;"
 		id="imgProgress" />
 	<h3 id="id"></h3>
 
-	<input type="button" value="Populate Graph" onclick="runTrials()" />
+	<input type="button" value="Populate Graph" onclick="runTrials(0)" />
 
 	<div id="canvas-holder2">
 		<canvas id="chart2" width="450" height="300" />
