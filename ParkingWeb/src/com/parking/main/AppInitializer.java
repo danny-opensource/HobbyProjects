@@ -15,11 +15,13 @@ import com.parking.model.Location;
 import com.parking.model.RoadNetworkEdge;
 import com.parking.model.RoadNetworkNode;
 
+/**
+ * Entry point to the application. Called when the server is initialized
+ * 
+ * @author Madan Gopal (Git: madan1988)
+ *
+ */
 public class AppInitializer extends HttpServlet {
-
-	private void loadUserLocations() {
-
-	}
 
 	@Override
 	public void init() throws ServletException {
@@ -27,7 +29,7 @@ public class AppInitializer extends HttpServlet {
 		System.out.println("---- Initializing the User Locations ------");
 		AppConstants.randomUserLocations = new HashMap<Integer, Location>();
 		AppConstants.randomUserLocations.put(0, new Location(37.806205, -122.424262));
-		AppConstants.randomUserLocations.put(1, new Location(37.805082, -122.421966));
+		AppConstants.randomUserLocations.put(1, new Location(37.805853, -122.419370));
 		AppConstants.randomUserLocations.put(2, new Location(37.804700, -122.421097));
 		AppConstants.randomUserLocations.put(3, new Location(37.806464, -122.419091));
 		AppConstants.randomUserLocations.put(4, new Location(37.805836, -122.419606));
@@ -40,7 +42,7 @@ public class AppInitializer extends HttpServlet {
 		AppConstants.randomUserLocations.put(11, new Location(37.804929, -122.419391));
 		AppConstants.randomUserLocations.put(12, new Location(37.803683, -122.420850));
 
-		AppConstants.randomUserLocations.put(13, new Location(37.805853, -122.419370));
+		AppConstants.randomUserLocations.put(13, new Location(37.805082, -122.421966));
 		AppConstants.randomUserLocations.put(14, new Location(37.804912, -122.419391));
 		AppConstants.randomUserLocations.put(15, new Location(37.804785, -122.425195));
 		AppConstants.randomUserLocations.put(16, new Location(37.805133, -122.417975));
