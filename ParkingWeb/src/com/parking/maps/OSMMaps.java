@@ -5,11 +5,16 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+/**
+ * Utility to fetch the distance and navigation details using OSM APIs.
+ * 
+ * @author Madan Gopal (Git: madan1988)
+ *
+ */
 public class OSMMaps {
 
 	private final String OSM_BASE_URL = "http://router.project-osrm.org/viaroute?";
