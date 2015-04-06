@@ -4,6 +4,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * General Database Utility class that helps in providing and house-keeping
+ * database connections
+ * 
+ * @author Madan Gopal (Git: madan1988)
+ *
+ */
 public class DatabaseUtils {
 
 	private static Connection sDatabaseConnection;
