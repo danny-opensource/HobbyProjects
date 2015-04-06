@@ -1,10 +1,16 @@
 package com.parking.datastructure;
 
+/**
+ * Parking Edge Data Structure
+ * 
+ * @author Madan Gopal (Git: madan1988)
+ *
+ */
 public class Edge {
 
 	public Vertex target;
 	public double weight;
-	
+
 	public int blockId = 0;
 	public String blockName = "";
 	public double latitude1 = 0.0;
