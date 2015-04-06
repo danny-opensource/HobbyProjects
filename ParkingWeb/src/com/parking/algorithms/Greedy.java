@@ -9,8 +9,9 @@ import com.parking.datastructure.Edge;
 import com.parking.datastructure.Vertex;
 
 /**
- * The Greedy algorithm is based on the Dijkstra's Shortest path approach
+ * The Greedy algorithm is based on the A* Shortest path approach
  * 
+ * @author Madan Gopal (Git: madan1988)s
  */
 
 public class Greedy {
