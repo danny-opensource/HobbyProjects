@@ -6,6 +6,12 @@ import com.parking.inmemory.RoadEdges;
 import com.parking.inmemory.RoadNodes;
 import com.parking.model.Location;
 
+/**
+ * Constants used through out the application
+ * 
+ * @author Madan Gopal (Git: madan1988)
+ *
+ */
 public class AppConstants {
 
 	public static final String ALGORITHM_TYPE_KEY = "algorithmType";
