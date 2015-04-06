@@ -5,6 +5,12 @@ import java.util.Set;
 
 import com.parking.model.RoadNetworkNode;
 
+/**
+ * Road Node Map Construction
+ * 
+ * @author Madan Gopal (Git: madan1988)
+ *
+ */
 public class RoadNodes {
 
 	private HashMap<Integer, RoadNetworkNode> mInMemoryNodes;
