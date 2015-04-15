@@ -77,13 +77,35 @@ public class GreedyImpl {
 			userToBlockDistance = DistanceUtils.distance(userLoc.getLatitude(), userLoc.getLongitude(), edge.latitude1, edge.longitude1, 'M');
 			int blockId = edge.blockId;
 			int totalAvailableParkingLots = GeneralUtils.getAvailableParkingLots(blockId, driverTimeStamp, congestionLevel);
+			System.out.println("**** totalAvailableParkingLots: " + totalAvailableParkingLots);
+			System.out.println("*** Num Operational: " + edge.numOperational);
+			double resultantValue;
+			if (edge.numOperational == 0) {
+				resultantValue = 0;
+			} else {
+				resultantValue = (totalAvailableParkingLots / edge.numOperational) / userToBlockDistance;
+			}
 			if (edge.numOperational > 0 && totalAvailableParkingLots > 0) {
-				mBlockDistanceSortedMap.put(edge.blockId, userToBlockDistance);
+				mBlockDistanceSortedMap.put(edge.blockId, resultantValue);
 			}
 		}
-		Map<Integer, Double> sortedDistanceMap = GeneralUtils.sortByValues(mBlockDistanceSortedMap);
+		TreeMap<Integer, Double> sortedDistanceMap = (TreeMap<Integer, Double>) GeneralUtils.sortByValues(mBlockDistanceSortedMap);
+		Iterator testIt = sortedDistanceMap.keySet().iterator();
+		/*
+		 * while (testIt.hasNext()) { System.out.println("Test: " +
+		 * testIt.next() + " with value: " +
+		 * sortedDistanceMap.get(testIt.next())); }
+		 */
+
+		for (Map.Entry<Integer, Double> entry : sortedDistanceMap.entrySet()) {
+			System.out.print(entry.getKey() + "/" + entry.getValue() + "....");
+			Location loc = GeneralUtils.getBlockLocation(entry.getKey()).get("start");
+			System.out.println("Distance is: "
+					+ DistanceUtils.distance(userLoc.getLatitude(), userLoc.getLongitude(), loc.getLatitude(), loc.getLongitude(), 'M'));
+		}
 
 		int parkingBlock = GeneralUtils.getNearestParkingBlock(sortedDistanceMap);
+		System.out.println("*** Parking Block got : " + parkingBlock);
 		HashMap<String, Location> blockLoc = GeneralUtils.getBlockLocation(parkingBlock);
 		Location blockStartLoc = blockLoc.get("start");
 
