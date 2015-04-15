@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.parking.inmemory.RoadEdges;
 import com.parking.inmemory.RoadNodes;
 import com.parking.model.Location;
+import com.parking.model.TrialData;
 
 /**
  * Constants used through out the application
@@ -23,5 +24,6 @@ public class AppConstants {
 	public static HashMap<Integer, Location> randomUserLocations;
 	public static RoadNodes sInMemoryNodes = new RoadNodes();
 	public static RoadEdges sInMemoryEdges = new RoadEdges();
+	public static HashMap<String, TrialData> sGravitationalTraialData = new HashMap<String, TrialData>();
 
 }
