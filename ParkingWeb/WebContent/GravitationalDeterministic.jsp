@@ -1,3 +1,4 @@
+<%@page import="com.parking.constants.AppConstants"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -13,6 +14,10 @@
 <script
 	src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 <script type="text/javascript">
+	$(document).on("ready", function() {
+		runTrials(0);
+	});
+
 	Chart.defaults.global.pointHitDetectionRadius = 1;
 	Chart.defaults.global.customTooltips = function(tooltip) {
 		var tooltipEl = $('#chartjs-tooltip');
@@ -49,7 +54,7 @@
 			return Math.round(Math.random() * 100);
 		};
 		var lineChartData = {
-			labels : [ "0", "10", "20", "30", "40" ],
+			labels : [ "0", "30", "50", "70", "90" ],
 			datasets : [ {
 				label : "My First dataset",
 				fillColor : "rgba(151,187,205,0.2)",
@@ -57,6 +62,7 @@
 				pointColor : "rgba(151,187,205,1)",
 				pointStrokeColor : "#fff",
 				pointHighlightFill : "#fff",
+				axisLabel : "Congestion Level",
 				pointHighlightStroke : "rgba(151,187,205,1)",
 				data : [ randomScalingFactor() * 100,
 						randomScalingFactor() * 100,
@@ -95,16 +101,18 @@
 		});
 	}
 
-	function runTrials() {
+	var plotTimes = [];
+	var congestionCounter = 0;
+	function runTrials(congestion) {
 		var averageTimes = [];
 		var counter = 0;
 		var averageTime = 0;
-		var plotTimes = [];
 		$("#imgProgress").show();
 		$
 				.ajax({
 					crossDomain : true,
-					url : 'http://localhost:8080/ParkingWeb/rest/parking/greedydeterministic/2/0',
+					url : 'http://localhost:8080/ParkingWeb/rest/parking/gravitationaldeterministic/2/'
+							+ congestion,
 					complete : function(jsXHR, textStatus) {
 						$("#imgProgress").hide();
 						var xmlResponse = $.parseXML(jsXHR.responseText), $xml = $(xmlResponse);
@@ -112,28 +120,33 @@
 								function() {
 									averageTimes[counter] = $(this).find(
 											'averageTime').text();
-									alert('AverageTimes[counter]'
-											+ averageTimes[counter]);
+
 									counter++;
 								});
 
 						for (var i = 0; i < averageTimes.length; i++) {
 							averageTime = averageTime
 									+ parseFloat(averageTimes[i]);
-							alert('iteration is: ' + i);
-							alert('averageTime is: ' + averageTime);
+
 						}
 						var jsAvgTime = averageTime / counter;
-						alert('Total AvgTime: ' + jsAvgTime);
 						//alert('Hi' + jsAvgTime.text());
-						plotTimes[0] = jsAvgTime;
-						plotTimes[1] = jsAvgTime;
-						plotTimes[2] = jsAvgTime;
-						plotTimes[3] = jsAvgTime;
-						plotTimes[4] = jsAvgTime;
-						populateGraph(plotTimes);
-						populateTable(trialNumbers, userLocation, averageTime,
-								congestionLevel);
+						plotTimes[congestionCounter] = jsAvgTime;
+						if (congestion == 0) {
+							runTrials(30);
+							congestionCounter++;
+						} else if (congestion == 30) {
+							runTrials(50);
+							congestionCounter++;
+						} else if (congestion == 50) {
+							runTrials(70);
+							congestionCounter++;
+						} else if (congestion == 70) {
+							runTrials(90);
+							congestionCounter++;
+						} else if (congestion == 90) {
+							populateGraph(plotTimes);
+						}
 					}
 				});
 	}
@@ -168,6 +181,11 @@
 </style>
 </head>
 <body>
+
+	<%
+		AppConstants.sGravitationalTraialData.clear();
+	%>
+
 	<img src="images/ajax-loader.gif" style="display: none;"
 		id="imgProgress" />
 	<h3 id="id"></h3>
@@ -185,44 +203,45 @@
 				<h3>Analysis for 0% Congestion</h3>
 				<p>
 					Total Trials Conducted: <label id="trialsCountZero"></label> <a
-						href="#navigationDialog" class="ui-btn ui-btn-inline">Show
-						Navigation</a> <a href="#trialData" class="ui-btn ui-btn-inline">Show
-						Trial Data</a>
-				</p>
-			</div>
-			<div data-role="collapsible">
-				<h3>Analysis for 10% Congestion</h3>
-				<p>
-					Total Trials Conducted: <label id="trialsCountTen"></label> <a
-						href="#navigationDialog" class="ui-btn ui-btn-inline">Show
-						Navigation</a> <a href="#trialData" class="ui-btn ui-btn-inline">Show
-						Trial Data</a>
-				</p>
-			</div>
-			<div data-role="collapsible">
-				<h3>Analysis for 20% Congestion</h3>
-				<p>
-					Total Trials Conducted: <label id="trialsCountTwenty"></label> <a
-						href="#navigationDialog" class="ui-btn ui-btn-inline">Show
-						Navigation</a> <a href="#trialData" class="ui-btn ui-btn-inline">Show
-						Trial Data</a>
+						href='GeoLocation.jsp?userLatitude=37.806205&userLongitude=-122.424262&blockLatitude=37.804709&blockLongitude=-122.420990'
+						class="ui-btn ui-btn-inline" rel="external">Show Navigation</a> <a
+						href="TrialData.jsp?congestion=0" class="ui-btn ui-btn-inline">Show Trial
+						Data</a>
 				</p>
 			</div>
 			<div data-role="collapsible">
 				<h3>Analysis for 30% Congestion</h3>
 				<p>
-					Total Trials Conducted: <label id="trialsCountThirty"></label> <a
+					Total Trials Conducted: <label id="trialsCountTen"></label> <a
 						href="#navigationDialog" class="ui-btn ui-btn-inline">Show
-						Navigation</a> <a href="#trialData" class="ui-btn ui-btn-inline">Show
+						Navigation</a> <a href="TrialData.jsp?congestion=30" class="ui-btn ui-btn-inline">Show
 						Trial Data</a>
 				</p>
 			</div>
 			<div data-role="collapsible">
-				<h3>Analysis for 40% Congestion</h3>
+				<h3>Analysis for 50% Congestion</h3>
+				<p>
+					Total Trials Conducted: <label id="trialsCountTwenty"></label> <a
+						href="#navigationDialog" class="ui-btn ui-btn-inline">Show
+						Navigation</a> <a href="TrialData.jsp?congestion=50" class="ui-btn ui-btn-inline">Show
+						Trial Data</a>
+				</p>
+			</div>
+			<div data-role="collapsible">
+				<h3>Analysis for 70% Congestion</h3>
+				<p>
+					Total Trials Conducted: <label id="trialsCountThirty"></label> <a
+						href="#navigationDialog" class="ui-btn ui-btn-inline">Show
+						Navigation</a> <a href="TrialData.jsp?congestion=70" class="ui-btn ui-btn-inline">Show
+						Trial Data</a>
+				</p>
+			</div>
+			<div data-role="collapsible">
+				<h3>Analysis for 90% Congestion</h3>
 				<p>
 					Total Trials Conducted: <label id="trialsCountFourty"></label> <a
 						href="#navigationDialog" class="ui-btn ui-btn-inline">Show
-						Navigation</a> <a href="#trialData" class="ui-btn ui-btn-inline">Show
+						Navigation</a> <a href="TrialData.jsp?congestion=90" class="ui-btn ui-btn-inline">Show
 						Trial Data</a>
 				</p>
 			</div>
