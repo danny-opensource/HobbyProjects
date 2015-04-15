@@ -28,7 +28,7 @@ public class OSMMaps {
 			HttpURLConnection.setFollowRedirects(true);
 			conn.setDoInput(true);
 			conn.connect();
-
+			
 			int status = conn.getResponseCode();
 
 			if (status == HttpURLConnection.HTTP_OK) {
