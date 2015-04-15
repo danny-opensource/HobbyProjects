@@ -10,6 +10,7 @@ import com.parking.constants.AppConstants;
 import com.parking.main.GravitationalImpl;
 import com.parking.main.GreedyImpl;
 import com.parking.model.Location;
+import com.parking.model.TrialData;
 
 /**
  * Core REST Service that services all the requests from the UI. Follows SOA
@@ -33,8 +34,11 @@ public class SpatialParkingService {
 			Location sampleUserLoc = AppConstants.randomUserLocations.get(i);
 			System.out.println("Location is: " + sampleUserLoc.toString());
 			gravityComp.initializeDriverTime();
-			int totalSecs = gravityComp.computeGravityRoadNetwork(sampleUserLoc, Integer.parseInt(congestionLevel));
-			double totalMins = (totalSecs / (double) 60);
+			TrialData trialData = gravityComp.computeGravityRoadNetwork(sampleUserLoc, Integer.parseInt(congestionLevel));
+			trialData.setTrialNumber(i + 1);
+			trialData.setCongestionLevel(Integer.parseInt(congestionLevel));
+			AppConstants.sGravitationalTraialData.put(congestionLevel + "$" + (i + 1), trialData);
+			double totalMins = (trialData.getTimeToParkingBlock() / (double) 60);
 			output.append("<trial>");
 			output.append("<number>" + (i + 1) + "</number>");
 			output.append("<averageTime>" + totalMins + "</averageTime>");
