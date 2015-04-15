@@ -23,6 +23,7 @@ import com.parking.algorithms.GravitationalComputation;
 import com.parking.constants.AppConstants;
 import com.parking.model.Location;
 import com.parking.model.RoadNetworkEdge;
+import com.parking.model.TrialData;
 import com.parking.utils.DistanceUtils;
 import com.parking.utils.GeneralUtils;
 
@@ -75,7 +76,7 @@ public class GravitationalImpl extends HttpServlet {
 		}
 	}
 
-	public int computeGravityRoadNetwork(final Location userLoc, final int congestionLevel) {
+	public TrialData computeGravityRoadNetwork(final Location userLoc, final int congestionLevel) {
 		Iterator<Integer> it = AppConstants.sInMemoryEdges.getKeySet().iterator();
 		mGForceDistance = new Hashtable<Integer, Double>();
 		GravitationalComputation gComp = new GravitationalComputation();
@@ -122,9 +123,11 @@ public class GravitationalImpl extends HttpServlet {
 		 * driverTimeStamp); // TODO Allocate a different block } }
 		 */
 		System.out.println("Total Minutes to the parking lot in seconds: " + totalTime);
-		return totalTime;
+		TrialData returnTrialData = new TrialData(totalTime, parkingBlock, userLoc, blockStartLoc);
+		return returnTrialData;
 	}
 
+	@Deprecated
 	private void computeGravityFreeSpace(final Location userLoc) {
 		try {
 			Class.forName("org.postgresql.Driver");
