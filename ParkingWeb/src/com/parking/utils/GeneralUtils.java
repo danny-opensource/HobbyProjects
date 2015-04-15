@@ -5,10 +5,12 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.TreeMap;
 
 import com.parking.constants.AppConstants;
@@ -16,6 +18,7 @@ import com.parking.constants.AppConstants.ALGORITHM_TYPE;
 import com.parking.model.Location;
 import com.parking.model.RoadNetworkEdge;
 import com.parking.model.RoadNetworkNode;
+import com.parking.model.TrialData;
 
 /**
  * All other utility functions that cannot be categorized under Database and
@@ -42,9 +45,14 @@ public class GeneralUtils {
 		return sortedByValues;
 	}
 
-	public static int getNearestParkingBlock(Map<Integer, Double> minMap) {
-		Iterator<Integer> i = minMap.keySet().iterator();
-		return i.hasNext() ? i.next() : null;
+	public static int getNearestParkingBlock(TreeMap<Integer, Double> minMap) {
+		NavigableMap<Integer, Double> parkingMap = minMap;
+		return parkingMap.lastKey();
+
+		/*
+		 * Iterator<Integer> i = minMap.keySet().iterator(); return i.hasNext()
+		 * ? i.next() : null;
+		 */
 	}
 
 	public static int getBlockWithMaxForce(Map<Integer, Double> minMap) {
@@ -64,6 +72,59 @@ public class GeneralUtils {
 		}
 
 		return returnKey;
+	}
+
+	public static ArrayList<TrialData> getTrialData(final int congestionLevel) {
+		ArrayList<TrialData> returnList = new ArrayList<TrialData>();
+		switch (congestionLevel) {
+		case 0:
+			for (String key : AppConstants.sGravitationalTraialData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("0")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sGravitationalTraialData.get(key));
+				}
+			}
+			break;
+		case 30:
+			for (String key : AppConstants.sGravitationalTraialData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("30")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sGravitationalTraialData.get(key));
+				}
+			}
+			break;
+		case 50:
+			for (String key : AppConstants.sGravitationalTraialData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("50")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sGravitationalTraialData.get(key));
+				}
+			}
+			break;
+		case 70:
+			for (String key : AppConstants.sGravitationalTraialData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("70")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sGravitationalTraialData.get(key));
+				}
+			}
+			break;
+		case 90:
+			for (String key : AppConstants.sGravitationalTraialData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("90")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sGravitationalTraialData.get(key));
+				}
+			}
+			break;
+		}
+
+		return returnList;
 	}
 
 	public static HashMap<String, Location> getBlockLocation(final int blockId) {
@@ -164,9 +225,11 @@ public class GeneralUtils {
 			if (rs.next()) {
 				parkingLotCount = Integer.parseInt(rs.getString(1));
 			}
-			/*if (block == 612311) {
-				System.out.println("612311 parking avail: " + parkingLotCount + " for congession: " + congestionLevel);
-			}*/
+			/*
+			 * if (block == 612311) {
+			 * System.out.println("612311 parking avail: " + parkingLotCount +
+			 * " for congession: " + congestionLevel); }
+			 */
 			return parkingLotCount;
 		} catch (Exception ex) {
 			ex.printStackTrace();
