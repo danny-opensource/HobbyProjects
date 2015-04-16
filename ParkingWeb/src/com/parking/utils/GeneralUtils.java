@@ -245,6 +245,58 @@ public class GeneralUtils {
 		}
 	}
 
+	public static double getEstimatedParkingLots(final int blockId, final Timestamp driverTimeStamp) {
+
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		int hour = driverTimeStamp.getHours();
+		int dayOfWeek = driverTimeStamp.getDay();
+
+		try {
+			Class.forName("org.postgresql.Driver");
+		} catch (ClassNotFoundException cnfe) {
+			cnfe.printStackTrace();
+			return -1;
+		}
+		try {
+			conn = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/postgres", "postgres", "cs440");
+			String query = "";
+			String secondQuery = "";
+			String timeStamp = "";
+			/*
+			 * query =
+			 * "select max(p.timestamp) from parking.\"prob_data\" p where p.block_id="
+			 * + blockId + "and p.timestamp <'" + driverTimeStamp +
+			 * "' group by p.available";
+			 */
+
+			query = "select avg from parking.\"prob_data\" p where p.block_id=" + blockId + " and time=" + hour + " and dow=" + dayOfWeek;
+
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(query);
+
+			double estimatedFreeBlocks = 0;
+			if (rs.next()) {
+				estimatedFreeBlocks = Double.parseDouble(rs.getString(1));
+			}
+
+			return estimatedFreeBlocks;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return -1;
+		} finally {
+			try {
+				rs.close();
+				stmt.close();
+				conn.close();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+
+	}
+
 	public static AppConstants.ALGORITHM_TYPE getAlgorithmType(int type) {
 		switch (type) {
 		case 0:
