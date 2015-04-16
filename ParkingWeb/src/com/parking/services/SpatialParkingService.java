@@ -42,6 +42,8 @@ public class SpatialParkingService {
 			output.append("<trial>");
 			output.append("<number>" + (i + 1) + "</number>");
 			output.append("<averageTime>" + totalMins + "</averageTime>");
+			output.append("<userLocation>" + trialData.getUserLocation()+"</userLocation>");
+			output.append("<blockLocation>" + trialData.getParkingBlockLocation() + "</blockLocation>");
 			output.append("<congestionLevel>" + 0 + "</congestionLevel>");
 			output.append("</trial>");
 		}
