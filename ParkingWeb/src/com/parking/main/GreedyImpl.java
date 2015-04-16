@@ -16,6 +16,7 @@ import java.util.TreeMap;
 import com.parking.constants.AppConstants;
 import com.parking.model.Location;
 import com.parking.model.RoadNetworkEdge;
+import com.parking.model.TrialData;
 import com.parking.utils.DistanceUtils;
 import com.parking.utils.GeneralUtils;
 
@@ -68,7 +69,7 @@ public class GreedyImpl {
 		}
 	}
 
-	public int computeGravityRoadNetwork(final Location userLoc, final int congestionLevel) {
+	public TrialData computeGravityRoadNetwork(final Location userLoc, final int congestionLevel) {
 		Iterator<Integer> it = AppConstants.sInMemoryEdges.getKeySet().iterator();
 		mBlockDistanceSortedMap = new TreeMap<Integer, Double>();
 		while (it.hasNext()) {
@@ -138,7 +139,8 @@ public class GreedyImpl {
 		}
 
 		System.out.println("Total Minutes to the parking lot in seconds: " + totalTime);
-		return totalTime;
+		TrialData returnTrialData = new TrialData(totalTime, parkingBlock, userLoc, blockStartLoc);
+		return returnTrialData;
 	}
 
 	public void initializeDriverTime() {
