@@ -9,6 +9,8 @@ import javax.ws.rs.core.Response;
 import com.parking.constants.AppConstants;
 import com.parking.main.GravitationalImpl;
 import com.parking.main.GreedyImpl;
+import com.parking.main.ProbabilisticGravitationalImpl;
+import com.parking.main.ProbabilisticGreedyImpl;
 import com.parking.model.Location;
 import com.parking.model.TrialData;
 
@@ -42,7 +44,7 @@ public class SpatialParkingService {
 			output.append("<trial>");
 			output.append("<number>" + (i + 1) + "</number>");
 			output.append("<averageTime>" + totalMins + "</averageTime>");
-			output.append("<userLocation>" + trialData.getUserLocation()+"</userLocation>");
+			output.append("<userLocation>" + trialData.getUserLocation() + "</userLocation>");
 			output.append("<blockLocation>" + trialData.getParkingBlockLocation() + "</blockLocation>");
 			output.append("<congestionLevel>" + 0 + "</congestionLevel>");
 			output.append("</trial>");
@@ -63,11 +65,75 @@ public class SpatialParkingService {
 			Location sampleUserLoc = AppConstants.randomUserLocations.get(i);
 			System.out.println("Location is: " + sampleUserLoc.toString());
 			greedyImpl.initializeDriverTime();
-			int totalSecs = greedyImpl.computeGravityRoadNetwork(sampleUserLoc, Integer.parseInt(congestionLevel));
-			double totalMins = (totalSecs / (double) 60);
+			TrialData trialData = greedyImpl.computeGravityRoadNetwork(sampleUserLoc, Integer.parseInt(congestionLevel));
+			trialData.setTrialNumber(i + 1);
+			trialData.setCongestionLevel(Integer.parseInt(congestionLevel));
+			AppConstants.sGravitationalTraialData.put(congestionLevel + "$" + (i + 1), trialData);
+			double totalMins = (trialData.getTimeToParkingBlock() / (double) 60);
 			output.append("<trial>");
 			output.append("<number>" + (i + 1) + "</number>");
 			output.append("<averageTime>" + totalMins + "</averageTime>");
+			output.append("<userLocation>" + trialData.getUserLocation() + "</userLocation>");
+			output.append("<blockLocation>" + trialData.getParkingBlockLocation() + "</blockLocation>");
+			output.append("<congestionLevel>" + 0 + "</congestionLevel>");
+			output.append("</trial>");
+		}
+		output.append("</trials>");
+		return Response.status(200).entity(output.toString()).build();
+	}
+
+	@GET
+	@Path("/gravitationalprobabilistic/{trialCount}/{congestionLevel}")
+	@Produces("application/xml")
+	public Response applyGravitationalProbabilistic(@PathParam("trialCount") String trialCount, @PathParam("congestionLevel") String congestionLevel) {
+		System.out.println("CongestionLevel Received: " + congestionLevel);
+		StringBuilder output = new StringBuilder("<trials>");
+		int trials = Integer.parseInt(trialCount);
+		ProbabilisticGravitationalImpl gravityComp = new ProbabilisticGravitationalImpl();
+		for (int i = 0; i < trials; i++) {
+			System.out.println("** Trials are being executed: " + i);
+			Location sampleUserLoc = AppConstants.randomUserLocations.get(i);
+			System.out.println("Location is: " + sampleUserLoc.toString());
+			gravityComp.initializeDriverTime();
+			TrialData trialData = gravityComp.computeGravityRoadNetwork(sampleUserLoc, Integer.parseInt(congestionLevel));
+			trialData.setTrialNumber(i + 1);
+			trialData.setCongestionLevel(Integer.parseInt(congestionLevel));
+			AppConstants.sGravitationalTraialData.put(congestionLevel + "$" + (i + 1), trialData);
+			double totalMins = (trialData.getTimeToParkingBlock() / (double) 60);
+			output.append("<trial>");
+			output.append("<number>" + (i + 1) + "</number>");
+			output.append("<averageTime>" + totalMins + "</averageTime>");
+			output.append("<userLocation>" + trialData.getUserLocation() + "</userLocation>");
+			output.append("<blockLocation>" + trialData.getParkingBlockLocation() + "</blockLocation>");
+			output.append("<congestionLevel>" + 0 + "</congestionLevel>");
+			output.append("</trial>");
+		}
+		output.append("</trials>");
+		return Response.status(200).entity(output.toString()).build();
+	}
+
+	@GET
+	@Path("/greedyprobabilistic/{trialCount}/{congestionLevel}")
+	@Produces("application/xml")
+	public Response applyGreedyProbabilistic(@PathParam("trialCount") String trialCount, @PathParam("congestionLevel") String congestionLevel) {
+		StringBuilder output = new StringBuilder("<trials>");
+		int trials = Integer.parseInt(trialCount);
+		ProbabilisticGreedyImpl greedyImpl = new ProbabilisticGreedyImpl();
+		for (int i = 0; i < trials; i++) {
+			System.out.println("** Trials are being executed: " + i);
+			Location sampleUserLoc = AppConstants.randomUserLocations.get(i);
+			System.out.println("Location is: " + sampleUserLoc.toString());
+			greedyImpl.initializeDriverTime();
+			TrialData trialData = greedyImpl.computeGravityRoadNetwork(sampleUserLoc, Integer.parseInt(congestionLevel));
+			trialData.setTrialNumber(i + 1);
+			trialData.setCongestionLevel(Integer.parseInt(congestionLevel));
+			AppConstants.sGravitationalTraialData.put(congestionLevel + "$" + (i + 1), trialData);
+			double totalMins = (trialData.getTimeToParkingBlock() / (double) 60);
+			output.append("<trial>");
+			output.append("<number>" + (i + 1) + "</number>");
+			output.append("<averageTime>" + totalMins + "</averageTime>");
+			output.append("<userLocation>" + trialData.getUserLocation() + "</userLocation>");
+			output.append("<blockLocation>" + trialData.getParkingBlockLocation() + "</blockLocation>");
 			output.append("<congestionLevel>" + 0 + "</congestionLevel>");
 			output.append("</trial>");
 		}
