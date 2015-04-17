@@ -139,7 +139,7 @@ public class GreedyImpl {
 		}
 
 		System.out.println("Total Minutes to the parking lot in seconds: " + totalTime);
-		TrialData returnTrialData = new TrialData(totalTime, parkingBlock, userLoc, blockStartLoc);
+		TrialData returnTrialData = new TrialData(parkingBlock, totalTime, userLoc, blockStartLoc);
 		return returnTrialData;
 	}
 
