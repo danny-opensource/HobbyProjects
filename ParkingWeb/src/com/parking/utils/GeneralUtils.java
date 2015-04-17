@@ -245,7 +245,7 @@ public class GeneralUtils {
 		}
 	}
 
-	public static double getEstimatedParkingLots(final int blockId, final Timestamp driverTimeStamp) {
+	public static double getEstimatedParkingLots(final int blockId, final Timestamp driverTimeStamp, final int congestionLevel) {
 
 		Connection conn = null;
 		Statement stmt = null;
@@ -280,8 +280,28 @@ public class GeneralUtils {
 			if (rs.next()) {
 				estimatedFreeBlocks = Double.parseDouble(rs.getString(1));
 			}
+			double returnResult = 0;
+			switch (congestionLevel) {
+			case 0:
+				returnResult = estimatedFreeBlocks;
+				return returnResult;
+			case 30:
+				returnResult = estimatedFreeBlocks - (0.3 * estimatedFreeBlocks);
+				return returnResult;
+			case 50:
+				returnResult = estimatedFreeBlocks - (0.5 * estimatedFreeBlocks);
+				return returnResult;
+			case 70:
+				returnResult = estimatedFreeBlocks - (0.7 * estimatedFreeBlocks);
+				return returnResult;
+			case 90:
+				returnResult = estimatedFreeBlocks - (0.9 * estimatedFreeBlocks);
+				return returnResult;
+			default:
+				return estimatedFreeBlocks;
+			}
 
-			return estimatedFreeBlocks;
+			// return estimatedFreeBlocks;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			return -1;
