@@ -85,9 +85,8 @@ public class ProbabilisticGravitationalImpl extends HttpServlet {
 			double userToBlockDistance = 0;
 			userToBlockDistance = DistanceUtils.distance(userLoc.getLatitude(), userLoc.getLongitude(), edge.latitude1, edge.longitude1, 'M');
 			int blockId = edge.blockId;
-			//int totalAvailableParkingLots = GeneralUtils.getAvailableParkingLots(blockId, driverTimeStamp, congestionLevel);
-			
-			double estimatedAvailableParkingLots = GeneralUtils.getEstimatedParkingLots(blockId, driverTimeStamp);
+
+			double estimatedAvailableParkingLots = GeneralUtils.getEstimatedParkingLots(blockId, driverTimeStamp, congestionLevel);
 			double gForce = gComp.getEstimatedGForce(estimatedAvailableParkingLots, userToBlockDistance);
 			System.out.println("Block: " + blockId + " : GForce:" + gForce + " : congestionLevel: " + congestionLevel);
 			if (edge.numOperational > 0) {
@@ -109,7 +108,7 @@ public class ProbabilisticGravitationalImpl extends HttpServlet {
 		int totalTime = DistanceUtils.totalTime(userLoc.getLatitude(), userLoc.getLongitude(), blockStartLoc.getLatitude(),
 				blockStartLoc.getLongitude(), 'M');
 		System.out.println("Total Minutes to the parking lot in seconds: " + totalTime);
-		TrialData returnTrialData = new TrialData(totalTime, parkingBlock, userLoc, blockStartLoc);
+		TrialData returnTrialData = new TrialData(parkingBlock, totalTime, userLoc, blockStartLoc);
 		return returnTrialData;
 	}
 
