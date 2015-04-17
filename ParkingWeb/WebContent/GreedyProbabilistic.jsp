@@ -88,7 +88,7 @@
 			return Math.round(Math.random() * 100);
 		};
 		var lineChartData = {
-			labels : [ "0", "10", "20", "30", "40" ],
+			labels : [ "0", "30", "50", "70", "90" ],
 			datasets : [ {
 				label : "My First dataset",
 				fillColor : "rgba(151,187,205,0.2)",
