@@ -7,6 +7,17 @@
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/jcarousel.basic.css">
+
+<script src="js/jquery-1.11.2.min.js"></script>
+<link rel="stylesheet"
+	href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script
+	src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+<script type="text/javascript" src="js/jquery.jcarousel.min.js"></script>
+<script type="text/javascript" src="js/jcarousel.basic.js"></script>
 
 
 
@@ -20,6 +31,8 @@
 				Algorithms Analysis</h3>
 		</div>
 		<div class="panel-body">
+		
+		<div class="jcarousel-wrapper">
 			<div class="row">
 				<div class="col-sm-6 col-md-4"
 					style="box-shadow: 5px 5px 5px #888888;">
@@ -56,6 +69,11 @@
 
 
 			</div>
+			
+			</div>
+			
+			
+			
 		</div>
 
 
