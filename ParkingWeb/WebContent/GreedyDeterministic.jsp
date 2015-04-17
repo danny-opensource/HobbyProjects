@@ -1,3 +1,4 @@
+<%@page import="com.parking.constants.AppConstants"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -14,8 +15,13 @@
 	src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 <script type="text/javascript">
 	$(document).on("ready", function() {
-		runTrials(0);
+		//	runTrials(0);
 	});
+
+	function startAnalysis() {
+		$('#btnStartAnalysis').closest('.ui-btn').hide();
+		runTrials(0);
+	}
 
 	Chart.defaults.global.pointHitDetectionRadius = 1;
 	Chart.defaults.global.customTooltips = function(tooltip) {
@@ -61,7 +67,7 @@
 				pointColor : "rgba(151,187,205,1)",
 				pointStrokeColor : "#fff",
 				pointHighlightFill : "#fff",
-				axisLabel: "Congestion Level",
+				axisLabel : "Congestion Level",
 				pointHighlightStroke : "rgba(151,187,205,1)",
 				data : [ randomScalingFactor() * 100,
 						randomScalingFactor() * 100,
@@ -82,7 +88,7 @@
 			return Math.round(Math.random() * 100);
 		};
 		var lineChartData = {
-			labels : [ "0", "10", "20", "30", "40" ],
+			labels : [ "0", "30", "50", "70", "90" ],
 			datasets : [ {
 				label : "My First dataset",
 				fillColor : "rgba(151,187,205,0.2)",
@@ -119,7 +125,33 @@
 								function() {
 									averageTimes[counter] = $(this).find(
 											'averageTime').text();
+									if (counter == 0) {
+										var userLocation = $(this).find('userLocation').text();
+										var parkingBlockLoc = $(this).find('blockLocation').text();
+										switch (congestion) {
+										case 0:
+											alert("Inside 0");
+											document.getElementById("zeroNavigation").href="GeoLocationAltered.jsp?userLocation=" + userLocation + "&blockLocation=" + parkingBlockLoc;
+											break;
+										case 30:
+											alert("Inside 30");
+											document.getElementById("thirtyNavigation").href="GeoLocationAltered.jsp?userLocation=" + userLocation + "&blockLocation=" + parkingBlockLoc;
+											break;
+										case 50:
+											alert("Inside 50");
+											document.getElementById("fiftyNavigation").href="GeoLocationAltered.jsp?userLocation=" + userLocation + "&blockLocation=" + parkingBlockLoc;
+											break;
+										case 70:
+											alert("Inside 70");
+											document.getElementById("seventyNavigation").href="GeoLocationAltered.jsp?userLocation=" + userLocation + "&blockLocation=" + parkingBlockLoc;
+											break;
+										case 90:
+											alert("Inside 90");
+											document.getElementById("ninetyNavigation").href="GeoLocationAltered.jsp?userLocation=" + userLocation + "&blockLocation=" + parkingBlockLoc;
+											break;
+										}
 
+									}
 									counter++;
 								});
 
@@ -181,13 +213,19 @@
 </head>
 <body>
 
+	<%
+		AppConstants.sGravitationalTraialData.clear();
+	%>
 
 
-	<img src="images/ajax-loader.gif" style="display: none;"
-		id="imgProgress" />
 	<h3 id="id"></h3>
 
 	<div data-role="main" class="ui-content">
+		<button class="ui-btn-inline" data-icon="gear" data-theme="b"
+			onclick="startAnalysis();" id="btnStartAnalysis">Start
+			Analyzing</button>
+		<img src="images/ajax-loader.gif"
+			style="display: none; margin-left: 50%;" id="imgProgress" />
 		<div id="canvas-holder2">
 			<canvas id="chart2" width="450" height="100" />
 		</div>
@@ -200,45 +238,45 @@
 				<h3>Analysis for 0% Congestion</h3>
 				<p>
 					Total Trials Conducted: <label id="trialsCountZero"></label> <a
-						href="#navigationDialog" class="ui-btn ui-btn-inline">Show
-						Navigation</a> <a href="#trialData" class="ui-btn ui-btn-inline">Show
-						Trial Data</a>
-				</p>
-			</div>
-			<div data-role="collapsible">
-				<h3>Analysis for 10% Congestion</h3>
-				<p>
-					Total Trials Conducted: <label id="trialsCountTen"></label> <a
-						href="#navigationDialog" class="ui-btn ui-btn-inline">Show
-						Navigation</a> <a href="#trialData" class="ui-btn ui-btn-inline">Show
-						Trial Data</a>
-				</p>
-			</div>
-			<div data-role="collapsible">
-				<h3>Analysis for 20% Congestion</h3>
-				<p>
-					Total Trials Conducted: <label id="trialsCountTwenty"></label> <a
-						href="#navigationDialog" class="ui-btn ui-btn-inline">Show
-						Navigation</a> <a href="#trialData" class="ui-btn ui-btn-inline">Show
-						Trial Data</a>
+						class="ui-btn ui-btn-inline" rel="external" id="zeroNavigation" target="_blank">Show
+						Navigation</a> <a href="TrialData.jsp?congestion=0"
+						class="ui-btn ui-btn-inline" data-rel="dialog">Show Trial Data</a>
 				</p>
 			</div>
 			<div data-role="collapsible">
 				<h3>Analysis for 30% Congestion</h3>
 				<p>
-					Total Trials Conducted: <label id="trialsCountThirty"></label> <a
-						href="#navigationDialog" class="ui-btn ui-btn-inline">Show
-						Navigation</a> <a href="#trialData" class="ui-btn ui-btn-inline">Show
-						Trial Data</a>
+					Total Trials Conducted: <label id="trialsCountTen"></label> <a
+						class="ui-btn ui-btn-inline" id="thirtyNavigation" target="_blank">Show
+						Navigation</a> <a href="TrialData.jsp?congestion=30"
+						class="ui-btn ui-btn-inline" data-rel="dialog">Show Trial Data</a>
 				</p>
 			</div>
 			<div data-role="collapsible">
-				<h3>Analysis for 40% Congestion</h3>
+				<h3>Analysis for 50% Congestion</h3>
+				<p>
+					Total Trials Conducted: <label id="trialsCountTwenty"></label> <a
+						class="ui-btn ui-btn-inline" id="fiftyNavigation" target="_blank">Show
+						Navigation</a> <a href="TrialData.jsp?congestion=50"
+						class="ui-btn ui-btn-inline" data-rel="dialog">Show Trial Data</a>
+				</p>
+			</div>
+			<div data-role="collapsible">
+				<h3>Analysis for 70% Congestion</h3>
+				<p>
+					Total Trials Conducted: <label id="trialsCountThirty"></label> <a
+						class="ui-btn ui-btn-inline" id="seventyNavigation" target="_blank">Show
+						Navigation</a> <a href="TrialData.jsp?congestion=70"
+						class="ui-btn ui-btn-inline" data-rel="dialog">Show Trial Data</a>
+				</p>
+			</div>
+			<div data-role="collapsible">
+				<h3>Analysis for 90% Congestion</h3>
 				<p>
 					Total Trials Conducted: <label id="trialsCountFourty"></label> <a
-						href="#navigationDialog" class="ui-btn ui-btn-inline">Show
-						Navigation</a> <a href="#trialData" class="ui-btn ui-btn-inline">Show
-						Trial Data</a>
+						class="ui-btn ui-btn-inline" id="ninetyNavigation" target="_blank">Show
+						Navigation</a> <a href="TrialData.jsp?congestion=90"
+						class="ui-btn ui-btn-inline" data-rel="dialog">Show Trial Data</a>
 				</p>
 			</div>
 		</div>
