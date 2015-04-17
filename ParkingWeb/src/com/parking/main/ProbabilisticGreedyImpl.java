@@ -77,7 +77,7 @@ public class ProbabilisticGreedyImpl {
 			double userToBlockDistance = 0;
 			userToBlockDistance = DistanceUtils.distance(userLoc.getLatitude(), userLoc.getLongitude(), edge.latitude1, edge.longitude1, 'M');
 			int blockId = edge.blockId;
-			double totalEstimatedParkingLots = GeneralUtils.getEstimatedParkingLots(blockId, driverTimeStamp);
+			double totalEstimatedParkingLots = GeneralUtils.getEstimatedParkingLots(blockId, driverTimeStamp,congestionLevel);
 			System.out.println("**** totalAvailableParkingLots: " + totalEstimatedParkingLots);
 			System.out.println("*** Num Operational: " + edge.numOperational);
 			double resultantValue;
@@ -139,7 +139,7 @@ public class ProbabilisticGreedyImpl {
 		}
 
 		System.out.println("Total Minutes to the parking lot in seconds: " + totalTime);
-		TrialData returnTrialData = new TrialData(totalTime, parkingBlock, userLoc, blockStartLoc);
+		TrialData returnTrialData = new TrialData(parkingBlock, totalTime, userLoc, blockStartLoc);
 		return returnTrialData;
 	}
 
