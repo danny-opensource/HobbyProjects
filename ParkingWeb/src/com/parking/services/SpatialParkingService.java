@@ -100,11 +100,11 @@ public class SpatialParkingService {
 			trialData.setCongestionLevel(Integer.parseInt(congestionLevel));
 			AppConstants.sGravitationalTraialData.put(congestionLevel + "$" + (i + 1), trialData);
 			System.out.println("**** SERVICE 1: " + trialData.getTimeToParkingBlock());
-			double totalMins = (trialData.getTimeToParkingBlock() / 60);
-			System.out.println("**** SERVICE 2: " + totalMins);
+			double totalSeconds = trialData.getTimeToParkingBlock();
+			System.out.println("**** SERVICE 2: " + totalSeconds);
 			output.append("<trial>");
 			output.append("<number>" + (i + 1) + "</number>");
-			output.append("<averageTime>" + totalMins + "</averageTime>");
+			output.append("<averageTime>" + totalSeconds + "</averageTime>");
 			output.append("<userLocation>" + trialData.getUserLocation() + "</userLocation>");
 			output.append("<blockLocation>" + trialData.getParkingBlockLocation() + "</blockLocation>");
 			output.append("<congestionLevel>" + 0 + "</congestionLevel>");
