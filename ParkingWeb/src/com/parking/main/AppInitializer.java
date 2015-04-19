@@ -29,9 +29,9 @@ public class AppInitializer extends HttpServlet {
 		System.out.println("---- Initializing the User Locations ------");
 		AppConstants.randomUserLocations = new HashMap<Integer, Location>();
 		AppConstants.randomUserLocations.put(0, new Location(37.795752, -122.394340));
-		AppConstants.randomUserLocations.put(1, new Location(37.805853, -122.419370));
-		AppConstants.randomUserLocations.put(2, new Location(37.804700, -122.421097));
-		AppConstants.randomUserLocations.put(3, new Location(37.806464, -122.419091));
+		AppConstants.randomUserLocations.put(1, new Location(37.783827, -122.437230));
+		AppConstants.randomUserLocations.put(2, new Location(37.756042, -122.423314));
+		AppConstants.randomUserLocations.put(3, new Location(37.807319, -122.436905));
 		AppConstants.randomUserLocations.put(4, new Location(37.805836, -122.419606));
 		AppConstants.randomUserLocations.put(5, new Location(37.805590, -122.417857));
 		AppConstants.randomUserLocations.put(6, new Location(37.807015, -122.417964));
