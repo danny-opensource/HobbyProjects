@@ -116,7 +116,7 @@
 		$
 				.ajax({
 					crossDomain : true,
-					url : 'http://localhost:8080/ParkingWeb/rest/parking/gravitationalprobabilistic/2/'
+					url : 'http://localhost:8080/ParkingWeb/rest/parking/gravitationalprobabilistic/4/'
 							+ congestion,
 					complete : function(jsXHR, textStatus) {
 						$("#imgProgress").hide();
@@ -130,27 +130,21 @@
 										var parkingBlockLoc = $(this).find('blockLocation').text();
 										switch (congestion) {
 										case 0:
-											alert("Inside 0");
 											document.getElementById("zeroNavigation").href="GeoLocationAltered.jsp?userLocation=" + userLocation + "&blockLocation=" + parkingBlockLoc;
 											break;
 										case 30:
-											alert("Inside 30");
 											document.getElementById("thirtyNavigation").href="GeoLocationAltered.jsp?userLocation=" + userLocation + "&blockLocation=" + parkingBlockLoc;
 											break;
 										case 50:
-											alert("Inside 50");
 											document.getElementById("fiftyNavigation").href="GeoLocationAltered.jsp?userLocation=" + userLocation + "&blockLocation=" + parkingBlockLoc;
 											break;
 										case 70:
-											alert("Inside 70");
 											document.getElementById("seventyNavigation").href="GeoLocationAltered.jsp?userLocation=" + userLocation + "&blockLocation=" + parkingBlockLoc;
 											break;
 										case 90:
-											alert("Inside 90");
 											document.getElementById("ninetyNavigation").href="GeoLocationAltered.jsp?userLocation=" + userLocation + "&blockLocation=" + parkingBlockLoc;
 											break;
 										}
-
 									}
 									counter++;
 								});
@@ -161,6 +155,7 @@
 
 						}
 						var jsAvgTime = averageTime / counter;
+						jsAvgTime = jsAvgTime/60;
 						//alert('Hi' + jsAvgTime.text());
 						plotTimes[congestionCounter] = jsAvgTime;
 						if (congestion == 0) {
