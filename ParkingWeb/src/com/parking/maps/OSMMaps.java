@@ -23,12 +23,13 @@ public class OSMMaps {
 		try {
 			StringBuilder locationBuilder = new StringBuilder(OSM_BASE_URL);
 			locationBuilder.append("loc=").append(startLat).append(",").append(startLong).append("&loc=").append(endLat).append(",").append(endLong);
+			System.out.println(" *** LocationBuilder: " + locationBuilder.toString());
 			URL url = new URL(locationBuilder.toString());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			HttpURLConnection.setFollowRedirects(true);
 			conn.setDoInput(true);
 			conn.connect();
-			
+
 			int status = conn.getResponseCode();
 
 			if (status == HttpURLConnection.HTTP_OK) {
@@ -68,6 +69,7 @@ public class OSMMaps {
 		try {
 			StringBuilder locationBuilder = new StringBuilder(OSM_BASE_URL);
 			locationBuilder.append("loc=").append(startLat).append(",").append(startLong).append("&loc=").append(endLat).append(",").append(endLong);
+			System.out.println(" *** LocationBuilder: " + locationBuilder.toString());
 			URL url = new URL(locationBuilder.toString());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			HttpURLConnection.setFollowRedirects(true);
