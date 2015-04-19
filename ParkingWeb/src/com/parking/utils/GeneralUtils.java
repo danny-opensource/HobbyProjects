@@ -46,8 +46,11 @@ public class GeneralUtils {
 	}
 
 	public static int getNearestParkingBlock(TreeMap<Integer, Double> minMap) {
-		NavigableMap<Integer, Double> parkingMap = minMap;
-		return parkingMap.lastKey();
+		if (minMap != null && !minMap.isEmpty()) {
+			NavigableMap<Integer, Double> parkingMap = minMap;
+			return parkingMap.lastKey();
+		}
+		return 100;
 
 		/*
 		 * Iterator<Integer> i = minMap.keySet().iterator(); return i.hasNext()
@@ -271,7 +274,26 @@ public class GeneralUtils {
 			 * "' group by p.available";
 			 */
 
-			query = "select avg from parking.\"prob_data\" p where p.block_id=" + blockId + " and time=" + hour + " and dow=" + dayOfWeek;
+			switch (congestionLevel) {
+			case 0:
+				query = "select avg from parking.\"prob_data\" p where p.block_id=" + blockId + " and time=" + hour + " and dow=" + dayOfWeek;
+				break;
+			case 30:
+				query = "select avg from parking.\"prob_data_thirty\" p where p.block_id=" + blockId + " and time=" + hour + " and dow=" + dayOfWeek;
+				break;
+			case 50:
+				query = "select avg from parking.\"prob_data_fifty\" p where p.block_id=" + blockId + " and time=" + hour + " and dow=" + dayOfWeek;
+				break;
+			case 70:
+				query = "select avg from parking.\"prob_data_seventy\" p where p.block_id=" + blockId + " and time=" + hour + " and dow=" + dayOfWeek;
+				break;
+			case 90:
+				query = "select avg from parking.\"prob_data_ninety\" p where p.block_id=" + blockId + " and time=" + hour + " and dow=" + dayOfWeek;
+				break;
+			default:
+				query = "select avg from parking.\"prob_data\" p where p.block_id=" + blockId + " and time=" + hour + " and dow=" + dayOfWeek;
+				break;
+			}
 
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(query);
@@ -280,28 +302,8 @@ public class GeneralUtils {
 			if (rs.next()) {
 				estimatedFreeBlocks = Double.parseDouble(rs.getString(1));
 			}
-			double returnResult = 0;
-			switch (congestionLevel) {
-			case 0:
-				returnResult = estimatedFreeBlocks;
-				return returnResult;
-			case 30:
-				returnResult = estimatedFreeBlocks - (0.3 * estimatedFreeBlocks);
-				return returnResult;
-			case 50:
-				returnResult = estimatedFreeBlocks - (0.5 * estimatedFreeBlocks);
-				return returnResult;
-			case 70:
-				returnResult = estimatedFreeBlocks - (0.7 * estimatedFreeBlocks);
-				return returnResult;
-			case 90:
-				returnResult = estimatedFreeBlocks - (0.9 * estimatedFreeBlocks);
-				return returnResult;
-			default:
-				return estimatedFreeBlocks;
-			}
 
-			// return estimatedFreeBlocks;
+			return estimatedFreeBlocks;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			return -1;
