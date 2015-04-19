@@ -97,7 +97,7 @@
 				pointStrokeColor : "#fff",
 				pointHighlightFill : "#fff",
 				pointHighlightStroke : "rgba(151,187,205,1)",
-				data : [ data[0], data[1], data[2], data[3], data[4] ]
+				data : [ data[0], data[1], data[2], data[3], data[4]]
 			} ]
 		};
 		var ctx2 = document.getElementById("chart2").getContext("2d");
@@ -130,23 +130,18 @@
 										var parkingBlockLoc = $(this).find('blockLocation').text();
 										switch (congestion) {
 										case 0:
-											alert("Inside 0");
 											document.getElementById("zeroNavigation").href="GeoLocationAltered.jsp?userLocation=" + userLocation + "&blockLocation=" + parkingBlockLoc;
 											break;
 										case 30:
-											alert("Inside 30");
 											document.getElementById("thirtyNavigation").href="GeoLocationAltered.jsp?userLocation=" + userLocation + "&blockLocation=" + parkingBlockLoc;
 											break;
 										case 50:
-											alert("Inside 50");
 											document.getElementById("fiftyNavigation").href="GeoLocationAltered.jsp?userLocation=" + userLocation + "&blockLocation=" + parkingBlockLoc;
 											break;
 										case 70:
-											alert("Inside 70");
 											document.getElementById("seventyNavigation").href="GeoLocationAltered.jsp?userLocation=" + userLocation + "&blockLocation=" + parkingBlockLoc;
 											break;
 										case 90:
-											alert("Inside 90");
 											document.getElementById("ninetyNavigation").href="GeoLocationAltered.jsp?userLocation=" + userLocation + "&blockLocation=" + parkingBlockLoc;
 											break;
 										}
