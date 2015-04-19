@@ -70,6 +70,7 @@ public class ProbabilisticGreedyImpl {
 	}
 
 	public TrialData computeGravityRoadNetwork(final Location userLoc, final int congestionLevel) {
+		System.out.println("*** CongestionLevel" + congestionLevel);
 		Iterator<Integer> it = AppConstants.sInMemoryEdges.getKeySet().iterator();
 		mBlockDistanceSortedMap = new TreeMap<Integer, Double>();
 		while (it.hasNext()) {
@@ -77,14 +78,17 @@ public class ProbabilisticGreedyImpl {
 			double userToBlockDistance = 0;
 			userToBlockDistance = DistanceUtils.distance(userLoc.getLatitude(), userLoc.getLongitude(), edge.latitude1, edge.longitude1, 'M');
 			int blockId = edge.blockId;
-			double totalEstimatedParkingLots = GeneralUtils.getEstimatedParkingLots(blockId, driverTimeStamp,congestionLevel);
+			double totalEstimatedParkingLots = GeneralUtils.getEstimatedParkingLots(blockId, driverTimeStamp, congestionLevel);
 			System.out.println("**** totalAvailableParkingLots: " + totalEstimatedParkingLots);
 			System.out.println("*** Num Operational: " + edge.numOperational);
 			double resultantValue;
 			if (edge.numOperational == 0) {
 				resultantValue = 0;
 			} else {
+				System.out.println("^^^^^^^ totalEstimatedParkingLots: " + totalEstimatedParkingLots);
+				System.out.println("^^^^^^^ numOperational: " + (edge.numOperational - (edge.numOperational * (congestionLevel / 100))));
 				resultantValue = (totalEstimatedParkingLots / edge.numOperational) / userToBlockDistance;
+				System.out.println("^^^^^^^ resultantValue: " + resultantValue);
 			}
 			if (edge.numOperational > 0 && totalEstimatedParkingLots > 0) {
 				mBlockDistanceSortedMap.put(edge.blockId, resultantValue);
@@ -119,25 +123,6 @@ public class ProbabilisticGreedyImpl {
 		int totalTime = DistanceUtils.totalTime(userLoc.getLatitude(), userLoc.getLongitude(), blockStartLoc.getLatitude(),
 				blockStartLoc.getLongitude(), 'M');
 
-		// NAVIGATION PART WHILE - BAD CODE. RE-INVENT!
-		while (userToBestParkingDistance > 0) {
-			userToBestParkingDistance = userToBestParkingDistance - 0.0310686; //
-			// Subracting 50 meters from mile
-
-			// Increase 1 minute from the timestamp
-			driverTimeStamp.setMinutes(driverTimeStamp.getMinutes() + 1);
-
-			// TODO Check for max time-stamp that is less than
-			// driverTimeStamp
-
-			if (isParkingSpaceAvailable(parkingBlock)) {
-				continue;
-			} else {
-				System.out.println("Parking Lot not available at : " + driverTimeStamp);
-				// TODO Allocate a different block
-			}
-		}
-
 		System.out.println("Total Minutes to the parking lot in seconds: " + totalTime);
 		TrialData returnTrialData = new TrialData(parkingBlock, totalTime, userLoc, blockStartLoc);
 		return returnTrialData;
@@ -147,7 +132,7 @@ public class ProbabilisticGreedyImpl {
 		try {
 			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 			Date date = dateFormat.parse("23/04/2012");
-			date.setHours(18);
+			date.setHours(7);
 			date.setMinutes(00); // TODO Set the Seconds to 10
 			date.setSeconds(00);
 			long time = date.getTime();
