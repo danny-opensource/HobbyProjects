@@ -1,5 +1,6 @@
 package com.parking.utils;
 
+import com.parking.constants.AppConstants;
 import com.parking.maps.GoogleDistance;
 import com.parking.maps.OSMMaps;
 import com.parking.model.Location;
@@ -44,19 +45,31 @@ public class DistanceUtils {
 	public static double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
 
 		double distance = 0;
-		OSMMaps osmMapsInstance = DistanceUtils.getOSMMapsInstance();
-
-		distance = Double.parseDouble(osmMapsInstance.getDistance(lat1, lon1, lat2, lon2));
-		// System.out.println("*** Double Distance: " + distance);
+		if (!AppConstants.sInMemoryDistance.containsKey((lat1 + "$" + lon1 + "$" + lat2 + "$" + lon2))) {
+			System.out.println("***** cache MISS for Distance!!!!");
+			OSMMaps osmMapsInstance = DistanceUtils.getOSMMapsInstance();
+			distance = Double.parseDouble(osmMapsInstance.getDistance(lat1, lon1, lat2, lon2));
+			AppConstants.sInMemoryDistance.put((lat1 + "$" + lon1 + "$" + lat2 + "$" + lon2), distance);
+		} else {
+			System.out.println("***** cache HIT for Distance!!!!");
+			distance = AppConstants.sInMemoryDistance.get((lat1 + "$" + lon1 + "$" + lat2 + "$" + lon2));
+		}
 		return distance;
 	}
 
 	public static int totalTime(double lat1, double lon1, double lat2, double lon2, char unit) {
 
 		int totalTimeInSecs = 0;
-		OSMMaps osmMapsInstance = DistanceUtils.getOSMMapsInstance();
+		if (!AppConstants.sInMemoryTotalTime.containsKey((lat1 + "$" + lon1 + "$" + lat2 + "$" + lon2))) {
+			System.out.println("***** cache MISS for Time!!!!");
+			OSMMaps osmMapsInstance = DistanceUtils.getOSMMapsInstance();
+			totalTimeInSecs = Integer.parseInt(osmMapsInstance.getTotalTimeToParkingBlock(lat1, lon1, lat2, lon2));
+			AppConstants.sInMemoryTotalTime.put((lat1 + "$" + lon1 + "$" + lat2 + "$" + lon2), totalTimeInSecs);
+		} else {
+			System.out.println("***** cache HIT for Time!!!!");
+			totalTimeInSecs = AppConstants.sInMemoryTotalTime.get((lat1 + "$" + lon1 + "$" + lat2 + "$" + lon2));
+		}
 
-		totalTimeInSecs = Integer.parseInt(osmMapsInstance.getTotalTimeToParkingBlock(lat1, lon1, lat2, lon2));
 		// System.out.println("*** Double Distance: " + distance);
 		return totalTimeInSecs;
 	}
