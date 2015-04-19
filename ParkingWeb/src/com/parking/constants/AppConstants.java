@@ -25,5 +25,7 @@ public class AppConstants {
 	public static RoadNodes sInMemoryNodes = new RoadNodes();
 	public static RoadEdges sInMemoryEdges = new RoadEdges();
 	public static HashMap<String, TrialData> sGravitationalTraialData = new HashMap<String, TrialData>();
+	public static HashMap<String, Double> sInMemoryDistance = new HashMap<String, Double>();
+	public static HashMap<String, Integer> sInMemoryTotalTime = new HashMap<String, Integer>();
 
 }
