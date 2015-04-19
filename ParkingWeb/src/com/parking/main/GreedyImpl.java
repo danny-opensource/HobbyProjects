@@ -84,7 +84,8 @@ public class GreedyImpl {
 			if (edge.numOperational == 0) {
 				resultantValue = 0;
 			} else {
-				resultantValue = (totalAvailableParkingLots / edge.numOperational) / userToBlockDistance;
+				resultantValue = (totalAvailableParkingLots / (edge.numOperational - (edge.numOperational * (congestionLevel / 100))))
+						/ userToBlockDistance;
 			}
 			if (edge.numOperational > 0 && totalAvailableParkingLots > 0) {
 				mBlockDistanceSortedMap.put(edge.blockId, resultantValue);
@@ -147,7 +148,7 @@ public class GreedyImpl {
 		try {
 			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 			Date date = dateFormat.parse("23/04/2012");
-			date.setHours(18);
+			date.setHours(9);
 			date.setMinutes(00); // TODO Set the Seconds to 10
 			date.setSeconds(00);
 			long time = date.getTime();
