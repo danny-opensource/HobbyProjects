@@ -190,7 +190,7 @@ public class ProbabilisticGravitationalImpl extends HttpServlet {
 		try {
 			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 			Date date = dateFormat.parse("23/04/2012");
-			date.setHours(18);
+			date.setHours(7);
 			date.setMinutes(00); // TODO Set the Seconds to 10
 			date.setSeconds(00);
 			long time = date.getTime();
