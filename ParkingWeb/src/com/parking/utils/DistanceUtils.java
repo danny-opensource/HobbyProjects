@@ -1,5 +1,10 @@
 package com.parking.utils;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Iterator;
+
 import com.parking.constants.AppConstants;
 import com.parking.maps.GoogleDistance;
 import com.parking.maps.OSMMaps;
@@ -42,14 +47,26 @@ public class DistanceUtils {
 		return null;
 	}
 
-	public static double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
+	private static void saveDistanceCacheToStorage(String cacheString) {
+		try {
+			File file = new File("C:\\dbms_log\\cache\\distance.cache");
+			FileWriter cacheWriter = new FileWriter(file, true);
+			cacheWriter.append(cacheString);
+			cacheWriter.flush();
+			cacheWriter.close();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+	}
 
+	public static double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
 		double distance = 0;
 		if (!AppConstants.sInMemoryDistance.containsKey((lat1 + "$" + lon1 + "$" + lat2 + "$" + lon2))) {
 			System.out.println("***** cache MISS for Distance!!!!");
 			OSMMaps osmMapsInstance = DistanceUtils.getOSMMapsInstance();
 			distance = Double.parseDouble(osmMapsInstance.getDistance(lat1, lon1, lat2, lon2));
 			AppConstants.sInMemoryDistance.put((lat1 + "$" + lon1 + "$" + lat2 + "$" + lon2), distance);
+			saveDistanceCacheToStorage((lat1 + "$" + lon1 + "$" + lat2 + "$" + lon2) + "#" + distance + "\n");
 		} else {
 			System.out.println("***** cache HIT for Distance!!!!");
 			distance = AppConstants.sInMemoryDistance.get((lat1 + "$" + lon1 + "$" + lat2 + "$" + lon2));
