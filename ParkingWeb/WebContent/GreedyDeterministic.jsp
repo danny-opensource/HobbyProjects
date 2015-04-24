@@ -116,7 +116,7 @@
 		$
 				.ajax({
 					crossDomain : true,
-					url : 'http://localhost:8080/ParkingWeb/rest/parking/greedydeterministic/2/'
+					url : 'http://localhost:8080/ParkingWeb/rest/parking/greedydeterministic/100/'
 							+ congestion,
 					complete : function(jsXHR, textStatus) {
 						$("#imgProgress").hide();
@@ -171,6 +171,7 @@
 							runTrials(90);
 							congestionCounter++;
 						} else if (congestion == 90) {
+							document.cookie = "greedydeterministic=" + plotTimes + ";";
 							populateGraph(plotTimes);
 						}
 					}
