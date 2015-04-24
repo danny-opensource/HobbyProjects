@@ -122,6 +122,7 @@ public class GravitationalImpl extends HttpServlet {
 		 * System.out.println("Parking Lot not available at : " +
 		 * driverTimeStamp); // TODO Allocate a different block } }
 		 */
+		
 		System.out.println("Total Minutes to the parking lot in seconds: " + totalTime);
 		TrialData returnTrialData = new TrialData(parkingBlock, totalTime, userLoc, blockStartLoc);
 		return returnTrialData;
@@ -205,7 +206,7 @@ public class GravitationalImpl extends HttpServlet {
 		try {
 			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 			Date date = dateFormat.parse("23/04/2012");
-			date.setHours(9);
+			date.setHours(18);
 			date.setMinutes(00); // TODO Set the Seconds to 10
 			date.setSeconds(00);
 			long time = date.getTime();
