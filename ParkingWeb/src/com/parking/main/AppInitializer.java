@@ -1,5 +1,9 @@
 package com.parking.main;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -97,8 +101,68 @@ public class AppInitializer extends HttpServlet {
 		AppConstants.randomUserLocations.put(62, new Location(37.806625, -122.413265));
 		AppConstants.randomUserLocations.put(63, new Location(37.805090, -122.411838));
 		AppConstants.randomUserLocations.put(64, new Location(37.804082, -122.413308));
+		AppConstants.randomUserLocations.put(65, new Location(37.802510, -122.415808));
+		AppConstants.randomUserLocations.put(66, new Location(37.802077, -122.407890));
+		AppConstants.randomUserLocations.put(67, new Location(37.803645, -122.406828));
+		AppConstants.randomUserLocations.put(68, new Location(37.802213, -122.418007));
+		AppConstants.randomUserLocations.put(69, new Location(37.802026, -122.411849));
+		AppConstants.randomUserLocations.put(70, new Location(37.801958, -122.407890));
+
+		AppConstants.randomUserLocations.put(71, new Location(37.804459, -122.406785));
+		AppConstants.randomUserLocations.put(72, new Location(37.798813, -122.422127));
+		AppConstants.randomUserLocations.put(73, new Location(37.797372, -122.418715));
+		AppConstants.randomUserLocations.put(74, new Location(37.796100, -122.420829));
+		AppConstants.randomUserLocations.put(75, new Location(37.790878, -122.418522));
+		AppConstants.randomUserLocations.put(76, new Location(37.798161, -122.412428));
+		AppConstants.randomUserLocations.put(77, new Location(37.797474, -122.409918));
+		AppConstants.randomUserLocations.put(78, new Location(37.793650, -122.411237));
+		AppConstants.randomUserLocations.put(79, new Location(37.808579, -122.412308));
+		AppConstants.randomUserLocations.put(80, new Location(37.808791, -122.421085));
+		AppConstants.randomUserLocations.put(81, new Location(37.805994, -122.418413));
+		AppConstants.randomUserLocations.put(82, new Location(37.806706, -122.420580));
+		AppConstants.randomUserLocations.put(83, new Location(37.805697, -122.413199));
+
+		AppConstants.randomUserLocations.put(84, new Location(37.804977, -122.411450));
+		AppConstants.randomUserLocations.put(85, new Location(37.808910, -122.414347));
+		AppConstants.randomUserLocations.put(86, new Location(37.803561, -122.422544));
+		AppConstants.randomUserLocations.put(87, new Location(37.802129, -122.425913));
+		AppConstants.randomUserLocations.put(88, new Location(37.802129, -122.418585));
+		AppConstants.randomUserLocations.put(89, new Location(37.789835, -122.426616));
+		AppConstants.randomUserLocations.put(90, new Location(37.791598, -122.429352));
+		AppConstants.randomUserLocations.put(91, new Location(37.787253, -122.409274));
+		AppConstants.randomUserLocations.put(92, new Location(37.785269, -122.409982));
+		AppConstants.randomUserLocations.put(93, new Location(37.785438, -122.408459));
+		AppConstants.randomUserLocations.put(94, new Location(37.785608, -122.414639));
+		AppConstants.randomUserLocations.put(95, new Location(37.800780, -122.399362));
+		AppConstants.randomUserLocations.put(96, new Location(37.800136, -122.398633));
+
+		AppConstants.randomUserLocations.put(97, new Location(37.799424, -122.402184));
+		AppConstants.randomUserLocations.put(98, new Location(37.800314, -122.402753));
+		AppConstants.randomUserLocations.put(99, new Location(37.799212, -122.403826));
+		AppConstants.randomUserLocations.put(100, new Location(37.797695, -122.400618));
+		AppConstants.randomUserLocations.put(101, new Location(37.796423, -122.396573));
+		AppConstants.randomUserLocations.put(102, new Location(37.785774, -122.401395));
 
 		initInMemoryData();
+		loadDistanceCache();
+	}
+
+	private void loadDistanceCache() {
+		try {
+			File distanceCacheFile = new File("C:\\dbms_log\\cache\\distance.cache");
+			if (distanceCacheFile.exists()) {
+				BufferedReader br = new BufferedReader(new FileReader(distanceCacheFile));
+				String temp = "";
+				String[] cacheItem;
+				while ((temp = br.readLine()) != null) {
+					cacheItem = temp.split("#");
+					System.out.println("Cache Item Key: " + cacheItem[0] + " Value: " + cacheItem[1]);
+					AppConstants.sInMemoryDistance.put(cacheItem[0], Double.parseDouble(cacheItem[1]));
+				}
+			}
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 	}
 
 	private void initInMemoryData() {
