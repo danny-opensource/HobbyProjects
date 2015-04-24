@@ -7,12 +7,22 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.xml.bind.Element;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.json.JSONException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.w3c.dom.Document;
+
+import com.parking.model.Location;
+import com.parking.model.LocationNavigation;
 
 /**
  * User Based Navigation service using Google APIs
@@ -23,7 +33,7 @@ import org.json.simple.parser.ParseException;
 public class UserNavigation {
 	private static final String MAP_API = "https://maps.googleapis.com/maps/api";
 
-	protected static String run(String type, String format, ParameterNameValue[] params) throws Exception {
+	private String run(String type, String format, ParameterNameValue[] params) throws Exception {
 		String query = "";
 		StringBuilder locationBuilder = new StringBuilder(MAP_API + "/" + type + "/" + format + "?");
 		for (int i = 0; i < params.length; i++) {
@@ -73,10 +83,35 @@ public class UserNavigation {
 		return "";
 	}
 
-	public static void main(String[] args) throws Exception {
-		run("directions", "json", new ParameterNameValue[] { new ParameterNameValue("origin", "901 S Ashland Ave, Chicago,IL"),
-				new ParameterNameValue("destination", "Daley Library,Chicago, IL"), new ParameterNameValue("sensor", "false"),
+	private void parseXml(final String locationNav, final List<LocationNavigation> returnList) {
+
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		try {
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			Document doc = db.parse("/example.xml");
+			
+			Element element; //CONTINUE FROM HERE
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+	}
+
+	public List<LocationNavigation> getNavigation(final Location startLoc, final Location endLoc) throws UnsupportedEncodingException, Exception {
+		String strStartLocation = startLoc.getLatitude() + "," + startLoc.getLongitude();
+		String strEndLocation = endLoc.getLatitude() + "," + endLoc.getLongitude();
+		String locationNav = run("directions", "xml", new ParameterNameValue[] { new ParameterNameValue("origin", strStartLocation),
+				new ParameterNameValue("destination", strEndLocation), new ParameterNameValue("sensor", "false"),
 				new ParameterNameValue("key", "AIzaSyAz1JAk83jhqzG85RObM3wTrlV6txGq3TM") });
+
+		List<LocationNavigation> returnList = new LinkedList<LocationNavigation>();
+		parseXml(locationNav, returnList);
+
+		return returnList;
+	}
+
+	public static void main(String[] args) throws Exception {
 
 	}
 
