@@ -1,5 +1,10 @@
 package com.parking.services;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -50,6 +55,7 @@ public class SpatialParkingService {
 			output.append("</trial>");
 		}
 		output.append("</trials>");
+		saveToLog(output.toString());
 		return Response.status(200).entity(output.toString()).build();
 	}
 
@@ -79,6 +85,7 @@ public class SpatialParkingService {
 			output.append("</trial>");
 		}
 		output.append("</trials>");
+		saveToLog(output.toString());
 		return Response.status(200).entity(output.toString()).build();
 	}
 
@@ -111,7 +118,20 @@ public class SpatialParkingService {
 			output.append("</trial>");
 		}
 		output.append("</trials>");
+		saveToLog(output.toString());
 		return Response.status(200).entity(output.toString()).build();
+	}
+
+	private void saveToLog(final String logText) {
+		try {
+			File file = new File("C:\\dbms_log\\output.xml");
+			FileWriter outputWriter = new FileWriter(file);
+			outputWriter.write(logText);
+			outputWriter.flush();
+			outputWriter.close();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 	}
 
 	@GET
@@ -142,6 +162,7 @@ public class SpatialParkingService {
 			output.append("</trial>");
 		}
 		output.append("</trials>");
+		saveToLog(output.toString());
 		return Response.status(200).entity(output.toString()).build();
 	}
 
