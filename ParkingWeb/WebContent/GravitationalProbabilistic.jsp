@@ -116,7 +116,7 @@
 		$
 				.ajax({
 					crossDomain : true,
-					url : 'http://localhost:8080/ParkingWeb/rest/parking/gravitationalprobabilistic/4/'
+					url : 'http://localhost:8080/ParkingWeb/rest/parking/gravitationalprobabilistic/100/'
 							+ congestion,
 					complete : function(jsXHR, textStatus) {
 						$("#imgProgress").hide();
@@ -171,6 +171,7 @@
 							runTrials(90);
 							congestionCounter++;
 						} else if (congestion == 90) {
+							document.cookie = "gravitationalprobabilistic=" + plotTimes + ";";
 							populateGraph(plotTimes);
 						}
 					}
