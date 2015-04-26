@@ -59,6 +59,18 @@ public class DistanceUtils {
 		}
 	}
 
+	private static void saveTimeCacheToStorage(String cacheString) {
+		try {
+			File file = new File("C:\\dbms_log\\cache\\time.cache");
+			FileWriter cacheWriter = new FileWriter(file, true);
+			cacheWriter.append(cacheString);
+			cacheWriter.flush();
+			cacheWriter.close();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+	}
+
 	public static double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
 		double distance = 0;
 		if (!AppConstants.sInMemoryDistance.containsKey((lat1 + "$" + lon1 + "$" + lat2 + "$" + lon2))) {
@@ -82,6 +94,7 @@ public class DistanceUtils {
 			OSMMaps osmMapsInstance = DistanceUtils.getOSMMapsInstance();
 			totalTimeInSecs = Integer.parseInt(osmMapsInstance.getTotalTimeToParkingBlock(lat1, lon1, lat2, lon2));
 			AppConstants.sInMemoryTotalTime.put((lat1 + "$" + lon1 + "$" + lat2 + "$" + lon2), totalTimeInSecs);
+			saveTimeCacheToStorage((lat1 + "$" + lon1 + "$" + lat2 + "$" + lon2) + "#" + totalTimeInSecs + "\n");
 		} else {
 			System.out.println("***** cache HIT for Time!!!!");
 			totalTimeInSecs = AppConstants.sInMemoryTotalTime.get((lat1 + "$" + lon1 + "$" + lat2 + "$" + lon2));
