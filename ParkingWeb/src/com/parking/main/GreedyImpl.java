@@ -131,12 +131,11 @@ public class GreedyImpl {
 			// TODO Check for max time-stamp that is less than
 			// driverTimeStamp
 
-			if (isParkingSpaceAvailable(parkingBlock)) {
-				continue;
-			} else {
-				System.out.println("Parking Lot not available at : " + driverTimeStamp);
-				// TODO Allocate a different block
-			}
+			/*
+			 * if (isParkingSpaceAvailable(parkingBlock)) { continue; } else {
+			 * System.out.println("Parking Lot not available at : " +
+			 * driverTimeStamp); // TODO Allocate a different block }
+			 */
 		}
 
 		System.out.println("Total Minutes to the parking lot in seconds: " + totalTime);
@@ -148,7 +147,7 @@ public class GreedyImpl {
 		try {
 			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 			Date date = dateFormat.parse("23/04/2012");
-			date.setHours(8);
+			date.setHours(7);
 			date.setMinutes(00); // TODO Set the Seconds to 10
 			date.setSeconds(00);
 			long time = date.getTime();
