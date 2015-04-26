@@ -1,7 +1,10 @@
 package com.parking.model;
 
-public class TrialData {
+import java.io.Serializable;
 
+public class TrialData implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	private int trialNumber;
 	private int parkingBlockId;
 	private int timeToParkingBlock;
