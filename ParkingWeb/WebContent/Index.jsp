@@ -5,20 +5,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Parking Algorithm Analysis</title>
 <script src="js/jquery-1.11.2.min.js"></script>
 <script src="charts/Chart.js"></script>
-<link rel="stylesheet"
-	href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
-<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
-<script
-	src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+<link rel="stylesheet" href="css/bootstrap.min.css">
 
 <style>
 #canvas-holder2 {
 	width: 80%;
 	height: 15%;
-	margin: 30px 10%;
+	margin: 5px 10%;
 }
 
 #chartjs-tooltip {
@@ -96,8 +93,17 @@
 						pointStrokeColor : "#000",
 						pointHighlightFill : "#ddf",
 						pointHighlightStroke : "rgba(151,187,205,1)",
-						data : [ gravDeter[0], gravDeter[1], gravDeter[2],
-								gravDeter[3], gravDeter[4] ]
+						data : [
+<%=AppConstants.sSimulatedDataForSevenAM.get("grav_det_0")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM.get("grav_det_30")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM.get("grav_det_50")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM.get("grav_det_70")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM.get("grav_det_90")%>
+	]
 					},
 					{
 						label : "Greedy Deterministic (Red)",
@@ -107,8 +113,21 @@
 						pointStrokeColor : "#fff",
 						pointHighlightFill : "#fff",
 						pointHighlightStroke : "rgba(151,187,205,1)",
-						data : [ greedyDeter[0], greedyDeter[1],
-								greedyDeter[2], greedyDeter[3], greedyDeter[4] ]
+						data : [
+<%=AppConstants.sSimulatedDataForSevenAM.get("greedy_det_0")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM
+					.get("greedy_det_30")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM
+					.get("greedy_det_50")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM
+					.get("greedy_det_70")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM
+					.get("greedy_det_90")%>
+	]
 					},
 					{
 						label : "Gravitational Probabilistic (Yellow)",
@@ -118,8 +137,17 @@
 						pointStrokeColor : "#fff",
 						pointHighlightFill : "#fff",
 						pointHighlightStroke : "rgba(151,187,205,1)",
-						data : [ gravProb[0], gravProb[1], gravProb[2],
-								gravProb[3], gravProb[4] ]
+						data : [
+<%=AppConstants.sSimulatedDataForSevenAM.get("grav_prob_0")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM.get("grav_prob_30")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM.get("grav_prob_50")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM.get("grav_prob_70")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM.get("grav_prob_90")%>
+	]
 					},
 					{
 
@@ -130,11 +158,28 @@
 						pointStrokeColor : "#fff",
 						pointHighlightFill : "#fff",
 						pointHighlightStroke : "rgba(151,187,205,1)",
-						data : [ greedyProb[0], greedyProb[1], greedyProb[2],
-								greedyProb[3], greedyProb[4] ]
+						data : [
+<%=AppConstants.sSimulatedDataForSevenAM
+					.get("greedy_prob_0")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM
+					.get("greedy_prob_30")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM
+					.get("greedy_prob_50")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM
+					.get("greedy_prob_70")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM
+					.get("greedy_prob_90")%>
+	]
 					} ]
 		};
 		var ctx2 = document.getElementById("chart2").getContext("2d");
+		if (window.myLine != null) {
+			window.myLine.destroy();
+		}
 		window.myLine = new Chart(ctx2).Line(lineChartData, {
 			responsive : true
 		});
@@ -219,22 +264,248 @@
 			}
 		}
 	}
+
+	function populateGravDeterministic() {
+
+		//alert("Avg Time: " + jsAvgTime.text());
+		var randomScalingFactor = function() {
+			return Math.round(Math.random() * 100);
+		};
+		var gravDeter = readGravitationalCookies();
+		var lineChartData = {
+			labels : [ "0", "30", "50", "70", "90" ],
+			datasets : [ {
+				label : "Gravitational Deterministic (Blue)",
+				fillColor : "rgba(151,187,205,0.2)",
+				strokeColor : "rgba(1,17,205,1)",
+				pointColor : "rgba(150,180,205,1)",
+				pointStrokeColor : "#000",
+				pointHighlightFill : "#ddf",
+				pointHighlightStroke : "rgba(151,187,205,1)",
+				data : [
+<%=AppConstants.sSimulatedDataForSevenAM.get("grav_det_0")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM.get("grav_det_30")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM.get("grav_det_50")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM.get("grav_det_70")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM.get("grav_det_90")%>
+	]
+			} ]
+		};
+		var ctx2 = document.getElementById("chart2").getContext("2d");
+		if (window.myLine != null) {
+			window.myLine.destroy();
+		}
+		window.myLine = new Chart(ctx2).Line(lineChartData, {
+			responsive : true
+		});
+	}
+
+	function populateGreedyDeterministic() {
+		//alert("Avg Time: " + jsAvgTime.text());
+		var randomScalingFactor = function() {
+			return Math.round(Math.random() * 100);
+		};
+
+		var greedyDeter = readGreedyDeterministicCookies();
+		var lineChartData = {
+			labels : [ "0", "30", "50", "70", "90" ],
+			datasets : [ {
+				label : "Greedy Deterministic (Red)",
+				fillColor : "rgba(151,187,205,0.2)",
+				strokeColor : "rgba(255,0,0,0.3)",
+				pointColor : "rgba(151,187,205,1)",
+				pointStrokeColor : "#fff",
+				pointHighlightFill : "#fff",
+				pointHighlightStroke : "rgba(151,187,205,1)",
+				data : [
+<%=AppConstants.sSimulatedDataForSevenAM.get("greedy_det_0")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM
+					.get("greedy_det_30")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM
+					.get("greedy_det_50")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM
+					.get("greedy_det_70")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM
+					.get("greedy_det_90")%>
+	]
+			} ]
+		};
+		var ctx2 = document.getElementById("chart2").getContext("2d");
+		if (window.myLine != null) {
+			window.myLine.destroy();
+		}
+		window.myLine = new Chart(ctx2).Line(lineChartData, {
+			responsive : true
+		});
+	}
+
+	function populateGravProbabilistic() {
+		//alert("Avg Time: " + jsAvgTime.text());
+		var randomScalingFactor = function() {
+			return Math.round(Math.random() * 100);
+		};
+
+		var gravProb = readGravitationalProbabilisticCookies();
+
+		var lineChartData = {
+			labels : [ "0", "30", "50", "70", "90" ],
+			datasets : [ {
+				label : "Gravitational Probabilistic (Yellow)",
+				fillColor : "rgba(151,187,205,0.2)",
+				strokeColor : "rgba(255,255,0,0.3)",
+				pointColor : "rgba(151,187,205,1)",
+				pointStrokeColor : "#fff",
+				pointHighlightFill : "#fff",
+				pointHighlightStroke : "rgba(151,187,205,1)",
+				data : [
+<%=AppConstants.sSimulatedDataForSevenAM.get("grav_prob_0")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM.get("grav_prob_30")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM.get("grav_prob_50")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM.get("grav_prob_70")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM.get("grav_prob_90")%>
+	]
+			} ]
+		};
+		var ctx2 = document.getElementById("chart2").getContext("2d");
+		if (window.myLine != null) {
+			window.myLine.destroy();
+		}
+		window.myLine = new Chart(ctx2).Line(lineChartData, {
+			responsive : true
+		});
+	}
+
+	function populateGreedyProbabilistic() {
+		//alert("Avg Time: " + jsAvgTime.text());
+		var randomScalingFactor = function() {
+			return Math.round(Math.random() * 100);
+		};
+
+		var greedyProb = readGreedyProbabilisticCookies();
+
+		var lineChartData = {
+			labels : [ "0", "30", "50", "70", "90" ],
+			datasets : [ {
+
+				label : "Greedy Probabilistic (Green)",
+				fillColor : "rgba(151,187,205,0.2)",
+				strokeColor : "rgba(0,255,0,0.3)",
+				pointColor : "rgba(151,187,205,1)",
+				pointStrokeColor : "#fff",
+				pointHighlightFill : "#fff",
+				pointHighlightStroke : "rgba(151,187,205,1)",
+				data : [
+<%=AppConstants.sSimulatedDataForSevenAM
+					.get("greedy_prob_0")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM
+					.get("greedy_prob_30")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM
+					.get("greedy_prob_50")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM
+					.get("greedy_prob_70")%>
+	,
+<%=AppConstants.sSimulatedDataForSevenAM
+					.get("greedy_prob_90")%>
+	]
+			} ]
+		};
+		var ctx2 = document.getElementById("chart2").getContext("2d");
+		if (window.myLine != null) {
+			window.myLine.destroy();
+		}
+		window.myLine = new Chart(ctx2).Line(lineChartData, {
+			responsive : true
+		});
+	}
 </script>
 
 
 </head>
 <body>
-
+	<h1 align="center">Analysis for Data computed at 7:00 AM on
+		04/23/2012</h1>
 	<h3 id="id"></h3>
 
 	<div data-role="main" class="ui-content">
 		<div id="canvas-holder2">
-			<canvas id="chart2" width="450" height="100" />
+			<canvas id="chart2" width="450" height="200" />
 		</div>
 	</div>
 
+	<div align="center">Congestion Level</div>
+	<table align="center" >
+		<tr>
+			<td bgcolor="blue">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td>Gravitational Deterministic</td>
+			<td bgcolor="red">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td>Greedy Deterministic&nbsp;&nbsp;</td>
+			<td bgcolor="yellow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td>Gravitational Probabilistic&nbsp;&nbsp;</td>
+			<td bgcolor="green">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td>Greedy Probabilistic&nbsp;&nbsp;</td>
 
-	<input type="button" value="Compute" onclick="populateGraph();" />
+		</tr>
+	</table>
+	<br/><br/>
+	<table class="table table-bordered table-condensed">
+		<tr>
+
+			<td><input type="button" class="btn btn-primary"
+				value="Gravitational Deterministic Results"
+				onclick="populateGravDeterministic();" data-theme="c" /></td>
+			<td><input type="button" class="btn btn-primary"
+				value="Greedy Deterministic Results"
+				onclick="populateGreedyDeterministic();" /></td>
+			<td><input type="button" class="btn btn-success"
+				value="Simulation Results" onclick="populateGraph();" data-theme="b" /></td>
+			<td><input type="button" class="btn btn-warning"
+				value="Gravitational Probabilistic Results"
+				onclick="populateGravProbabilistic();" /></td>
+			<td><input type="button" value="Greedy Probabilistic Results"
+				class="btn btn-warning" onclick="populateGreedyProbabilistic();" /></td>
+		</tr>
+
+		<tr>
+
+			<td><a class="btn btn-primary" rel="external"
+				id="gravDetMainPage" target="_blank"
+				href="Simulation/GravitationalDeterministicSimulate.jsp">Data -
+					Gravitational Deterministic</a></td>
+
+			<td><a class="btn btn-primary" rel="external"
+				id="gravDetMainPage" target="_blank"
+				href="Simulation/GreedyDeterministicSimulate.jsp">Data - Greedy
+					Deterministic</a></td>
+			<td>&nbsp;</td>
+			<td><a class="btn btn-warning" rel="external"
+				id="gravDetMainPage" target="_blank"
+				href="Simulation/GravitationalProbabilisticSimulate.jsp">Data -
+					Gravitational Probabilistic</a></td>
+
+			<td><a class="btn btn-warning" rel="external"
+				id="gravDetMainPage" target="_blank"
+				href="Simulation/GreedyProbabilisticSimulate.jsp"
+				data-icon="forward">Data - Greedy Deterministic</a></td>
+
+
+		</tr>
+	</table>
+
 
 </body>
 </html>
