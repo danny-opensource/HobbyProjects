@@ -97,7 +97,7 @@
 				pointStrokeColor : "#fff",
 				pointHighlightFill : "#fff",
 				pointHighlightStroke : "rgba(151,187,205,1)",
-				data : [ data[0], data[1], data[2], data[3], data[4]]
+				data : [ data[0], data[1], data[2], data[3], data[4] ]
 			} ]
 		};
 		var ctx2 = document.getElementById("chart2").getContext("2d");
@@ -121,34 +121,60 @@
 					complete : function(jsXHR, textStatus) {
 						$("#imgProgress").hide();
 						var xmlResponse = $.parseXML(jsXHR.responseText), $xml = $(xmlResponse);
-						$($xml).find('trial').each(
-								function() {
-									averageTimes[counter] = $(this).find(
-											'averageTime').text();
-									if (counter == 0) {
-										var userLocation = $(this).find('userLocation').text();
-										var parkingBlockLoc = $(this).find('blockLocation').text();
-										switch (congestion) {
-										case 0:
-											document.getElementById("zeroNavigation").href="GeoLocationAltered.jsp?userLocation=" + userLocation + "&blockLocation=" + parkingBlockLoc;
-											break;
-										case 30:
-											document.getElementById("thirtyNavigation").href="GeoLocationAltered.jsp?userLocation=" + userLocation + "&blockLocation=" + parkingBlockLoc;
-											break;
-										case 50:
-											document.getElementById("fiftyNavigation").href="GeoLocationAltered.jsp?userLocation=" + userLocation + "&blockLocation=" + parkingBlockLoc;
-											break;
-										case 70:
-											document.getElementById("seventyNavigation").href="GeoLocationAltered.jsp?userLocation=" + userLocation + "&blockLocation=" + parkingBlockLoc;
-											break;
-										case 90:
-											document.getElementById("ninetyNavigation").href="GeoLocationAltered.jsp?userLocation=" + userLocation + "&blockLocation=" + parkingBlockLoc;
-											break;
-										}
+						$($xml)
+								.find('trial')
+								.each(
+										function() {
+											averageTimes[counter] = $(this)
+													.find('averageTime').text();
+											if (counter == 0) {
+												var userLocation = $(this)
+														.find('userLocation')
+														.text();
+												var parkingBlockLoc = $(this)
+														.find('blockLocation')
+														.text();
+												switch (congestion) {
+												case 0:
+													document
+															.getElementById("zeroNavigation").href = "GeoLocationAltered.jsp?userLocation="
+															+ userLocation
+															+ "&blockLocation="
+															+ parkingBlockLoc;
+													break;
+												case 30:
+													document
+															.getElementById("thirtyNavigation").href = "GeoLocationAltered.jsp?userLocation="
+															+ userLocation
+															+ "&blockLocation="
+															+ parkingBlockLoc;
+													break;
+												case 50:
+													document
+															.getElementById("fiftyNavigation").href = "GeoLocationAltered.jsp?userLocation="
+															+ userLocation
+															+ "&blockLocation="
+															+ parkingBlockLoc;
+													break;
+												case 70:
+													document
+															.getElementById("seventyNavigation").href = "GeoLocationAltered.jsp?userLocation="
+															+ userLocation
+															+ "&blockLocation="
+															+ parkingBlockLoc;
+													break;
+												case 90:
+													document
+															.getElementById("ninetyNavigation").href = "GeoLocationAltered.jsp?userLocation="
+															+ userLocation
+															+ "&blockLocation="
+															+ parkingBlockLoc;
+													break;
+												}
 
-									}
-									counter++;
-								});
+											}
+											counter++;
+										});
 
 						for (var i = 0; i < averageTimes.length; i++) {
 							averageTime = averageTime
@@ -171,7 +197,9 @@
 							runTrials(90);
 							congestionCounter++;
 						} else if (congestion == 90) {
-							document.cookie = "gravitationaldeterministic=" + plotTimes + ";"; 
+							document.cookie = "gravitationaldeterministic="
+									+ plotTimes + ";";
+							alert("GravitationalDet: " + plotTimes);
 							populateGraph(plotTimes);
 						}
 					}
@@ -211,6 +239,7 @@
 
 	<%
 		AppConstants.sGravitationalTraialData.clear();
+		AppConstants.sSimulatedGraDetData.clear();
 	%>
 
 
@@ -234,9 +263,10 @@
 				<h3>Analysis for 0% Congestion</h3>
 				<p>
 					Total Trials Conducted: <label id="trialsCountZero"></label> <a
-						class="ui-btn ui-btn-inline" rel="external" id="zeroNavigation" target="_blank">Show
-						Navigation</a> <a href="TrialData.jsp?congestion=0"
-						class="ui-btn ui-btn-inline" data-rel="dialog">Show Trial Data</a>
+						class="ui-btn ui-btn-inline" rel="external" id="zeroNavigation"
+						target="_blank">Show Navigation</a> <a
+						href="TrialData.jsp?congestion=0" class="ui-btn ui-btn-inline"
+						data-rel="dialog">Show Trial Data</a>
 				</p>
 			</div>
 			<div data-role="collapsible">
@@ -261,9 +291,10 @@
 				<h3>Analysis for 70% Congestion</h3>
 				<p>
 					Total Trials Conducted: <label id="trialsCountThirty"></label> <a
-						class="ui-btn ui-btn-inline" id="seventyNavigation" target="_blank">Show
-						Navigation</a> <a href="TrialData.jsp?congestion=70"
-						class="ui-btn ui-btn-inline" data-rel="dialog">Show Trial Data</a>
+						class="ui-btn ui-btn-inline" id="seventyNavigation"
+						target="_blank">Show Navigation</a> <a
+						href="TrialData.jsp?congestion=70" class="ui-btn ui-btn-inline"
+						data-rel="dialog">Show Trial Data</a>
 				</p>
 			</div>
 			<div data-role="collapsible">
