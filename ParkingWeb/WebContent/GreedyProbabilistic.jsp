@@ -116,7 +116,7 @@
 		$
 				.ajax({
 					crossDomain : true,
-					url : 'http://localhost:8080/ParkingWeb/rest/parking/greedyprobabilistic/100/'
+					url : 'http://localhost:8080/ParkingWeb/rest/parking/greedyprobabilistic/80/'
 							+ congestion,
 					complete : function(jsXHR, textStatus) {
 						$("#imgProgress").hide();
@@ -172,6 +172,7 @@
 							congestionCounter++;
 						} else if (congestion == 90) {
 							document.cookie = "greedyprobabilistic=" + plotTimes + ";";
+							alert("GreedyProbabilistic: " + plotTimes);
 							populateGraph(plotTimes);
 						}
 					}
@@ -211,6 +212,7 @@
 
 	<%
 		AppConstants.sGravitationalTraialData.clear();
+		AppConstants.sSimulatedGreedyProbData.clear();
 	%>
 
 
