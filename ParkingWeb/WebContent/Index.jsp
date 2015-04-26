@@ -448,10 +448,12 @@
 	</div>
 
 	<div align="center">Congestion Level</div>
-	<table align="center" >
+	<br />
+	<br />
+	<table align="center">
 		<tr>
 			<td bgcolor="blue">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-			<td>Gravitational Deterministic</td>
+			<td>Gravitational Deterministic&nbsp;&nbsp;</td>
 			<td bgcolor="red">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td>Greedy Deterministic&nbsp;&nbsp;</td>
 			<td bgcolor="yellow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
@@ -461,51 +463,57 @@
 
 		</tr>
 	</table>
-	<br/><br/>
-	<table class="table table-bordered table-condensed">
-		<tr>
+	<br />
+	<br />
 
-			<td><input type="button" class="btn btn-primary"
-				value="Gravitational Deterministic Results"
-				onclick="populateGravDeterministic();" data-theme="c" /></td>
-			<td><input type="button" class="btn btn-primary"
-				value="Greedy Deterministic Results"
-				onclick="populateGreedyDeterministic();" /></td>
-			<td><input type="button" class="btn btn-success"
-				value="Simulation Results" onclick="populateGraph();" data-theme="b" /></td>
-			<td><input type="button" class="btn btn-warning"
-				value="Gravitational Probabilistic Results"
-				onclick="populateGravProbabilistic();" /></td>
-			<td><input type="button" value="Greedy Probabilistic Results"
-				class="btn btn-warning" onclick="populateGreedyProbabilistic();" /></td>
-		</tr>
+	<div class="panel panel-primary">
+	<div class="panel-heading">Algorithm Selections and Actions</div>
+		<div class="panel-body">
+			<table class="table table-bordered table-condensed">
+				<tr>
 
-		<tr>
+					<td><input type="button" class="btn btn-info"
+						value="Gravitational Deterministic Results"
+						onclick="populateGravDeterministic();" data-theme="c" /></td>
+					<td><input type="button" class="btn btn-info"
+						value="Greedy Deterministic Results"
+						onclick="populateGreedyDeterministic();" /></td>
+					<td><input type="button" class="btn btn-success"
+						value="Simulation Results" onclick="populateGraph();"
+						data-theme="b" /></td>
+					<td><input type="button" class="btn btn-warning"
+						value="Gravitational Probabilistic Results"
+						onclick="populateGravProbabilistic();" /></td>
+					<td><input type="button" value="Greedy Probabilistic Results"
+						class="btn btn-warning" onclick="populateGreedyProbabilistic();" /></td>
+				</tr>
 
-			<td><a class="btn btn-primary" rel="external"
-				id="gravDetMainPage" target="_blank"
-				href="Simulation/GravitationalDeterministicSimulate.jsp">Data -
-					Gravitational Deterministic</a></td>
+				<tr>
 
-			<td><a class="btn btn-primary" rel="external"
-				id="gravDetMainPage" target="_blank"
-				href="Simulation/GreedyDeterministicSimulate.jsp">Data - Greedy
-					Deterministic</a></td>
-			<td>&nbsp;</td>
-			<td><a class="btn btn-warning" rel="external"
-				id="gravDetMainPage" target="_blank"
-				href="Simulation/GravitationalProbabilisticSimulate.jsp">Data -
-					Gravitational Probabilistic</a></td>
+					<td><a class="btn btn-info" rel="external"
+						id="gravDetMainPage" target="_blank"
+						href="Simulation/GravitationalDeterministicSimulate.jsp">Data
+							- Gravitational Deterministic</a></td>
 
-			<td><a class="btn btn-warning" rel="external"
-				id="gravDetMainPage" target="_blank"
-				href="Simulation/GreedyProbabilisticSimulate.jsp"
-				data-icon="forward">Data - Greedy Deterministic</a></td>
+					<td><a class="btn btn-info" rel="external"
+						id="gravDetMainPage" target="_blank"
+						href="Simulation/GreedyDeterministicSimulate.jsp">Data -
+							Greedy Deterministic</a></td>
+					<td>&nbsp;</td>
+					<td><a class="btn btn-warning" rel="external"
+						id="gravDetMainPage" target="_blank"
+						href="Simulation/GravitationalProbabilisticSimulate.jsp">Data
+							- Gravitational Probabilistic</a></td>
 
-
-		</tr>
-	</table>
+					<td><a class="btn btn-warning" rel="external"
+						id="gravDetMainPage" target="_blank"
+						href="Simulation/GreedyProbabilisticSimulate.jsp"
+						data-icon="forward">Data - Greedy Deterministic</a></td>
 
 
+				</tr>
+			</table>
+		</div>
+	</div>
 </body>
 </html>
