@@ -18,6 +18,7 @@ import com.parking.main.ProbabilisticGravitationalImpl;
 import com.parking.main.ProbabilisticGreedyImpl;
 import com.parking.model.Location;
 import com.parking.model.TrialData;
+import com.sun.jersey.api.core.HttpContext;
 
 /**
  * Core REST Service that services all the requests from the UI. Follows SOA
@@ -36,6 +37,7 @@ public class SpatialParkingService {
 		StringBuilder output = new StringBuilder("<trials>");
 		int trials = Integer.parseInt(trialCount);
 		GravitationalImpl gravityComp = new GravitationalImpl();
+		double parkingTimes[] = new double[trials];
 		for (int i = 0; i < trials; i++) {
 			System.out.println("** Trials are being executed: " + i);
 			Location sampleUserLoc = AppConstants.randomUserLocations.get(i);
@@ -45,6 +47,7 @@ public class SpatialParkingService {
 			trialData.setTrialNumber(i + 1);
 			trialData.setCongestionLevel(Integer.parseInt(congestionLevel));
 			AppConstants.sGravitationalTraialData.put(congestionLevel + "$" + (i + 1), trialData);
+			AppConstants.sSimulatedGraDetData.put(congestionLevel + "$" + (i + 1), trialData);
 			double totalMins = (trialData.getTimeToParkingBlock() / (double) 60);
 			output.append("<trial>");
 			output.append("<number>" + (i + 1) + "</number>");
@@ -53,9 +56,10 @@ public class SpatialParkingService {
 			output.append("<blockLocation>" + trialData.getParkingBlockLocation() + "</blockLocation>");
 			output.append("<congestionLevel>" + 0 + "</congestionLevel>");
 			output.append("</trial>");
+			parkingTimes[i] = totalMins;
 		}
 		output.append("</trials>");
-		saveToLog(output.toString());
+		saveToLog(output.toString(), "grav_det.xml");
 		return Response.status(200).entity(output.toString()).build();
 	}
 
@@ -75,6 +79,7 @@ public class SpatialParkingService {
 			trialData.setTrialNumber(i + 1);
 			trialData.setCongestionLevel(Integer.parseInt(congestionLevel));
 			AppConstants.sGravitationalTraialData.put(congestionLevel + "$" + (i + 1), trialData);
+			AppConstants.sSimulatedGreedyDetData.put(congestionLevel + "$" + (i + 1), trialData);
 			double totalMins = (trialData.getTimeToParkingBlock() / (double) 60);
 			output.append("<trial>");
 			output.append("<number>" + (i + 1) + "</number>");
@@ -85,7 +90,7 @@ public class SpatialParkingService {
 			output.append("</trial>");
 		}
 		output.append("</trials>");
-		saveToLog(output.toString());
+		saveToLog(output.toString(), "greedy_det.xml");
 		return Response.status(200).entity(output.toString()).build();
 	}
 
@@ -106,6 +111,7 @@ public class SpatialParkingService {
 			trialData.setTrialNumber(i + 1);
 			trialData.setCongestionLevel(Integer.parseInt(congestionLevel));
 			AppConstants.sGravitationalTraialData.put(congestionLevel + "$" + (i + 1), trialData);
+			AppConstants.sSimulatedGraProbData.put(congestionLevel + "$" + (i + 1), trialData);
 			System.out.println("**** SERVICE 1: " + trialData.getTimeToParkingBlock());
 			double totalSeconds = trialData.getTimeToParkingBlock();
 			System.out.println("**** SERVICE 2: " + totalSeconds);
@@ -118,14 +124,17 @@ public class SpatialParkingService {
 			output.append("</trial>");
 		}
 		output.append("</trials>");
-		saveToLog(output.toString());
+		saveToLog(output.toString(), "grav_prob.xml");
 		return Response.status(200).entity(output.toString()).build();
 	}
 
-	private void saveToLog(final String logText) {
+	private void saveToLog(final String logText, final String fileName) {
 		try {
-			File file = new File("C:\\dbms_log\\output.xml");
-			FileWriter outputWriter = new FileWriter(file);
+			File file = new File("C:\\dbms_log\\" + fileName);
+			FileWriter outputWriter = new FileWriter(file,true);
+			StringBuilder finalText = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			finalText.append("\n");
+			finalText.append(logText);
 			outputWriter.write(logText);
 			outputWriter.flush();
 			outputWriter.close();
@@ -150,6 +159,7 @@ public class SpatialParkingService {
 			trialData.setTrialNumber(i + 1);
 			trialData.setCongestionLevel(Integer.parseInt(congestionLevel));
 			AppConstants.sGravitationalTraialData.put(congestionLevel + "$" + (i + 1), trialData);
+			AppConstants.sSimulatedGreedyProbData.put(congestionLevel + "$" + (i + 1), trialData);
 			System.out.println("**** SERVICE 1: " + trialData.getTimeToParkingBlock());
 			double totalMins = (trialData.getTimeToParkingBlock() / 60);
 			System.out.println("**** SERVICE 2: " + trialData.getTimeToParkingBlock());
@@ -162,7 +172,7 @@ public class SpatialParkingService {
 			output.append("</trial>");
 		}
 		output.append("</trials>");
-		saveToLog(output.toString());
+		saveToLog(output.toString(), "greedy_prob.xml");
 		return Response.status(200).entity(output.toString()).build();
 	}
 
