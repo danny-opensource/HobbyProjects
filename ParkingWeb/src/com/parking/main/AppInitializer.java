@@ -2,8 +2,12 @@ package com.parking.main;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -18,6 +22,7 @@ import com.parking.constants.AppConstants;
 import com.parking.model.Location;
 import com.parking.model.RoadNetworkEdge;
 import com.parking.model.RoadNetworkNode;
+import com.parking.model.TrialData;
 
 /**
  * Entry point to the application. Called when the server is initialized
@@ -145,6 +150,122 @@ public class AppInitializer extends HttpServlet {
 
 		initInMemoryData();
 		loadDistanceCache();
+		loadTimeCache();
+		loadSimulationDataForSevenAM();
+		loadSimulatedTrialDataToInMemoryMaps();
+	}
+
+	private void loadSimulatedTrialDataToInMemoryMaps() {
+		File file = new File("C:\\dbms_log\\cache\\gra_det_simulated");
+		try {
+			FileInputStream f = new FileInputStream(file);
+			ObjectInputStream s = new ObjectInputStream(f);
+			AppConstants.sSimulatedGraDetData = (HashMap<String, TrialData>) s.readObject();
+			s.close();
+		} catch (ClassNotFoundException cnfe) {
+			cnfe.printStackTrace();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+
+		file = new File("C:\\dbms_log\\cache\\greedy_det_simulated");
+		try {
+			FileInputStream f = new FileInputStream(file);
+			ObjectInputStream s = new ObjectInputStream(f);
+			AppConstants.sSimulatedGreedyDetData = (HashMap<String, TrialData>) s.readObject();
+			s.close();
+		} catch (ClassNotFoundException cnfe) {
+			cnfe.printStackTrace();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+
+		file = new File("C:\\dbms_log\\cache\\gra_prob_simulated");
+		try {
+			FileInputStream f = new FileInputStream(file);
+			ObjectInputStream s = new ObjectInputStream(f);
+			AppConstants.sSimulatedGraProbData = (HashMap<String, TrialData>) s.readObject();
+			s.close();
+		} catch (ClassNotFoundException cnfe) {
+			cnfe.printStackTrace();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+
+		file = new File("C:\\dbms_log\\cache\\greedy_prob_simulated");
+		try {
+			FileInputStream f = new FileInputStream(file);
+			ObjectInputStream s = new ObjectInputStream(f);
+			AppConstants.sSimulatedGreedyProbData = (HashMap<String, TrialData>) s.readObject();
+			s.close();
+		} catch (ClassNotFoundException cnfe) {
+			cnfe.printStackTrace();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+	}
+
+	private void loadGravDetSimDataForSevenAM() {
+		try {
+			File file = new File("C:\\dbms_log\\simulation\\grav_deterministic_7.txt");
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			String temp = "";
+			String splitVals[];
+			while ((temp = br.readLine()) != null) {
+				splitVals = temp.split("#");
+				AppConstants.sSimulatedDataForSevenAM.put("grav_det_" + splitVals[0], Double.parseDouble(splitVals[1]));
+			}
+		} catch (IOException ioe) {
+		}
+	}
+
+	private void loadGreedyDetSimDataForSevenAM() {
+		try {
+			File file = new File("C:\\dbms_log\\simulation\\greedy_deterministic_7.txt");
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			String temp = "";
+			String splitVals[];
+			while ((temp = br.readLine()) != null) {
+				splitVals = temp.split("#");
+				AppConstants.sSimulatedDataForSevenAM.put("greedy_det_" + splitVals[0], Double.parseDouble(splitVals[1]));
+			}
+		} catch (IOException ioe) {
+		}
+	}
+
+	private void loadGravProbSimDataForSevenAM() {
+		try {
+			File file = new File("C:\\dbms_log\\simulation\\grav_probabilistic_7.txt");
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			String temp = "";
+			String splitVals[];
+			while ((temp = br.readLine()) != null) {
+				splitVals = temp.split("#");
+				AppConstants.sSimulatedDataForSevenAM.put("grav_prob_" + splitVals[0], Double.parseDouble(splitVals[1]));
+			}
+		} catch (IOException ioe) {
+		}
+	}
+
+	private void loadGreedyProbSimDataForSevenAM() {
+		try {
+			File file = new File("C:\\dbms_log\\simulation\\greedy_probabilistic_7.txt");
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			String temp = "";
+			String splitVals[];
+			while ((temp = br.readLine()) != null) {
+				splitVals = temp.split("#");
+				AppConstants.sSimulatedDataForSevenAM.put("greedy_prob_" + splitVals[0], Double.parseDouble(splitVals[1]));
+			}
+		} catch (IOException ioe) {
+		}
+	}
+
+	private void loadSimulationDataForSevenAM() {
+		loadGravDetSimDataForSevenAM();
+		loadGreedyDetSimDataForSevenAM();
+		loadGravProbSimDataForSevenAM();
+		loadGreedyProbSimDataForSevenAM();
 	}
 
 	private void loadDistanceCache() {
@@ -158,6 +279,24 @@ public class AppInitializer extends HttpServlet {
 					cacheItem = temp.split("#");
 					System.out.println("Cache Item Key: " + cacheItem[0] + " Value: " + cacheItem[1]);
 					AppConstants.sInMemoryDistance.put(cacheItem[0], Double.parseDouble(cacheItem[1]));
+				}
+			}
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+	}
+
+	private void loadTimeCache() {
+		try {
+			File distanceCacheFile = new File("C:\\dbms_log\\cache\\time.cache");
+			if (distanceCacheFile.exists()) {
+				BufferedReader br = new BufferedReader(new FileReader(distanceCacheFile));
+				String temp = "";
+				String[] cacheItem;
+				while ((temp = br.readLine()) != null) {
+					cacheItem = temp.split("#");
+					System.out.println("Cache Item Key: " + cacheItem[0] + " Value: " + cacheItem[1]);
+					AppConstants.sInMemoryTotalTime.put(cacheItem[0], Integer.parseInt(cacheItem[1]));
 				}
 			}
 		} catch (IOException ioe) {
@@ -229,5 +368,55 @@ public class AppInitializer extends HttpServlet {
 				ex.printStackTrace();
 			}
 		}
+	}
+
+	@Override
+	public void destroy() {
+		System.out.println("*** Destroy being called ...");
+		File file = new File("C:\\dbms_log\\cache\\gra_det_simulated");
+		try {
+			FileOutputStream fOutStream = new FileOutputStream(file);
+			ObjectOutputStream graDetOutput = new ObjectOutputStream(fOutStream);
+			graDetOutput.writeObject(AppConstants.sSimulatedGraDetData);
+			graDetOutput.flush();
+			graDetOutput.close();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+
+		file = new File("C:\\dbms_log\\cache\\greedy_det_simulated");
+		try {
+			FileOutputStream fOutStream = new FileOutputStream(file);
+			ObjectOutputStream graDetOutput = new ObjectOutputStream(fOutStream);
+			graDetOutput.writeObject(AppConstants.sSimulatedGreedyDetData);
+			graDetOutput.flush();
+			graDetOutput.close();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+
+		file = new File("C:\\dbms_log\\cache\\gra_prob_simulated");
+		try {
+			FileOutputStream fOutStream = new FileOutputStream(file);
+			ObjectOutputStream graDetOutput = new ObjectOutputStream(fOutStream);
+			graDetOutput.writeObject(AppConstants.sSimulatedGraProbData);
+			graDetOutput.flush();
+			graDetOutput.close();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+
+		file = new File("C:\\dbms_log\\cache\\greedy_prob_simulated");
+		try {
+			FileOutputStream fOutStream = new FileOutputStream(file);
+			ObjectOutputStream graDetOutput = new ObjectOutputStream(fOutStream);
+			graDetOutput.writeObject(AppConstants.sSimulatedGreedyProbData);
+			graDetOutput.flush();
+			graDetOutput.close();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+
+		super.destroy();
 	}
 }
