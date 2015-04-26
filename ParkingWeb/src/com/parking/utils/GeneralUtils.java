@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,6 +14,7 @@ import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
+import com.parking.comparators.TrialDataComparator;
 import com.parking.constants.AppConstants;
 import com.parking.constants.AppConstants.ALGORITHM_TYPE;
 import com.parking.model.Location;
@@ -77,6 +79,220 @@ public class GeneralUtils {
 		return returnKey;
 	}
 
+	private static ArrayList<TrialData> getGraDetSimulatedData(final int congestionLevel) {
+		ArrayList<TrialData> returnList = new ArrayList<TrialData>();
+		switch (congestionLevel) {
+		case 0:
+			for (String key : AppConstants.sSimulatedGraDetData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("0")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sSimulatedGraDetData.get(key));
+				}
+			}
+			break;
+		case 30:
+			for (String key : AppConstants.sSimulatedGraDetData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("30")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sSimulatedGraDetData.get(key));
+				}
+			}
+			break;
+		case 50:
+			for (String key : AppConstants.sSimulatedGraDetData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("50")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sSimulatedGraDetData.get(key));
+				}
+			}
+			break;
+		case 70:
+			for (String key : AppConstants.sSimulatedGraDetData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("70")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sSimulatedGraDetData.get(key));
+				}
+			}
+			break;
+		case 90:
+			for (String key : AppConstants.sSimulatedGraDetData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("90")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sSimulatedGraDetData.get(key));
+				}
+			}
+			break;
+		}
+		Collections.sort(returnList, new TrialDataComparator());
+		return returnList;
+	}
+
+	private static ArrayList<TrialData> getGreedyDetSimulatedData(final int congestionLevel) {
+
+		ArrayList<TrialData> returnList = new ArrayList<TrialData>();
+		switch (congestionLevel) {
+		case 0:
+			for (String key : AppConstants.sSimulatedGreedyDetData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("0")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sSimulatedGreedyDetData.get(key));
+				}
+			}
+			break;
+		case 30:
+			for (String key : AppConstants.sSimulatedGreedyDetData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("30")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sSimulatedGreedyDetData.get(key));
+				}
+			}
+			break;
+		case 50:
+			for (String key : AppConstants.sSimulatedGreedyDetData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("50")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sSimulatedGreedyDetData.get(key));
+				}
+			}
+			break;
+		case 70:
+			for (String key : AppConstants.sSimulatedGreedyDetData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("70")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sSimulatedGreedyDetData.get(key));
+				}
+			}
+			break;
+		case 90:
+			for (String key : AppConstants.sSimulatedGreedyDetData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("90")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sSimulatedGreedyDetData.get(key));
+				}
+			}
+			break;
+		}
+
+		return returnList;
+
+	}
+
+	private static ArrayList<TrialData> getGraProbSimulatedData(final int congestionLevel) {
+
+		ArrayList<TrialData> returnList = new ArrayList<TrialData>();
+		switch (congestionLevel) {
+		case 0:
+			for (String key : AppConstants.sSimulatedGraProbData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("0")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sSimulatedGraProbData.get(key));
+				}
+			}
+			break;
+		case 30:
+			for (String key : AppConstants.sSimulatedGraProbData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("30")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sSimulatedGraProbData.get(key));
+				}
+			}
+			break;
+		case 50:
+			for (String key : AppConstants.sSimulatedGraProbData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("50")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sSimulatedGraProbData.get(key));
+				}
+			}
+			break;
+		case 70:
+			for (String key : AppConstants.sSimulatedGraProbData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("70")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sSimulatedGraProbData.get(key));
+				}
+			}
+			break;
+		case 90:
+			for (String key : AppConstants.sSimulatedGraProbData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("90")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sSimulatedGraProbData.get(key));
+				}
+			}
+			break;
+		}
+		return returnList;
+	}
+
+	private static ArrayList<TrialData> getGreedyProbSimulatedData(final int congestionLevel) {
+
+		ArrayList<TrialData> returnList = new ArrayList<TrialData>();
+		switch (congestionLevel) {
+		case 0:
+			for (String key : AppConstants.sSimulatedGreedyProbData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("0")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sSimulatedGreedyProbData.get(key));
+				}
+			}
+			break;
+		case 30:
+			for (String key : AppConstants.sSimulatedGreedyProbData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("30")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sSimulatedGreedyProbData.get(key));
+				}
+			}
+			break;
+		case 50:
+			for (String key : AppConstants.sSimulatedGreedyProbData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("50")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sSimulatedGreedyProbData.get(key));
+				}
+			}
+			break;
+		case 70:
+			for (String key : AppConstants.sSimulatedGreedyProbData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("70")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sSimulatedGreedyProbData.get(key));
+				}
+			}
+			break;
+		case 90:
+			for (String key : AppConstants.sSimulatedGreedyProbData.keySet()) {
+				System.out.println(key);
+				if (key.startsWith("90")) {
+					System.out.println("Adding: " + key + " to the : " + congestionLevel + " congestionLevel list");
+					returnList.add(AppConstants.sSimulatedGreedyProbData.get(key));
+				}
+			}
+			break;
+		}
+		return returnList;
+	}
+
 	public static ArrayList<TrialData> getTrialData(final int congestionLevel) {
 		ArrayList<TrialData> returnList = new ArrayList<TrialData>();
 		switch (congestionLevel) {
@@ -126,7 +342,26 @@ public class GeneralUtils {
 			}
 			break;
 		}
+		Collections.sort(returnList, new TrialDataComparator());
+		return returnList;
+	}
 
+	public static ArrayList<TrialData> getSimulatedTrialData(final int congestionLevel, final AppConstants.ALGORITHM_TYPE algorithmType) {
+		ArrayList<TrialData> returnList = null;
+		switch (algorithmType) {
+		case GRAVITATIONAL_DETERMINISTIC:
+			returnList = getGraDetSimulatedData(congestionLevel);
+			break;
+		case GREEDY_DETERMINISTIC:
+			returnList = getGreedyDetSimulatedData(congestionLevel);
+			break;
+		case GRAVITATIONAL_PROBABILISTIC:
+			returnList = getGraProbSimulatedData(congestionLevel);
+			break;
+		case GREEDY_PROBABILISTIC:
+			returnList = getGreedyProbSimulatedData(congestionLevel);
+			break;
+		}
 		return returnList;
 	}
 
@@ -239,9 +474,15 @@ public class GeneralUtils {
 			return -1;
 		} finally {
 			try {
-				rs.close();
-				stmt.close();
-				conn.close();
+				if (rs != null) {
+					rs.close();
+				}
+
+				if (stmt != null)
+					stmt.close();
+
+				if (conn != null)
+					conn.close();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
