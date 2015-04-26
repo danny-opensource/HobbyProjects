@@ -67,7 +67,7 @@
 		<tr>
 			<td><%=thirtyCData.getTrianNumber()%></td>
 			<td><%=thirtyCData.getParkingBlockId()%></td>
-			<td><%=thirtyCData.getTimeToParkingBlock()%></td>
+			<td><%=(double) (thirtyCData.getTimeToParkingBlock())/60%></td>
 			<td><%=thirtyCData.getParkingBlockLocation()%></td>
 			<td><%=thirtyCData.getUserLocation()%></td>
 		</tr>
@@ -83,7 +83,7 @@
 		<tr>
 			<td><%=fiftyCData.getTrianNumber()%></td>
 			<td><%=fiftyCData.getParkingBlockId()%></td>
-			<td><%=fiftyCData.getTimeToParkingBlock()%></td>
+			<td><%=(double) (fiftyCData.getTimeToParkingBlock())/60%></td>
 			<td><%=fiftyCData.getParkingBlockLocation()%></td>
 			<td><%=fiftyCData.getUserLocation()%></td>
 		</tr>
@@ -99,7 +99,7 @@
 		<tr>
 			<td><%=seventyCData.getTrianNumber()%></td>
 			<td><%=seventyCData.getParkingBlockId()%></td>
-			<td><%=seventyCData.getTimeToParkingBlock()%></td>
+			<td><%=(double) (seventyCData.getTimeToParkingBlock())/60%></td>
 			<td><%=seventyCData.getParkingBlockLocation()%></td>
 			<td><%=seventyCData.getUserLocation()%></td>
 		</tr>
@@ -115,7 +115,7 @@
 		<tr>
 			<td><%=ninetyCData.getTrianNumber()%></td>
 			<td><%=ninetyCData.getParkingBlockId()%></td>
-			<td><%=ninetyCData.getTimeToParkingBlock()%></td>
+			<td><%=(double) (ninetyCData.getTimeToParkingBlock())/60%></td>
 			<td><%=ninetyCData.getParkingBlockLocation()%></td>
 			<td><%=ninetyCData.getUserLocation()%></td>
 		</tr>
