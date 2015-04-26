@@ -190,7 +190,7 @@
 				<p>
 					Total Trials Conducted: <label id="trialsCountTen"></label> <a
 						class="ui-btn ui-btn-inline" id="thirtyNavigation" target="_blank"
-						href="../GeoLocationAltered.jsp?userLocation=37.795752,-122.39434&blockLocation=37.8072188694,-122.4090052303">Show
+						href="../GeoLocationAltered.jsp?userLocation=37.8065670891,-122.4206920137&blockLocation=37.804912,-122.419391">Show
 						Navigation</a> <a
 						href="SimulatedTrialData.jsp?congestion=30&origin=gd"
 						class="ui-btn ui-btn-inline" data-rel="dialog">Show Trial Data</a>
@@ -201,7 +201,7 @@
 				<p>
 					Total Trials Conducted: <label id="trialsCountTwenty"></label> <a
 						class="ui-btn ui-btn-inline" id="fiftyNavigation" target="_blank"
-						href="../GeoLocationAltered.jsp?userLocation=37.795752,-122.39434&blockLocation=37.8072188694,-122.4090052303">Show
+						href="../GeoLocationAltered.jsp?userLocation=37.8055461678,-122.4221474552&blockLocation=37.80559,-122.417857">Show
 						Navigation</a> <a
 						href="SimulatedTrialData.jsp?congestion=50&origin=gd"
 						class="ui-btn ui-btn-inline" data-rel="dialog">Show Trial Data</a>
@@ -213,7 +213,7 @@
 					Total Trials Conducted: <label id="trialsCountThirty"></label> <a
 						class="ui-btn ui-btn-inline" id="seventyNavigation"
 						target="_blank"
-						href="../GeoLocationAltered.jsp?userLocation=37.795752,-122.39434&blockLocation=37.8072188694,-122.4090052303">Show
+						href="../GeoLocationAltered.jsp?userLocation=37.8055461678,-122.4221474552&blockLocation=37.804785,-122.425195">Show
 						Navigation</a> <a
 						href="SimulatedTrialData.jsp?congestion=70&origin=gd"
 						class="ui-btn ui-btn-inline" data-rel="dialog">Show Trial Data</a>
@@ -224,7 +224,7 @@
 				<p>
 					Total Trials Conducted: <label id="trialsCountFourty"></label> <a
 						class="ui-btn ui-btn-inline" id="ninetyNavigation" target="_blank"
-						href="../GeoLocationAltered.jsp?userLocation=37.795752,-122.39434&blockLocation=37.8068728626,-122.412239992">Show
+						href="../GeoLocationAltered.jsp?userLocation=37.8055461678,-122.4221474552&blockLocation=37.756042,-122.423314">Show
 						Navigation</a> <a
 						href="SimulatedTrialData.jsp?congestion=90&origin=gd"
 						class="ui-btn ui-btn-inline" data-rel="dialog">Show Trial Data</a>
