@@ -172,6 +172,7 @@
 							congestionCounter++;
 						} else if (congestion == 90) {
 							document.cookie = "gravitationalprobabilistic=" + plotTimes + ";";
+							alert("GravitationalProbabilistic: " + plotTimes);
 							populateGraph(plotTimes);
 						}
 					}
@@ -211,6 +212,7 @@
 
 	<%
 		AppConstants.sGravitationalTraialData.clear();
+		AppConstants.sSimulatedGraProbData.clear();
 	%>
 
 
