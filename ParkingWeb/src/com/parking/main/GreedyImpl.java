@@ -76,18 +76,24 @@ public class GreedyImpl {
 			RoadNetworkEdge edge = AppConstants.sInMemoryEdges.getEdge(it.next());
 			double userToBlockDistance = 0;
 			userToBlockDistance = DistanceUtils.distance(userLoc.getLatitude(), userLoc.getLongitude(), edge.latitude1, edge.longitude1, 'M');
+			System.out.println("****#### After distance");
 			int blockId = edge.blockId;
 			int totalAvailableParkingLots = GeneralUtils.getAvailableParkingLots(blockId, driverTimeStamp, congestionLevel);
 			System.out.println("**** totalAvailableParkingLots: " + totalAvailableParkingLots);
 			System.out.println("*** Num Operational: " + edge.numOperational);
 			double resultantValue;
+			double testValue;
 			if (edge.numOperational == 0) {
 				resultantValue = 0;
 			} else {
-				resultantValue = (totalAvailableParkingLots / (edge.numOperational - (edge.numOperational * (congestionLevel / 100))))
+				testValue = (totalAvailableParkingLots / (edge.numOperational - (edge.numOperational * (congestionLevel / 100))))
 						/ userToBlockDistance;
+				System.out.println("**** @@@@@ Here TestValue : !" + testValue);
+
+				resultantValue = (totalAvailableParkingLots / edge.numOperational) / userToBlockDistance;
+				System.out.println("**** @@@@@ Here resultantValue : !" + resultantValue);
 			}
-			if (edge.numOperational > 0 && totalAvailableParkingLots > 0) {
+			if (edge.numOperational > 0) {
 				mBlockDistanceSortedMap.put(edge.blockId, resultantValue);
 			}
 		}
@@ -117,26 +123,14 @@ public class GreedyImpl {
 		System.out.println("The Parking Block: " + parkingBlock + " allocated is located at a distance of: " + userToBestParkingDistance
 				+ " from the user location");
 
-		int totalTime = DistanceUtils.totalTime(userLoc.getLatitude(), userLoc.getLongitude(), blockStartLoc.getLatitude(),
-				blockStartLoc.getLongitude(), 'M');
+		/*
+		 * int totalTime = DistanceUtils.totalTime(userLoc.getLatitude(),
+		 * userLoc.getLongitude(), blockStartLoc.getLatitude(),
+		 * blockStartLoc.getLongitude(), 'M');
+		 */
 
-		// NAVIGATION PART WHILE - BAD CODE. RE-INVENT!
-		while (userToBestParkingDistance > 0) {
-			userToBestParkingDistance = userToBestParkingDistance - 0.0310686; //
-			// Subracting 50 meters from mile
-
-			// Increase 1 minute from the timestamp
-			driverTimeStamp.setMinutes(driverTimeStamp.getMinutes() + 1);
-
-			// TODO Check for max time-stamp that is less than
-			// driverTimeStamp
-
-			/*
-			 * if (isParkingSpaceAvailable(parkingBlock)) { continue; } else {
-			 * System.out.println("Parking Lot not available at : " +
-			 * driverTimeStamp); // TODO Allocate a different block }
-			 */
-		}
+		double dTotalTime = userToBestParkingDistance / 0.003107;
+		int totalTime = (int) Math.round(dTotalTime);
 
 		System.out.println("Total Minutes to the parking lot in seconds: " + totalTime);
 		TrialData returnTrialData = new TrialData(parkingBlock, totalTime, userLoc, blockStartLoc);
@@ -152,6 +146,20 @@ public class GreedyImpl {
 			date.setSeconds(00);
 			long time = date.getTime();
 			driverTimeStamp = new Timestamp(time);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	public void initializeDriverTime(final String timeStamp)
+	{
+		System.out.println("***@@@@@@@@@@@@ driverTimeStamp String is: " + timeStamp);
+		try {
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd:hh:mm:ss");
+			Date date = dateFormat.parse(timeStamp);
+			long time = date.getTime();
+			driverTimeStamp = new Timestamp(time);
+			System.out.println("***$$$$$$$$$ driverTimeStamp  is: " + driverTimeStamp);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
