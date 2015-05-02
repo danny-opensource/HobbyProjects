@@ -148,11 +148,27 @@ public class AppInitializer extends HttpServlet {
 		AppConstants.randomUserLocations.put(101, new Location(37.796423, -122.396573));
 		AppConstants.randomUserLocations.put(102, new Location(37.785774, -122.401395));
 
+		initRandomTimestamps();
 		initInMemoryData();
 		loadDistanceCache();
 		loadTimeCache();
 		loadSimulationDataForSevenAM();
 		loadSimulatedTrialDataToInMemoryMaps();
+	}
+
+	private void initRandomTimestamps() {
+		File file = new File("C:\\dbms_log\\random_times.txt");
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			String eachLine = "";
+			int index = 0;
+			while ((eachLine = br.readLine()) != null) {
+				AppConstants.randomTimeStamps.put(index, eachLine);
+				index++;
+			}
+		} catch (IOException ioe) {
+
+		}
 	}
 
 	private void loadSimulatedTrialDataToInMemoryMaps() {
