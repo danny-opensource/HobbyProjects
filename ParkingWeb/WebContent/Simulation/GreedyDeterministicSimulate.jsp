@@ -8,11 +8,9 @@
 <title>Greedy Deterministic</title>
 <script src="../js/jquery-1.11.2.min.js"></script>
 <script src="../charts/Chart.js"></script>
-<link rel="stylesheet"
-	href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
-<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
-<script
-	src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<link rel="stylesheet" href="../css/jquery.mobile-1.4.5.min.css">
+<script src="../js/jquery-1.11.2.min.js"></script>
+<script src="../js/jquery.mobile-1.4.5.min.js"></script>
 <script type="text/javascript">
 	$(document).on("ready", function() {
 		//	runTrials(0);
@@ -112,11 +110,12 @@
 		var averageTimes = [];
 		var counter = 0;
 		var averageTime = 0;
-		plotTimes[0] = 1.2872916666666667;
-		plotTimes[1] = 1.3643750000000006;
-		plotTimes[2] = 1.3643750000000006;
-		plotTimes[3] = 1.47125;
-		plotTimes[4] = 1.47125
+		
+		plotTimes[0] = <%=AppConstants.sSimulatedDataForSevenAM.get("greedy_det_0")%>;
+		plotTimes[1] = <%=AppConstants.sSimulatedDataForSevenAM.get("greedy_det_30")%>;
+		plotTimes[2] = <%=AppConstants.sSimulatedDataForSevenAM.get("greedy_det_50")%>;
+		plotTimes[3] = <%=AppConstants.sSimulatedDataForSevenAM.get("greedy_det_70")%>;
+		plotTimes[4] = <%=AppConstants.sSimulatedDataForSevenAM.get("greedy_det_90")%>;
 		populateGraph(plotTimes);
 	}
 </script>
@@ -179,7 +178,8 @@
 						class="ui-btn ui-btn-inline" rel="external" id="zeroNavigation"
 						target="_blank"
 						href="../GeoLocationAltered.jsp?userLocation=37.795752,-122.39434&blockLocation=37.8077921947,-122.4194870247">Show
-						Navigation</a> <a href="SimulatedTrialData.jsp?congestion=0&origin=grd"
+						Navigation</a> <a
+						href="SimulatedTrialData.jsp?congestion=0&origin=grd"
 						class="ui-btn ui-btn-inline" data-rel="dialog">Show Trial Data</a>
 				</p>
 			</div>
