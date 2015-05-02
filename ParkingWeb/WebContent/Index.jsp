@@ -472,43 +472,45 @@
 			<table class="table table-bordered table-condensed">
 				<tr>
 
-					<td><input type="button" class="btn btn-info"
+					<td style="text-align: center;"><input type="button" class="btn btn-info"
 						value="Gravitational Deterministic Results"
 						onclick="populateGravDeterministic();" data-theme="c" /></td>
-					<td><input type="button" class="btn btn-info"
+					<td style="text-align: center;"><input type="button" class="btn btn-info"
 						value="Greedy Deterministic Results"
 						onclick="populateGreedyDeterministic();" /></td>
-					<td><input type="button" class="btn btn-success"
+					<td style="text-align: center;"><input type="button" class="btn btn-success"
 						value="Simulation Results" onclick="populateGraph();"
 						data-theme="b" /></td>
-					<td><input type="button" class="btn btn-warning"
+					<td style="text-align: center;"><input type="button" class="btn btn-warning"
 						value="Gravitational Probabilistic Results"
 						onclick="populateGravProbabilistic();" /></td>
-					<td><input type="button" value="Greedy Probabilistic Results"
+					<td style="text-align: center;"><input type="button" value="Greedy Probabilistic Results"
 						class="btn btn-warning" onclick="populateGreedyProbabilistic();" /></td>
 				</tr>
 
 				<tr>
 
-					<td><a class="btn btn-info" rel="external"
+					<td style="text-align: center;"><a class="btn btn-info" rel="external"
 						id="gravDetMainPage" target="_blank"
 						href="Simulation/GravitationalDeterministicSimulate.jsp">Data
 							- Gravitational Deterministic</a></td>
 
-					<td><a class="btn btn-info" rel="external"
+					<td style="text-align: center;"><a class="btn btn-info" rel="external"
 						id="gravDetMainPage" target="_blank"
 						href="Simulation/GreedyDeterministicSimulate.jsp">Data -
 							Greedy Deterministic</a></td>
-					<td>&nbsp;</td>
-					<td><a class="btn btn-warning" rel="external"
+					<td style="text-align: center;"><a class="btn btn-danger" rel="external"
+						id="gravDetMainPage" target="_blank"
+						href="Simulation/data/blocks.html">Uninformed Simulation</a></td>
+					<td style="text-align: center;"><a class="btn btn-warning" rel="external"
 						id="gravDetMainPage" target="_blank"
 						href="Simulation/GravitationalProbabilisticSimulate.jsp">Data
 							- Gravitational Probabilistic</a></td>
 
-					<td><a class="btn btn-warning" rel="external"
+					<td style="text-align: center;"><a class="btn btn-warning" rel="external"
 						id="gravDetMainPage" target="_blank"
 						href="Simulation/GreedyProbabilisticSimulate.jsp"
-						data-icon="forward">Data - Greedy Deterministic</a></td>
+						data-icon="forward">Data - Greedy Probabilistic</a></td>
 
 
 				</tr>
