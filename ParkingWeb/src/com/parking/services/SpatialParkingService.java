@@ -42,7 +42,8 @@ public class SpatialParkingService {
 			System.out.println("** Trials are being executed: " + i);
 			Location sampleUserLoc = AppConstants.randomUserLocations.get(i);
 			System.out.println("Location is: " + sampleUserLoc.toString());
-			gravityComp.initializeDriverTime();
+			//gravityComp.initializeDriverTime();
+			gravityComp.initializeDriverTime(AppConstants.randomTimeStamps.get(i));
 			TrialData trialData = gravityComp.computeGravityRoadNetwork(sampleUserLoc, Integer.parseInt(congestionLevel));
 			trialData.setTrialNumber(i + 1);
 			trialData.setCongestionLevel(Integer.parseInt(congestionLevel));
@@ -74,7 +75,8 @@ public class SpatialParkingService {
 			System.out.println("** Trials are being executed: " + i);
 			Location sampleUserLoc = AppConstants.randomUserLocations.get(i);
 			System.out.println("Location is: " + sampleUserLoc.toString());
-			greedyImpl.initializeDriverTime();
+			//greedyImpl.initializeDriverTime();
+			greedyImpl.initializeDriverTime(AppConstants.randomTimeStamps.get(i));
 			TrialData trialData = greedyImpl.computeGravityRoadNetwork(sampleUserLoc, Integer.parseInt(congestionLevel));
 			trialData.setTrialNumber(i + 1);
 			trialData.setCongestionLevel(Integer.parseInt(congestionLevel));
@@ -106,7 +108,8 @@ public class SpatialParkingService {
 			System.out.println("** Trials are being executed: " + i);
 			Location sampleUserLoc = AppConstants.randomUserLocations.get(i);
 			System.out.println("Location is: " + sampleUserLoc.toString());
-			gravityComp.initializeDriverTime();
+			//gravityComp.initializeDriverTime();
+			gravityComp.initializeDriverTime(AppConstants.randomTimeStamps.get(i));
 			TrialData trialData = gravityComp.computeGravityRoadNetwork(sampleUserLoc, Integer.parseInt(congestionLevel));
 			trialData.setTrialNumber(i + 1);
 			trialData.setCongestionLevel(Integer.parseInt(congestionLevel));
@@ -154,7 +157,8 @@ public class SpatialParkingService {
 			System.out.println("** Trials are being executed: " + i);
 			Location sampleUserLoc = AppConstants.randomUserLocations.get(i);
 			System.out.println("Location is: " + sampleUserLoc.toString());
-			greedyImpl.initializeDriverTime();
+			//greedyImpl.initializeDriverTime();
+			greedyImpl.initializeDriverTime(AppConstants.randomTimeStamps.get(i));
 			TrialData trialData = greedyImpl.computeGravityRoadNetwork(sampleUserLoc, Integer.parseInt(congestionLevel));
 			trialData.setTrialNumber(i + 1);
 			trialData.setCongestionLevel(Integer.parseInt(congestionLevel));
