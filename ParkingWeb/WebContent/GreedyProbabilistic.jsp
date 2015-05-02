@@ -116,7 +116,7 @@
 		$
 				.ajax({
 					crossDomain : true,
-					url : 'http://localhost:8080/ParkingWeb/rest/parking/greedyprobabilistic/80/'
+					url : 'http://localhost:8080/ParkingWeb/rest/parking/greedyprobabilistic/100/'
 							+ congestion,
 					complete : function(jsXHR, textStatus) {
 						$("#imgProgress").hide();
@@ -212,7 +212,6 @@
 
 	<%
 		AppConstants.sGravitationalTraialData.clear();
-		AppConstants.sSimulatedGreedyProbData.clear();
 	%>
 
 
