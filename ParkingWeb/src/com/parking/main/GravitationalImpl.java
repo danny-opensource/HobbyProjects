@@ -106,8 +106,15 @@ public class GravitationalImpl extends HttpServlet {
 		System.out.println("The Parking Block: " + parkingBlock + " allocated is located at a distance of: " + userToBestParkingDistance
 				+ " from the user location");
 
-		int totalTime = DistanceUtils.totalTime(userLoc.getLatitude(), userLoc.getLongitude(), blockStartLoc.getLatitude(),
-				blockStartLoc.getLongitude(), 'M');
+		/*
+		 * int totalTime = DistanceUtils.totalTime(userLoc.getLatitude(),
+		 * userLoc.getLongitude(), blockStartLoc.getLatitude(),
+		 * blockStartLoc.getLongitude(), 'M');
+		 */
+
+		double dTotalTime = userToBestParkingDistance / 0.003107;
+		int totalTime = (int) Math.round(dTotalTime);
+
 		/*
 		 * while (userToBestParkingDistance > 0) { userToBestParkingDistance =
 		 * userToBestParkingDistance - 0.0310686; // // Subracting 50 meters
@@ -122,7 +129,7 @@ public class GravitationalImpl extends HttpServlet {
 		 * System.out.println("Parking Lot not available at : " +
 		 * driverTimeStamp); // TODO Allocate a different block } }
 		 */
-		
+
 		System.out.println("Total Minutes to the parking lot in seconds: " + totalTime);
 		TrialData returnTrialData = new TrialData(parkingBlock, totalTime, userLoc, blockStartLoc);
 		return returnTrialData;
@@ -211,6 +218,20 @@ public class GravitationalImpl extends HttpServlet {
 			date.setSeconds(00);
 			long time = date.getTime();
 			driverTimeStamp = new Timestamp(time);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	public void initializeDriverTime(final String timeStamp)
+	{
+		System.out.println("***@@@@@@@@@@@@ driverTimeStamp String is: " + timeStamp);
+		try {
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd:hh:mm:ss");
+			Date date = dateFormat.parse(timeStamp);
+			long time = date.getTime();
+			driverTimeStamp = new Timestamp(time);
+			System.out.println("***$$$$$$$$$ driverTimeStamp  is: " + driverTimeStamp);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
