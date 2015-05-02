@@ -212,7 +212,6 @@
 
 	<%
 		AppConstants.sGravitationalTraialData.clear();
-		AppConstants.sSimulatedGraProbData.clear();
 	%>
 
 
