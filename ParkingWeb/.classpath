@@ -23,5 +23,6 @@
 	<classpathentry kind="lib" path="libs/json-simple-1.1.1.jar"/>
 	<classpathentry kind="lib" path="libs/org.json-20120521.jar"/>
 	<classpathentry kind="lib" path="libs/java-json.jar"/>
+	<classpathentry kind="lib" path="libs/javax.xml.parsers-1_1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
