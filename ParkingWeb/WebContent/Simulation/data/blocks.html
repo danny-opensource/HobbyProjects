@@ -1,0 +1,37 @@
+<html>
+<head>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+google.load("visualization", "1", {packages:["map"]});
+google.setOnLoadCallback(drawChart);
+function drawChart(){
+var data = google.visualization.arrayToDataTable([
+['Lat', 'Long', 'Name'],
+[37.8060380205,-122.4188070811,'Leavenworth St (2717-2799)'],
+[37.8064232549,-122.418752766,'Leavenworth St (2700-2798)'],
+[37.8067642325,-122.4189559445,'Leavenworth St (2701-2715)'],
+[37.8064966807,-122.4190122712,'Columbus Ave (1350-1398)'],
+[37.8069633876,-122.4189941662,'Leavenworth St (2801-2849)'],
+[37.8069905452,-122.4188664253,'Leavenworth St (2800-2848)'],
+[37.8060551197,-122.4186702877,'Columbus Ave (1297-1399)'],
+[37.8081452424,-122.4159293905,'Jefferson St (201-299)'],
+[37.8079621806,-122.4182236974,'Jefferson St (302-398)'],
+[37.8079330115,-122.4176161738,'Jefferson St (301-399)'],
+[37.803085, -122.418695,'Start'],
+[37.808154, -122.416656,'Destination']
+]);
+var map = new google.visualization.Map(document.getElementById('map_div'));
+map.draw(data, {showTip: true});
+}
+</script>
+</head>
+<body>
+<div id="info" style="width: 100%; height: 50px" background-color='black'>
+<p></p>
+<b><i>These are the blocks which are on the way to the destination</i></b>
+&nbsp
+<button id="myButton" onclick="location.href = 'directionsMap4.html';">Suggest Block</button>&nbsp
+</div>
+<div id="map_div" style="width: 600px; height: 450px"></div>
+</body>
+</html>
