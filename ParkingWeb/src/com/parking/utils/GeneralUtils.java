@@ -50,6 +50,11 @@ public class GeneralUtils {
 	public static int getNearestParkingBlock(TreeMap<Integer, Double> minMap) {
 		if (minMap != null && !minMap.isEmpty()) {
 			NavigableMap<Integer, Double> parkingMap = minMap;
+			if (parkingMap.lastKey() < 0) {
+				System.out.println("*** DANGER! last Key: " + parkingMap.lastKey());
+				System.out.println("*** DANGER! first Key: " + parkingMap.firstKey());
+				return parkingMap.firstKey();
+			}
 			return parkingMap.lastKey();
 		}
 		return 100;
@@ -182,7 +187,7 @@ public class GeneralUtils {
 			}
 			break;
 		}
-
+		Collections.sort(returnList, new TrialDataComparator());
 		return returnList;
 
 	}
@@ -237,6 +242,7 @@ public class GeneralUtils {
 			}
 			break;
 		}
+		Collections.sort(returnList, new TrialDataComparator());
 		return returnList;
 	}
 
@@ -290,6 +296,7 @@ public class GeneralUtils {
 			}
 			break;
 		}
+		Collections.sort(returnList, new TrialDataComparator());
 		return returnList;
 	}
 
@@ -396,6 +403,9 @@ public class GeneralUtils {
 	}
 
 	public static int getAvailableParkingLots(final int block, final Timestamp driverTimeStamp, final int congestionLevel) {
+
+		System.out.println("^^^^^^^^^^driverTimeStamp in utils: " + driverTimeStamp);
+
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -410,8 +420,7 @@ public class GeneralUtils {
 			String query = "";
 			String secondQuery = "";
 			String timeStamp = "";
-			query = "select max(p.timestamp) from parking.\"projection\" p where p.block_id=" + block + "and p.timestamp <'" + driverTimeStamp
-					+ "' group by p.available";
+			query = "select max(p.timestamp) from parking.\"projection\" p where p.block_id=" + block + "and p.timestamp <'" + driverTimeStamp + "'";
 
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(query);
@@ -420,6 +429,9 @@ public class GeneralUtils {
 			}
 			rs.close();
 			stmt.close();
+
+			if (timeStamp == null)
+				return 0;
 			switch (congestionLevel) {
 			case 0:
 
