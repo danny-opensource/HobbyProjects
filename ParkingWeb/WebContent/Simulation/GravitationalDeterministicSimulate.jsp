@@ -112,11 +112,12 @@
 		var averageTimes = [];
 		var counter = 0;
 		var averageTime = 0;
-		plotTimes[0] = 0.9197916666666666;
-		plotTimes[1] = 0.9510416666666666;
-		plotTimes[2] = 0.98125;
-		plotTimes[3] = 1.025;
-		plotTimes[4] = 1.044375
+		
+		plotTimes[0] = <%=AppConstants.sSimulatedDataForSevenAM.get("grav_det_0")%>;
+		plotTimes[1] = <%=AppConstants.sSimulatedDataForSevenAM.get("grav_det_30")%>;
+		plotTimes[2] = <%=AppConstants.sSimulatedDataForSevenAM.get("grav_det_50")%>;
+		plotTimes[3] = <%=AppConstants.sSimulatedDataForSevenAM.get("grav_det_70")%>;
+		plotTimes[4] = <%=AppConstants.sSimulatedDataForSevenAM.get("grav_det_90")%>;
 		populateGraph(plotTimes);
 	}
 </script>
