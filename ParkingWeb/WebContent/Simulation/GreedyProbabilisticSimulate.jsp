@@ -9,10 +9,10 @@
 <script src="../js/jquery-1.11.2.min.js"></script>
 <script src="../charts/Chart.js"></script>
 <link rel="stylesheet"
-	href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
-<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+	href="../css/jquery.mobile-1.4.5.min.css">
+<script src="../js/jquery-1.11.2.min.js"></script>
 <script
-	src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+	src="../js/jquery.mobile-1.4.5.min.js"></script>
 <script type="text/javascript">
 	$(document).on("ready", function() {
 		//	runTrials(0);
@@ -112,11 +112,11 @@
 		var averageTimes = [];
 		var counter = 0;
 		var averageTime = 0;
-		plotTimes[0] = 0.77;
-		plotTimes[1] = 0.81;
-		plotTimes[2] = 0.81;
-		plotTimes[3] = 0.83;
-		plotTimes[4] = 1.02;
+		plotTimes[0] = <%=AppConstants.sSimulatedDataForSevenAM.get("greedy_prob_0")%>;
+		plotTimes[1] = <%=AppConstants.sSimulatedDataForSevenAM.get("greedy_prob_30")%>;
+		plotTimes[2] = <%=AppConstants.sSimulatedDataForSevenAM.get("greedy_prob_50")%>;
+		plotTimes[3] = <%=AppConstants.sSimulatedDataForSevenAM.get("greedy_prob_70")%>;
+		plotTimes[4] = <%=AppConstants.sSimulatedDataForSevenAM.get("greedy_prob_90")%>;
 		populateGraph(plotTimes);
 	}
 </script>
