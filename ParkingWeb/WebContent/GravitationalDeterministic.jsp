@@ -116,7 +116,7 @@
 		$
 				.ajax({
 					crossDomain : true,
-					url : 'http://localhost:8080/ParkingWeb/rest/parking/gravitationaldeterministic/80/'
+					url : 'http://localhost:8080/ParkingWeb/rest/parking/gravitationaldeterministic/100/'
 							+ congestion,
 					complete : function(jsXHR, textStatus) {
 						$("#imgProgress").hide();
@@ -239,7 +239,6 @@
 
 	<%
 		AppConstants.sGravitationalTraialData.clear();
-		AppConstants.sSimulatedGraDetData.clear();
 	%>
 
 
