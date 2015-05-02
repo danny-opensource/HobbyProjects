@@ -29,9 +29,9 @@ public class AppConstants {
 	public static HashMap<String, Integer> sInMemoryTotalTime = new HashMap<String, Integer>();
 	public static HashMap<String, Double> sSimulatedDataForSevenAM = new HashMap<String, Double>();
 	public static HashMap<String, TrialData> sSimulatedGraDetData = new HashMap<String, TrialData>();
-	public static HashMap<String,TrialData> sSimulatedGreedyDetData = new HashMap<String, TrialData>();
+	public static HashMap<String, TrialData> sSimulatedGreedyDetData = new HashMap<String, TrialData>();
 	public static HashMap<String, TrialData> sSimulatedGraProbData = new HashMap<String, TrialData>();
 	public static HashMap<String, TrialData> sSimulatedGreedyProbData = new HashMap<String, TrialData>();
-	
+	public static HashMap<Integer, String> randomTimeStamps = new HashMap<Integer, String>();
 
 }
